@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn {
+    @apply py-1 px-2 rounded bg-gray-700 text-gray-50 hover:bg-gray-800 focus:outline-none;
+  }
+}

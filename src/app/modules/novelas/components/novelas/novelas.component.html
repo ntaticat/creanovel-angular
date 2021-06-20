@@ -1,0 +1,10 @@
+<h1 class="p-5">Novelas</h1>
+<div class="border-t-2 border-b-2 border-solid border-gray-500 p-5">
+  <div class="border-2 border-gray-700 border-solid p-3 first:rounded-t-lg last:rounded-b-lg"
+    *ngFor="let novela of novelas; let i = index;">
+    <h2>{{novela.titulo}}</h2>
+    <p>{{novela.descripcion}}</p>
+    <button class="btn" [routerLink]="[novela._id]">Jugar</button>
+
+  </div>
+</div>
