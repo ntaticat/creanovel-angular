@@ -1,0 +1,7 @@
+<div class="list-container">
+  <ul class="list">
+    <li class="item" *ngFor="let novela of novelas">
+      <a class="link" [routerLink]="[novela._id]">{{novela.titulo}}</a>
+    </li>
+  </ul>
+</div>

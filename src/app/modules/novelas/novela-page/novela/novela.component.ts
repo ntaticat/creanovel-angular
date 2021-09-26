@@ -1,3 +1,4 @@
+import { Input } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -8,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class NovelaComponent implements OnInit {
 
-  novelaId: string = "";
+  @Input() novelaId: string = "";
 
   constructor(private activatedRoute: ActivatedRoute) {
   }

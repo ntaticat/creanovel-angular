@@ -1,0 +1,23 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()">
+  <input
+      type="text"
+      class="input-nuevo-usuario"
+      name="username"
+      placeholder="usuario...."
+      value=""
+      formControlName="nickname"
+  />
+  <input
+      type="password"
+      class="input-nuevo-usuario"
+      name="password"
+      placeholder="contraseña..."
+      value=""
+      formControlName="password"
+  />
+  <input
+      type="submit"
+      value="Enviar"
+  />
+  <a class="lawea" routerLink="../signup">Registrarse</a>
+</form>

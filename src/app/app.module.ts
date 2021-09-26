@@ -15,6 +15,7 @@ import { NovelasEffects } from './store/novelas/novelas.effects';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NovelasModule } from './modules/novelas/novelas.module';
+import { UsuariosEffects } from './store/usuarios/usuarios.effects';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,7 @@ import { NovelasModule } from './modules/novelas/novelas.module';
     AppRoutingModule,
     HttpClientModule,
     StoreModule.forRoot(appReducers),
-    EffectsModule.forRoot([NovelasEffects]),
+    EffectsModule.forRoot([NovelasEffects, UsuariosEffects]),
     environment.production ? [] : StoreDevtoolsModule.instrument(),
     NovelasModule,
   ],

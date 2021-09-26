@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { map, tap } from "rxjs/operators";
 import { INovela, INovelasResult } from '../models/novela.interface';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NovelasService {
 
-  url = "http://localhost:3000/api";
+  url = environment.url;
 
   constructor(private http: HttpClient) { }
 
