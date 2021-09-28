@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { INovela } from 'src/app/data/models/novela.interface';
 
 @Component({
@@ -8,15 +9,15 @@ import { INovela } from 'src/app/data/models/novela.interface';
 })
 export class NovelaPageComponent implements OnInit {
 
-  novela: INovela = {
-    _id: "21312",
-    titulo: "Titulo genérico 1",
-    descripcion: "Desc generica 1",
-    estado: false,
-    escenas: []
-  };
+  novelaId: string = "";
 
-  constructor() { }
+  constructor(private activatedRoute: ActivatedRoute) {
+    this.activatedRoute.params.subscribe((params) => {
+      this.novelaId = params["id"];
+      console.log("this.novelaId", this.novelaId);
+    });
+
+  }
 
   ngOnInit(): void {
   }

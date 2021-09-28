@@ -1,7 +1,26 @@
 <div class="list-container">
+  <h3>Novelas por descubrir</h3>
   <ul class="list">
-    <li class="item" *ngFor="let novela of novelas">
-      <a class="link" [routerLink]="[novela._id]">{{novela.titulo}}</a>
+    <li class="item" *ngFor="let novelaPlayer of novelasPlayer">
+      <a *ngIf="!novelaPlayer.created && !novelaPlayer.played" class="link" [routerLink]="[novelaPlayer.novela.novelaId]">{{novelaPlayer.novela.titulo}}</a>
+    </li>
+  </ul>
+</div>
+
+<div class="list-container">
+  <h3>Novelas creadas</h3>
+  <ul class="list">
+    <li class="item" *ngFor="let novelaPlayer of novelasPlayer">
+      <a *ngIf="novelaPlayer.created" class="link" [routerLink]="[novelaPlayer.novela.novelaId]">{{novelaPlayer.novela.titulo}}</a>
+    </li>
+  </ul>
+</div>
+
+<div class="list-container">
+  <h3>Novelas jugadas</h3>
+  <ul class="list">
+    <li class="item" *ngFor="let novelaPlayer of novelasPlayer">
+      <a *ngIf="novelaPlayer.played" class="link" [routerLink]="[novelaPlayer.novela.novelaId]">{{novelaPlayer.novela.titulo}}</a>
     </li>
   </ul>
 </div>

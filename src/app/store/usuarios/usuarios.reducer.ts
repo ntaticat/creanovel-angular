@@ -7,6 +7,7 @@ export interface State {
   error: string;
   isLoading: boolean;
   loadedSuccess: boolean;
+  logged: boolean;
 };
 
 const initialUsuario: IUsuario = {
@@ -22,17 +23,18 @@ const initialState: State = {
   object: initialUsuario,
   error: '',
   isLoading: false,
-  loadedSuccess: false
+  loadedSuccess: false,
+  logged: false
 };
 
 export const usuariosReducer = createReducer(initialState,
   on(actions.POST_LOGIN, (state, { payload }) => (
-      { ...state, isLoading: true, loadedSuccess: false }
+      { ...state, isLoading: true, loadedSuccess: false, logged: false }
   )),
   on(actions.POST_LOGIN_SUCCESS, (state, { payload }) => (
-    { ...state, isLoading: false, loadedSuccess: true, object: {...payload} }
+    { ...state, isLoading: false, loadedSuccess: true, logged: true, object: {...payload} }
   )),
   on(actions.POST_LOGIN_ERROR, (state, { payload }) => (
-    { ...state, isLoading: false, loadedSuccess: false, error: payload }
+    { ...state, isLoading: false, loadedSuccess: false, logged: false, error: payload }
   ))
 );

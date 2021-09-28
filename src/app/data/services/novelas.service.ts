@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, tap } from "rxjs/operators";
-import { INovela, INovelasResult } from '../models/novela.interface';
+import { INovela } from '../models/novela.interface';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -17,9 +17,9 @@ export class NovelasService {
   getNovelas(): Observable<INovela[]> {
     const method = 'novelas';
 
-    return this.http.get<INovelasResult>(`${this.url}/${method}`)
+    return this.http.get<INovela[]>(`${this.url}/${method}`)
       .pipe(
-        map(resp => resp.novelas)
+        map(resp => resp)
       );
   }
 }

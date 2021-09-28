@@ -1,12 +1,8 @@
 export interface INovela {
-  descripcion: string;
-  estado: boolean;
-  escenas: any[];
-  _id: string;
+  novelaId: string;
   titulo: string;
-}
-
-export interface INovelasResult {
-  ok: boolean;
-  novelas: INovela[]
+  descripcion: string;
+  disponible: boolean;
+  usuarioCreadorId: string;
+  escenas: any[];
 }

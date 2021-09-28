@@ -16,38 +16,14 @@ const initialState: State = {
   loadedSuccess: false
 };
 
-export const novelasReducer = createReducer(
-  initialState,
-  on(
-    actions.GET_NOVELAS,
-    (state) => (
-      {
-        ...state,
-        isLoading: true,
-        loadedSuccess: false
-      }
-    ),
-  ),
-  on(
-    actions.GET_NOVELAS_SUCCESS,
-    (state, { payload }) => (
-      {
-        ...state,
-        isLoading: false,
-        loadedSuccess: true,
-        array: payload
-      }
-    ),
-  ),
-  on(
-    actions.GET_NOVELAS_ERROR,
-    (state, { payload }) => (
-      {
-        ...state,
-        isLoading: false,
-        loadedSuccess: false,
-        error: payload
-      }
-    ),
-  )
+export const novelasReducer = createReducer(initialState,
+  on(actions.GET_NOVELAS, (state) => (
+      {...state, isLoading: true, loadedSuccess: false}
+  )),
+  on(actions.GET_NOVELAS_SUCCESS, (state, { payload }) => (
+      {...state, isLoading: false, loadedSuccess: true, array: payload}
+  )),
+  on(actions.GET_NOVELAS_ERROR, (state, { payload }) => (
+      {...state, isLoading: false, loadedSuccess: false, error: payload}
+  ))
 );
