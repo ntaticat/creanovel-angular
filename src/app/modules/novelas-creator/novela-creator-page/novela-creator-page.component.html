@@ -1,0 +1,27 @@
+
+<form [formGroup]="novelaForm" (ngSubmit)="onSubmitNovela()">
+  <input
+      type="text"
+      class="text-black"
+      name="titulo"
+      placeholder="titulo...."
+      value=""
+      formControlName="titulo"
+  />
+  <input
+      type="text"
+      class="text-black"
+      name="descripcion"
+      placeholder="descripcion...."
+      value=""
+      formControlName="descripcion"
+  />
+  <input
+      type="checkbox"
+      class="text-black"
+      name="disponible"
+      value=""
+      formControlName="disponible"
+  />
+  <button type="submit">Crear</button>
+</form>
