@@ -1,8 +1,8 @@
 <div class="novelas-page-container">
-	<div class="novelas-page-contained">
+	<div class="flex flex-col novelas-page-contained">
 
 		<!-- Header -->
-		<div class="bg-gray-900 text-gray-200 w-full flex flex-nowrap justify-center items-center">
+		<div class="bg-gray-900 text-gray-200 h-14 w-full flex flex-nowrap justify-center items-center">
 			<div class="w-9/12 flex flex-row flex-nowrap">
 				<!-- Titulo y busqueda -->
 				<div class="w-9/12 flex flex-nowrap justify-between items-center">
@@ -22,11 +22,14 @@
 					<button class="p-2">
 						<fa-icon [icon]="faCog"></fa-icon>
 					</button>
+          <a routerLink="/auth/login" class="p-2">
+						<fa-icon [icon]="faSignOutAlt"></fa-icon>
+					</a>
 				</div>
 			</div>
 		</div>
 
-    <div class="w-full">
+    <div class="w-full calc-heigth">
       <app-novelas></app-novelas>
     </div>
 	</div>

@@ -1,17 +1,17 @@
 <!-- Contenedor de novelas -->
-<div class="flex justify-evenly">
+<div class="flex justify-evenly h-full novelas-container-image">
 	<!-- Novelas jugadas y por descubrir -->
-	<div class="py-3  w-7/12">
+	<div class="py-3 w-7/12 overflow-y-auto background-safe-color">
 
 		<div class="">
 
 			<!-- Jugadas -->
 			<div class="">
 				<h3>Si quieres seguir jugando...</h3>
-        <div class="my-3 relative align-middle h-36 w-full overflow-y-hidden overflow-x-auto whitespace-nowrap">
+        <div class="my-3 relative align-middle h-40 w-full overflow-y-hidden overflow-x-auto whitespace-nowrap">
           <!-- Novela Card -->
           <ng-container *ngFor="let novelaPlayer of novelasPlayer">
-            <div *ngIf="novelaPlayer.created" class="cursor-pointer inline-block mx-3 relative w-32 h-32 rounded-lg bg-gray-700 overflow-hidden">
+            <div *ngIf="novelaPlayer.played" class="cursor-pointer inline-block mx-3 relative w-36 h-36 rounded-lg bg-gray-700 overflow-hidden">
               <img class="object-cover w-full h-full" src="https://yt3.ggpht.com/LR1e69SSkXgAZLxBEQfvoAq4TbjTBRf5wYs43fpWJcHOf8mcHu2mRq9ldgmXqQ8U1Mg=w1080-rw" alt="novela-bg">
               <div class="bg-opacity-50 bg-gray-700 text-white absolute top-0 right-0 z-10 w-full h-full flex flex-wrap justify-center items-center">
                 <h5>{{novelaPlayer.novela.titulo}}</h5>
@@ -24,9 +24,21 @@
 			<!-- Por Descubrir -->
 			<div class="">
 				<h3>Novelas por descubrir...</h3>
-        <div class="">
-
-        </div>
+        <ng-container *ngFor="let novelaPlayer of novelasPlayer">
+          <div *ngIf="!novelaPlayer.created && !novelaPlayer.played" class="my-3">
+            <div class="relative w-full h-40 border-2 border-solid border-gray-500 rounded-lg overflow-hidden flex flex-nowrap">
+              <div class="p-3 overflow-y-auto">
+                <h5>Titulo de la novela</h5>
+                <p>Descripción de la novela Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis perferendis, numquam tenetur officiis harum accusamus repellendus asperiores cumque assumenda quisquam, quasi, aut animi qui id? Numquam eos doloribus quibusdam incidunt!</p>
+                <p>Idiomas: <span>Español</span>, <span>Inglés</span></p>
+                <p>Puntuación: <span><fa-icon [icon]="faIcons['faStar']"></fa-icon><fa-icon [icon]="faIcons['faStar']"></fa-icon><fa-icon [icon]="faIcons['faStar']"></fa-icon><fa-icon [icon]="faIcons['faStar']"></fa-icon></span></p>
+                <h6>Creador de la novela</h6>
+              </div>
+              <img class="h-40 w-40 object-cover object-center" src="https://yt3.ggpht.com/LR1e69SSkXgAZLxBEQfvoAq4TbjTBRf5wYs43fpWJcHOf8mcHu2mRq9ldgmXqQ8U1Mg=w1080-rw" alt="novela test">
+              <button class="absolute bottom-0 w-10 h-10 right-0 p-2 rounded-full bg-blue-600 text-white m-2"><fa-icon [icon]="faIcons['faPlay']"></fa-icon></button>
+            </div>
+          </div>
+        </ng-container>
 			</div>
 
 		</div>
@@ -34,44 +46,24 @@
 	</div>
 
 	<!-- Novelas creadas y chat interno -->
-  <div class="py-3 w-4/12">
+  <div class="py-3 w-4/12 overflow-y-auto background-safe-color">
     <!-- Novelas creadas -->
     <div class="">
       <h3>Novelas Creadas</h3>
+      <!-- (click)="jugarNovela(novelaPlayer)" -->
+      <ng-container *ngFor="let novelaPlayer of novelasPlayer">
+        <a [routerLink]="[novelaPlayer.novela.novelaId]" *ngIf="novelaPlayer.created" class="cursor-pointer inline-block mx-3 relative w-36 h-36 rounded-lg bg-gray-700 overflow-hidden">
+          <img class="object-cover w-full h-full" src="https://yt3.ggpht.com/LR1e69SSkXgAZLxBEQfvoAq4TbjTBRf5wYs43fpWJcHOf8mcHu2mRq9ldgmXqQ8U1Mg=w1080-rw" alt="novela-bg">
+          <div class="bg-opacity-50 bg-gray-700 text-white absolute top-0 right-0 z-10 w-full h-full flex flex-wrap justify-center items-center">
+            <h5>{{novelaPlayer.novela.titulo}}</h5>
+          </div>
+        </a>
+      </ng-container>
+    </div>
+
+    <div class="">
+      <h3>Tal vez te interese...</h3>
+      <div class=""></div>
     </div>
   </div>
-</div>
-
-
-<div class="">
-	<div class="list-container">
-		<h3>Novelas por descubrir</h3>
-		<ul class="list">
-			<li class="item" *ngFor="let novelaPlayer of novelasPlayer">
-				<a *ngIf="!novelaPlayer.created && !novelaPlayer.played" class="link"
-					(click)="jugarNovela(novelaPlayer)"
-					[routerLink]="[novelaPlayer.novela.novelaId]">{{novelaPlayer.novela.titulo}}</a>
-			</li>
-		</ul>
-	</div>
-
-	<div class="list-container">
-		<h3>Novelas creadas</h3>
-		<ul class="list">
-			<li class="item" *ngFor="let novelaPlayer of novelasPlayer">
-				<a *ngIf="novelaPlayer.created" class="link" (click)="jugarNovela(novelaPlayer)"
-					[routerLink]="[novelaPlayer.novela.novelaId]">{{novelaPlayer.novela.titulo}}</a>
-			</li>
-		</ul>
-	</div>
-
-	<div class="list-container">
-		<h3>Novelas jugadas</h3>
-		<ul class="list">
-			<li class="item" *ngFor="let novelaPlayer of novelasPlayer">
-				<a *ngIf="novelaPlayer.played" class="link" (click)="jugarNovela(novelaPlayer)"
-					[routerLink]="[novelaPlayer.novela.novelaId]">{{novelaPlayer.novela.titulo}}</a>
-			</li>
-		</ul>
-	</div>
 </div>

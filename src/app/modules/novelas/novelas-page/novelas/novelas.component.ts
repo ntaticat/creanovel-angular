@@ -5,6 +5,9 @@ import { Subscription } from 'rxjs';
 import { ILectura } from 'src/app/data/models/lectura.interfaces';
 import { INovela } from '@models/novela.interfaces';
 import { AppState } from 'src/app/store/app.reducer';
+
+import * as faIcons from '@fortawesome/free-solid-svg-icons';
+
 import * as novelasActions from 'src/app/store/novelas/novelas.actions';
 import * as novelasSelectors from '@store/novelas/novelas.selectors';
 import * as usuarioSelectors from '@store/usuarios/usuarios.selectors';
@@ -16,6 +19,8 @@ import * as usuarioActions from '@store/usuarios/usuarios.actions';
   styleUrls: ['./novelas.component.scss']
 })
 export class NovelasComponent implements OnInit, OnDestroy {
+
+  faIcons = faIcons;
 
 
 

@@ -1,39 +1,11 @@
-
-.list-container {
-  width: 100%;
-  height: auto;
-  overflow: hidden;
-  background-color: crimson;
+.novelas-container-image {
+  background-image: url('https://images.alphacoders.com/935/935315.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.list {
-  box-sizing: border-box;
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-}
-
-.item {
-  list-style: none;
-}
-
-.link {
-  display: block;
-  text-decoration: none;
-  background-color: white;
-  color: black;
-  font-weight: bold;
-
-  margin: 10px;
-  padding: 10px 20px;
-
-  width: auto;
-  height: auto;
-
-  &:hover {
-      background-color: #ccc;
-  }
+.background-safe-color {
+  background-color: #fff1;
+  color: white;
 }
