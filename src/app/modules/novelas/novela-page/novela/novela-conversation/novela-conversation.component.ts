@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-novela-conversation',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./novela-conversation.component.scss']
 })
 export class NovelaConversationComponent implements OnInit {
+
+  @Input() text?: string = "";
 
   constructor() { }
 
