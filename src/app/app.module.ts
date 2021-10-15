@@ -18,10 +18,12 @@ import { NovelasModule } from './modules/novelas/novelas.module';
 import { UsuariosEffects } from './store/usuarios/usuarios.effects';
 import { LecturasEffects } from '@store/lecturas/lecturas.effects';
 import { RecursosEffects } from '@store/recursos/recursos.effects';
+import { MainPageComponent } from './layouts/main-page/main-page.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MainPageComponent
   ],
   imports: [
     BrowserModule,

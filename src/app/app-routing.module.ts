@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { AuthGuard } from './core/guards/auth.guard';
+import { MainPageComponent } from './layouts/main-page/main-page.component';
 
 const routes: Routes = [
 
@@ -11,6 +12,11 @@ const routes: Routes = [
     component: AppComponent,
     children: [
       {
+        path: '',
+        component: MainPageComponent,
+        pathMatch: 'full'
+      },
+      {
         path: 'novelas',
         canLoad: [AuthGuard],
         loadChildren: () => import('./modules/novelas/novelas.module').then(m => m.NovelasModule)
@@ -19,7 +25,7 @@ const routes: Routes = [
         path: 'novelas-creator',
         canLoad: [AuthGuard],
         loadChildren: () => import('./modules/novelas-creator/novelas-creator.module').then(m => m.NovelasCreatorModule)
-      },
+      }
     ]
   },
 
