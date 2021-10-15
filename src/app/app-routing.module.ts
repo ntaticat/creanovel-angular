@@ -15,6 +15,11 @@ const routes: Routes = [
         canLoad: [AuthGuard],
         loadChildren: () => import('./modules/novelas/novelas.module').then(m => m.NovelasModule)
       },
+      {
+        path: 'novelas-creator',
+        canLoad: [AuthGuard],
+        loadChildren: () => import('./modules/novelas-creator/novelas-creator.module').then(m => m.NovelasCreatorModule)
+      },
     ]
   },
 
