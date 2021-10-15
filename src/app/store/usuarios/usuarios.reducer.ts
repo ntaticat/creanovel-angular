@@ -1,9 +1,9 @@
 import { createReducer, on } from '@ngrx/store';
-import { IUsuario, IUsuarioPost } from 'src/app/data/models/usuario.interfaces';
-import * as actions from 'src/app/store/usuarios/usuarios.actions';
+import { IUsuario } from '@models/usuario.interfaces';
+import * as actions from '@store/usuarios/usuarios.actions';
 
 export interface State {
-  object: IUsuario;
+  data: IUsuario;
   error: string;
   isLoading: boolean;
   loadedSuccess: boolean;
@@ -20,7 +20,7 @@ const initialUsuario: IUsuario = {
 };
 
 const initialState: State = {
-  object: initialUsuario,
+  data: initialUsuario,
   error: '',
   isLoading: false,
   loadedSuccess: false,
@@ -28,13 +28,19 @@ const initialState: State = {
 };
 
 export const usuariosReducer = createReducer(initialState,
-  on(actions.POST_LOGIN, (state, { payload }) => (
+  on(actions.POST_LOGIN, (state) => (
       { ...state, isLoading: true, loadedSuccess: false, logged: false }
   )),
   on(actions.POST_LOGIN_SUCCESS, (state, { payload }) => (
-    { ...state, isLoading: false, loadedSuccess: true, logged: true, object: {...payload} }
+    { ...state, isLoading: false, loadedSuccess: true, logged: true, data: {...payload} }
   )),
   on(actions.POST_LOGIN_ERROR, (state, { payload }) => (
     { ...state, isLoading: false, loadedSuccess: false, logged: false, error: payload }
+  )),
+  on(actions.READ_USUARIO_DATA, (state) => (
+    { ...state, isLoading: true, loadedSuccess: false, logged: false }
+  )),
+  on(actions.SET_USUARIO_DATA, (state, { payload }) => (
+    { ...state, isLoading: false, loadedSuccess: true, logged: true, data: {...payload} }
   ))
 );

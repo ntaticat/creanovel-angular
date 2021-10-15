@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { INovela } from 'src/app/data/models/novela.interface';
+import { INovela } from '@models/novela.interfaces';
 import * as actions from './novelas.actions';
 
 export interface State {
@@ -25,5 +25,15 @@ export const novelasReducer = createReducer(initialState,
   )),
   on(actions.GET_NOVELAS_ERROR, (state, { payload }) => (
       {...state, isLoading: false, loadedSuccess: false, error: payload}
-  ))
+  )),
+
+  on(actions.CREATE_NOVELA, (state) => (
+    {...state, isLoading: true, loadedSuccess: false}
+  )),
+  on(actions.CREATE_NOVELA_SUCCESS, (state) => (
+    {...state, isLoading: false, loadedSuccess: true}
+  )),
+  on(actions.CREATE_NOVELA_ERROR, (state, {payload}) => (
+    {...state, isLoading: false, loadedSuccess: false, error: payload}
+  )),
 );

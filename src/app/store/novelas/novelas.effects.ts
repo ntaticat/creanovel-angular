@@ -1,7 +1,7 @@
 import { NovelasService } from './../../data/services/novelas.service';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import * as novelasActions from './novelas.actions';
+import * as novelaActions from './novelas.actions';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
@@ -13,14 +13,30 @@ export class NovelasEffects {
 
   getNovelas$ = createEffect(
     () => this.actions$.pipe(
-      ofType(novelasActions.GET_NOVELAS),
+      ofType(novelaActions.GET_NOVELAS),
       mergeMap(
         () => this.novelasService.getNovelas()
           .pipe(
-            map(novelas => novelasActions.GET_NOVELAS_SUCCESS({ payload: novelas })),
+            map(novelas => novelaActions.GET_NOVELAS_SUCCESS({ payload: novelas })),
             catchError(err => {
               console.log('Error en getNovelas effect', err)
-              return of(novelasActions.GET_NOVELAS_ERROR({ payload: err }))
+              return of(novelaActions.GET_NOVELAS_ERROR({ payload: err }))
+            })
+          )
+      )
+    )
+  );
+
+  createNovela$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(novelaActions.CREATE_NOVELA),
+      mergeMap(
+        ({payload}) => this.novelasService.postNovela(payload)
+          .pipe(
+            map(dbNovela => novelaActions.CREATE_NOVELA_SUCCESS({ payload: dbNovela })),
+            catchError(err => {
+              console.log('error createNovela effect', err)
+              return of(novelaActions.CREATE_NOVELA_ERROR({ payload: err }))
             })
           )
       )

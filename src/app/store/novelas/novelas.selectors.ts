@@ -1,9 +1,21 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
+import { AppState } from '@store/app.reducer';
 import * as novelas from "./novelas.reducer";
 
-export const getNovelasState = createFeatureSelector<novelas.State>('novelas');
+const featureKey = 'novelas';
+const selectNovelas = createFeatureSelector<AppState, novelas.State>(featureKey);
 
 export const getNovelas = createSelector(
-  getNovelasState,
+  selectNovelas,
   (state: novelas.State) => state.array
+);
+
+export const loadedSuccess = createSelector(
+  selectNovelas,
+  (state: novelas.State) => state.loadedSuccess
+);
+
+export const loading = createSelector(
+  selectNovelas,
+  (state: novelas.State) => state.isLoading
 );
