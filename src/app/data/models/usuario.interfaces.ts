@@ -1,3 +1,6 @@
+import { ILectura } from "./lectura.interfaces";
+import { INovela } from "./novela.interfaces";
+
 export interface ILoginPost {
   nickname: string;
   password: string;
@@ -8,8 +11,8 @@ export interface IUsuario {
   nombre: string;
   correo: string;
   nickname: string;
-  lecturas: any[];
-  novelasCreadas: any[];
+  lecturas?: ILectura[];
+  novelasCreadas?: INovela[];
 }
 
 export interface IUsuarioPost {
