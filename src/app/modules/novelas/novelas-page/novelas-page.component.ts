@@ -1,4 +1,8 @@
+import { AppState } from 'src/app/store/app.reducer';
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import * as usuarioActions from 'src/app/store/usuarios/usuarios.actions';
+import { faCog } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-novelas-page',
@@ -7,9 +11,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NovelasPageComponent implements OnInit {
 
-  constructor() { }
+  faCog = faCog;
+
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
+
   }
 
 }
