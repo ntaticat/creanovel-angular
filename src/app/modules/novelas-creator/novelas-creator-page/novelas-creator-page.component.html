@@ -1,0 +1,42 @@
+<div class="w-full">
+
+  <!-- Header -->
+  <div class="p-3 w-full text-center border-b-2 border-solid border-gray-700">
+    <h1>Novel Creator</h1>
+  </div>
+
+  <!-- Buscador de novelas -->
+  <!-- <div class="p-3 w-full flex justify-center"></div> -->
+
+  <!-- Lista de novelas creadas -->
+  <div class="pt-3 w-full flex justify-evenly">
+    <div class="w-5/12 flex flex-wrap justify-center">
+      <ng-container *ngFor="let novela of novelasCreadas; let i = index;">
+        <div class="my-3 w-full shadow-lg">
+          <div class="relative h-40 border-2 border-solid border-gray-500 rounded-lg overflow-hidden flex flex-nowrap">
+            <div class="p-3 overflow-y-auto w-full">
+              <h5>{{ novela.titulo }}</h5>
+              <p>{{ novela.descripcion }}</p>
+              <p>Idiomas: <span>Español</span>, <span>Inglés</span></p>
+            </div>
+            <img class="h-40 w-40 object-cover object-center" src="https://yt3.ggpht.com/LR1e69SSkXgAZLxBEQfvoAq4TbjTBRf5wYs43fpWJcHOf8mcHu2mRq9ldgmXqQ8U1Mg=w1080-rw" alt="novela test">
+            <button (click)="goNovelaPage(i)" class="absolute bottom-0 w-10 h-10 right-0 p-2 rounded-full bg-blue-600 text-white m-2"><fa-icon [icon]="faIcons['faPlay']"></fa-icon></button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="w-5/12 pt-3">
+      <div class="sticky top-5">
+        <app-novela-creator-form></app-novela-creator-form>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="py-3 w-full flex justify-center">
+    <div class="w-6/12">
+      <app-escena-creator-form></app-escena-creator-form>
+    </div>
+  </div> -->
+
+</div>
