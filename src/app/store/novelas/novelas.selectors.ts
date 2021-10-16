@@ -10,6 +10,11 @@ export const getNovelas = createSelector(
   (state: novelas.State) => state.array
 );
 
+export const novela = createSelector(
+  selectNovelas,
+  (state: novelas.State) => state.array
+);
+
 export const loadedSuccess = createSelector(
   selectNovelas,
   (state: novelas.State) => state.loadedSuccess

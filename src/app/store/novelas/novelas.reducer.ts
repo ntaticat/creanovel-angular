@@ -4,13 +4,24 @@ import * as actions from './novelas.actions';
 
 export interface State {
   array: INovela[];
+  object: INovela;
   error: string;
   isLoading: boolean;
   loadedSuccess: boolean;
 };
 
+const initialObject: INovela = {
+  disponible: false,
+  descripcion: '',
+  titulo: '',
+  usuarioCreadorId: '',
+  novelaId: '',
+  escenas: []
+};
+
 const initialState: State = {
   array: [],
+  object: {...initialObject},
   error: '',
   isLoading: false,
   loadedSuccess: false
