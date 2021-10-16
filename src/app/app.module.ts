@@ -18,6 +18,7 @@ import { NovelasModule } from './modules/novelas/novelas.module';
 import { UsuariosEffects } from './store/usuarios/usuarios.effects';
 import { LecturasEffects } from '@store/lecturas/lecturas.effects';
 import { RecursosEffects } from '@store/recursos/recursos.effects';
+import { EscenasEffects } from '@store/escenas/escenas.effects';
 import { MainPageComponent } from './layouts/main-page/main-page.component';
 
 @NgModule({
@@ -30,7 +31,7 @@ import { MainPageComponent } from './layouts/main-page/main-page.component';
     AppRoutingModule,
     HttpClientModule,
     StoreModule.forRoot(appReducers),
-    EffectsModule.forRoot([NovelasEffects, UsuariosEffects, LecturasEffects, RecursosEffects]),
+    EffectsModule.forRoot([NovelasEffects, UsuariosEffects, LecturasEffects, RecursosEffects, EscenasEffects]),
     environment.production ? [] : StoreDevtoolsModule.instrument(),
     NovelasModule,
   ],

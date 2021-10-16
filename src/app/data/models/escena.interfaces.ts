@@ -1,13 +1,13 @@
-import { IConversacion, IDecision, IRecurso } from "./recurso.interfaces";
+import { IConversacion, IDecision } from "./recurso.interfaces";
 
 export interface IEscenaPost {
-  ndentificador: string;
+  identificador: string;
   novelaId: string;
 }
 
 export interface IEscena {
   EscenaId: string;
   novelaId: string;
-  ndentificador: string;
+  identificador: string;
   Recursos: (IConversacion | IDecision)[];
 }

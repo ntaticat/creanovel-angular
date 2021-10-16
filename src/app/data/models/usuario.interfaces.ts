@@ -11,8 +11,8 @@ export interface IUsuario {
   nombre: string;
   correo: string;
   nickname: string;
-  lecturas?: ILectura[];
-  novelasCreadas?: INovela[];
+  lecturas: ILectura[];
+  novelasCreadas: INovela[];
 }
 
 export interface IUsuarioPost {
