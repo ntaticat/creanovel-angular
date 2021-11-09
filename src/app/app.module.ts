@@ -20,6 +20,7 @@ import { LecturasEffects } from '@store/lecturas/lecturas.effects';
 import { RecursosEffects } from '@store/recursos/recursos.effects';
 import { EscenasEffects } from '@store/escenas/escenas.effects';
 import { MainPageComponent } from './layouts/main-page/main-page.component';
+import { NovelasCreatorEffects } from '@store/novela-creator/novelas-creator.effects';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,7 @@ import { MainPageComponent } from './layouts/main-page/main-page.component';
     AppRoutingModule,
     HttpClientModule,
     StoreModule.forRoot(appReducers),
-    EffectsModule.forRoot([NovelasEffects, UsuariosEffects, LecturasEffects, RecursosEffects, EscenasEffects]),
+    EffectsModule.forRoot([NovelasEffects, UsuariosEffects, LecturasEffects, RecursosEffects, EscenasEffects, NovelasCreatorEffects]),
     environment.production ? [] : StoreDevtoolsModule.instrument(),
     NovelasModule,
   ],

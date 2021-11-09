@@ -35,4 +35,24 @@ export class NovelasService {
         map(resp => resp)
       );
   }
+
+  getNovela(novelaId: string): Observable<INovela> {
+    const method = `novelas/${novelaId}`;
+
+    return this.http.get<INovela>(`${this.url}/${method}`)
+      .pipe(
+        map(resp => resp)
+      );
+  }
+
+  getNovelaEscenas(novelaId: string): Observable<INovela> {
+    const method = `novelas/${novelaId}/escenas`;
+
+    return this.http.get<INovela>(`${this.url}/${method}`)
+      .pipe(
+        map(resp => resp)
+      );
+  }
+
+
 }

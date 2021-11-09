@@ -30,7 +30,7 @@ export class NovelasCreatorPageComponent implements OnInit {
 
   goNovelaPage(novelaIndex: number) {
     const novelaInfo = this.novelasCreadas[novelaIndex];
-    this.store.dispatch(novelaCreatorActions.SET_NOVELA({payload: {...novelaInfo}}));
+    this.store.dispatch(novelaCreatorActions.SET_NOVELA({payload: novelaInfo.novelaId}));
     this.router.navigate(['novelas-creator', novelaInfo.novelaId]);
   }
 }
