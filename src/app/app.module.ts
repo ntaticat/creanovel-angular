@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { environment } from 'src/environments/environment';
 
@@ -21,6 +21,7 @@ import { RecursosEffects } from '@store/recursos/recursos.effects';
 import { EscenasEffects } from '@store/escenas/escenas.effects';
 import { MainPageComponent } from './layouts/main-page/main-page.component';
 import { NovelasCreatorEffects } from '@store/novela-creator/novelas-creator.effects';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,9 @@ import { NovelasCreatorEffects } from '@store/novela-creator/novelas-creator.eff
     environment.production ? [] : StoreDevtoolsModule.instrument(),
     NovelasModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

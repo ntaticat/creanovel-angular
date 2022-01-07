@@ -4,43 +4,45 @@ import * as actions from '@store/usuarios/usuarios.actions';
 
 export interface State {
   data: IUsuario;
+  userLoaded: boolean;
   error: string;
   isLoading: boolean;
-  loadedSuccess: boolean;
-  logged: boolean;
 };
 
 const initialUsuario: IUsuario = {
-  usuarioId: "",
+  id: "",
   nombre: "",
-  nickname: "",
-  correo: "",
+  userName: "",
+  email: "",
   lecturas: [],
   novelasCreadas: []
 };
 
 const initialState: State = {
-  data: initialUsuario,
+  data: {...initialUsuario},
   error: '',
   isLoading: false,
-  loadedSuccess: false,
-  logged: false
+  userLoaded: false
 };
 
 export const usuariosReducer = createReducer(initialState,
   on(actions.POST_LOGIN, (state) => (
-      { ...state, isLoading: true, loadedSuccess: false, logged: false }
+      { ...state, isLoading: true }
   )),
-  on(actions.POST_LOGIN_SUCCESS, (state, { payload }) => (
-    { ...state, isLoading: false, loadedSuccess: true, logged: true, data: {...payload} }
+  on(actions.POST_LOGIN_SUCCESS, (state) => (
+    { ...state, isLoading: false }
   )),
   on(actions.POST_LOGIN_ERROR, (state, { payload }) => (
-    { ...state, isLoading: false, loadedSuccess: false, logged: false, error: payload }
+    { ...state, isLoading: false, error: payload }
   )),
-  on(actions.READ_USUARIO_DATA, (state) => (
-    { ...state, isLoading: true, loadedSuccess: false, logged: false }
+
+  on(actions.GET_USUARIO_ID, (state) => (
+    { ...state, isLoading: true }
   )),
-  on(actions.SET_USUARIO_DATA, (state, { payload }) => (
-    { ...state, isLoading: false, loadedSuccess: true, logged: true, data: {...payload} }
-  ))
+  on(actions.GET_USUARIO_ID_SUCCESS, (state, { payload }) => (
+    { ...state, isLoading: false, data: {...payload}, userLoaded: true }
+  )),
+  on(actions.GET_USUARIO_ID_ERROR, (state, { payload }) => (
+    { ...state, isLoading: false, error: payload, userLoaded: false }
+  )),
 );

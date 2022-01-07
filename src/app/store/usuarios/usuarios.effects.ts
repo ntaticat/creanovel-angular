@@ -3,13 +3,14 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as usuarioActions from '@store/usuarios/usuarios.actions';
 import * as lecturaActions from '@store/lecturas/lecturas.actions';
 import * as usuarioSelectors from '@store/usuarios/usuarios.selectors';
-import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, concatMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { EMPTY, from, of, Subject } from 'rxjs';
 import { IPlayRecursos, UsuariosService } from '@services/usuarios.service';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '@store/app.reducer';
 import { ILectura, ILecturaPost } from '@models/lectura.interfaces';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -21,37 +22,71 @@ export class UsuariosEffects {
   CASO DE USO:
   CUANDO EL USUARIO ENTRA AL SISTEMA Y OBTIENE SU INFORMACION
   */
-  getUsuarioById$ = createEffect(
+
+  login$ = createEffect(
     () => this.actions$.pipe(
       ofType(usuarioActions.POST_LOGIN),
       mergeMap(
-        (resp) => this.usuariosService.getUsuarioById("1821861C-91AA-4BA8-5E5F-08D98EA1512E")
+        (action) => this.usuariosService.login(action.payload)
           .pipe(
-            tap((usuario) => this.usuariosService.saveUserData(usuario)),
-            map(usuario => usuarioActions.POST_LOGIN_SUCCESS({ payload: usuario })),
-            tap(() => this.router.navigateByUrl("/novelas")),
-            catchError(err => {
-              console.log('Error en getNovelas effect', err)
-              return of(usuarioActions.POST_LOGIN_ERROR({ payload: err }))
+            map(resp => usuarioActions.POST_LOGIN_SUCCESS({ payload: resp })),
+            catchError((err: HttpErrorResponse) => {
+              console.log('login$ error', err)
+              return of(usuarioActions.POST_LOGIN_ERROR({ payload: err.message }))
             })
           )
       )
     )
   );
 
-  /*
-  CASO DE USO:
-  OBTENER USUARIO DEL LOCALSTORAGE (SUSTITUIR POR INFORMACION DE LA SESION)
-  */
-  readUsuarioData$ = createEffect(
+  loginSuccess$ = createEffect(
     () => this.actions$.pipe(
-      ofType(usuarioActions.READ_USUARIO_DATA),
+      ofType(usuarioActions.POST_LOGIN_SUCCESS),
+      map((data) => {
+        console.log("LOGIN SUCCESS effect");
+        this.usuariosService.saveToken(data.payload.token);
+        this.router.navigateByUrl("/novelas");
+        return usuarioActions.NO_ACTION();
+      })
+    )
+  );
+
+  logout$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(usuarioActions.LOGOUT),
+      tap(() => this.usuariosService.clearSession()),
+      tap(() => this.router.navigateByUrl("/")),
+      map(() => usuarioActions.NO_ACTION())
+    )
+  );
+
+  getUsuarioById$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(usuarioActions.GET_USUARIO_ID),
+      map(() => {
+        const token = this.usuariosService.readToken();
+        const tokenObject = this.usuariosService.decodeJWT(token);
+
+        return tokenObject.userId;
+      }),
       mergeMap(
-        () => from(this.usuariosService.readUserData())
+        (userId) => this.usuariosService.getUsuarioById(userId)
           .pipe(
-            map(usuario => usuarioActions.SET_USUARIO_DATA({ payload: usuario }))
+            map(usuario => usuarioActions.GET_USUARIO_ID_SUCCESS({ payload: usuario })),
+            catchError((err: HttpErrorResponse) => {
+              console.log('getUsuarioById$ error', err)
+              return of(usuarioActions.GET_USUARIO_ID_ERROR({ payload: err.message }))
+            })
           )
       )
+    )
+  );
+
+  getUsuarioByIdError$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(usuarioActions.GET_USUARIO_ID_ERROR),
+      tap(() => this.router.navigateByUrl("/auth/login")),
+      map(() => usuarioActions.NO_ACTION())
     )
   );
 
@@ -61,7 +96,7 @@ export class UsuariosEffects {
       map(({novelaId}) => {
         let usuarioId: string = "";
         this.store.pipe(select(usuarioSelectors.usuario)).subscribe((usuario) => {
-          usuarioId = usuario.usuarioId;
+          usuarioId = usuario.id;
         });
 
         let postLectura: ILecturaPost = {

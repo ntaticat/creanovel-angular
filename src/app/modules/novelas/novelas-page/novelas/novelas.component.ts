@@ -12,6 +12,7 @@ import * as novelasActions from 'src/app/store/novelas/novelas.actions';
 import * as novelasSelectors from '@store/novelas/novelas.selectors';
 import * as usuarioSelectors from '@store/usuarios/usuarios.selectors';
 import * as usuarioActions from '@store/usuarios/usuarios.actions';
+import { skip } from 'rxjs/operators';
 
 @Component({
   selector: 'app-novelas',
@@ -35,10 +36,12 @@ export class NovelasComponent implements OnInit, OnDestroy {
     this.store.pipe(select(usuarioSelectors.usuario)).subscribe((usuario) => {
       this.lecturas = usuario?.lecturas;
       this.novelasCreadas = usuario?.novelasCreadas;
+      console.log("NOVELAS CREA", usuario);
     });
 
 
-    this.novelasSub = this.store.pipe(select(novelasSelectors.getNovelas)).subscribe(novelas => {
+    this.novelasSub = this.store.pipe(select(novelasSelectors.getNovelas), skip(1)).subscribe(novelas => {
+      console.log("Novelas response", novelas);
       this.novelasPlayer = novelas.map((novela) => {
         const newNovela: INovelaUser = {
           novela: {...novela},

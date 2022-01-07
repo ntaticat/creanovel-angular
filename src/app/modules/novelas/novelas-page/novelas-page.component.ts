@@ -17,7 +17,10 @@ export class NovelasPageComponent implements OnInit {
   constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
+  }
 
+  logout() {
+    this.store.dispatch(usuarioActions.LOGOUT());
   }
 
 }

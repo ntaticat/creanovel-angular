@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ILoginPost } from '@models/usuario.interfaces';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.reducer';
 import * as usuarioActions from 'src/app/store/usuarios/usuarios.actions';
@@ -15,7 +16,7 @@ export class LoginPageComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private store: Store<AppState>) {
     this.loginForm = this.formBuilder.group({
-      nickname: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
   }
@@ -26,14 +27,15 @@ export class LoginPageComponent implements OnInit {
   onSubmitLogin() {
     if(this.loginForm.valid) {
 
-      const nick = this.loginForm.get('nickname')?.value;
-      const pass = this.loginForm.get('password')?.value;
+      const email = this.loginForm.get('email')?.value;
+      const password = this.loginForm.get('password')?.value;
 
-      this.store.dispatch(usuarioActions.POST_LOGIN({ payload: {nickname: nick, password: pass} }));
-    }
-    else {
+      const credentials: ILoginPost = {
+        email,
+        password
+      }
 
+      this.store.dispatch(usuarioActions.POST_LOGIN({ payload: {...credentials} }));
     }
   }
-
 }

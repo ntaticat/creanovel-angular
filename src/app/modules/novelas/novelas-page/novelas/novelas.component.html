@@ -26,10 +26,10 @@
 				<h3>Novelas por descubrir...</h3>
         <ng-container *ngFor="let novelaPlayer of novelasPlayer">
           <div *ngIf="!novelaPlayer.created && !novelaPlayer.played" class="my-3">
-            <div class="relative w-full h-40 border-2 border-solid border-gray-500 rounded-lg overflow-hidden flex flex-nowrap">
+            <div class="relative w-full h-40 border-2 border-solid border-gray-500 rounded-lg overflow-hidden flex flex-nowrap justify-between">
               <div class="p-3 overflow-y-auto">
-                <h5>Titulo de la novela</h5>
-                <p>Descripción de la novela Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis perferendis, numquam tenetur officiis harum accusamus repellendus asperiores cumque assumenda quisquam, quasi, aut animi qui id? Numquam eos doloribus quibusdam incidunt!</p>
+                <h5>{{ novelaPlayer.novela.titulo }}</h5>
+                <p>{{ novelaPlayer.novela.descripcion }}</p>
                 <p>Idiomas: <span>Español</span>, <span>Inglés</span></p>
                 <p>Puntuación: <span><fa-icon [icon]="faIcons['faStar']"></fa-icon><fa-icon [icon]="faIcons['faStar']"></fa-icon><fa-icon [icon]="faIcons['faStar']"></fa-icon><fa-icon [icon]="faIcons['faStar']"></fa-icon></span></p>
                 <h6>Creador de la novela</h6>

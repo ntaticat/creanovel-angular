@@ -24,7 +24,7 @@ export class LecturasEffects {
         (lecturaPost) => this.lecturasService.postLectura(lecturaPost.payload)
           .pipe(
             map(dbLectura => lecturaActions.POST_LECTURA_SUCCESS({ payload: dbLectura })),
-            tap(() => usuarioActions.POST_LOGIN({payload: {nickname: "123", password: "123"}})),
+            tap(() => usuarioActions.POST_LOGIN({payload: {email: "123", password: "123"}})),
             catchError(err => {
               console.log('Error en getNovelas effect', err)
               return of(lecturaActions.POST_LECTURA_ERROR({ payload: err }))

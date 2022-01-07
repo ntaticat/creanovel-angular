@@ -1,23 +1,31 @@
 import { ILectura } from "./lectura.interfaces";
 import { INovela } from "./novela.interfaces";
 
+export interface IToken {
+  token: string;
+}
+
+export interface ITokenData {
+  userId: string;
+}
+
 export interface ILoginPost {
-  nickname: string;
+  email: string;
   password: string;
 }
 
 export interface IUsuario {
-  usuarioId: string;
+  id: string;
   nombre: string;
-  correo: string;
-  nickname: string;
+  email: string;
+  userName: string;
   lecturas: ILectura[];
   novelasCreadas: INovela[];
 }
 
 export interface IUsuarioPost {
   nombre: string;
-  correo: string;
-  nickname: string;
+  email: string;
+  userName: string;
   password: string;
 }

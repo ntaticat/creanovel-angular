@@ -1,8 +1,16 @@
 import { createAction, props } from "@ngrx/store";
 import { INovela } from "@models/novela.interfaces";
-import { ILoginPost, IUsuario, IUsuarioPost } from "src/app/data/models/usuario.interfaces";
+import { ILoginPost, IToken, IUsuario, IUsuarioPost } from "src/app/data/models/usuario.interfaces";
 
 // -------- AUTENTICACION -------- //
+
+export const LOGOUT = createAction(
+  '[Usuarios] LOGOUT'
+);
+
+export const NO_ACTION = createAction(
+  '[Usuarios] NO_ACTION'
+);
 
 export const POST_LOGIN = createAction(
   '[Usuarios] POST_LOGIN',
@@ -11,12 +19,12 @@ export const POST_LOGIN = createAction(
 
 export const POST_LOGIN_SUCCESS = createAction(
   '[Usuarios] POST_LOGIN_SUCCESS',
-  props<{ payload: IUsuario }>()
+  props<{ payload: IToken }>()
 );
 
 export const POST_LOGIN_ERROR = createAction(
   '[Usuarios] POST_LOGIN_ERROR',
-  props<{ payload: any }>()
+  props<{ payload: string }>()
 );
 
 // -------- MODO LECTURA -------- //
@@ -31,19 +39,6 @@ export const PLAY_NOVEL = createAction(
   props<{ novelaId: string }>()
 );
 
-
-// Obtener usuario del localstorage
-export const READ_USUARIO_DATA = createAction(
-  '[Usuarios] READ_USUARIO_DATA'
-);
-
-export const SET_USUARIO_DATA = createAction(
-  '[Usuarios] SET_USUARIO_DATA',
-  props<{ payload: IUsuario }>()
-);
-
-
-
 // -------- MODO CREADOR -------- //
 
 // CREACION DE USUARIOS
@@ -54,10 +49,25 @@ export const POST_USUARIO = createAction(
 
 export const POST_USUARIO_SUCCESS = createAction(
   '[Usuarios] POST_USUARIO_SUCCESS',
-  props<{ payload: IUsuario }>()
+  props<{ payload: IToken }>()
 );
 
 export const POST_USUARIO_ERROR = createAction(
   '[Usuarios] POST_USUARIO_ERROR',
   props<{ payload: any }>()
+);
+
+// OBTENER POR ID
+export const GET_USUARIO_ID = createAction(
+  '[Usuarios] GET_USUARIO_ID'
+);
+
+export const GET_USUARIO_ID_SUCCESS = createAction(
+  '[Usuarios] GET_USUARIO_ID_SUCCESS',
+  props<{ payload: IUsuario }>()
+);
+
+export const GET_USUARIO_ID_ERROR = createAction(
+  '[Usuarios] GET_USUARIO_ID_ERROR',
+  props<{ payload: string }>()
 );

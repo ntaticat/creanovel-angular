@@ -37,7 +37,7 @@ export class NovelaCreatorFormComponent implements OnInit {
     const novelaPost: INovelaPost = {...this.novelaForm.value};
 
     this.store.pipe(select(usuarioSelectors.usuario)).subscribe((usuario) => {
-      novelaPost.usuarioCreadorId = usuario.usuarioId;
+      novelaPost.usuarioCreadorId = usuario.id;
     });
 
     this.store.dispatch(novelaActions.CREATE_NOVELA({payload: novelaPost}));

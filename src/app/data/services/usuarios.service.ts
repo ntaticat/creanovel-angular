@@ -1,9 +1,9 @@
+import { IUsuarioPost, IUsuario, IToken, ILoginPost, ITokenData } from '@models/usuario.interfaces';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { IUsuario } from '../models/usuario.interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,27 @@ export class UsuariosService {
 
   constructor(private http: HttpClient) { }
 
+  postUsuario(usuarioPost: IUsuarioPost): Observable<IToken> {
+    const method = `usuarios`;
+
+    return this.http.post<IToken>(`${this.url}/${method}`, usuarioPost)
+      .pipe(
+        map(resp => resp)
+      );
+  }
+
+  login(loginPost: ILoginPost) {
+    const method = `usuarios/login`;
+    return this.http.post<IToken>(`${this.url}/${method}`, loginPost)
+      .pipe(
+        map(resp => resp)
+      );
+  }
+
+  clearSession() {
+    localStorage.clear();
+  }
+
   getUsuarioById(usuarioId: string): Observable<IUsuario> {
     const method = `usuarios/${usuarioId}`;
 
@@ -23,26 +44,19 @@ export class UsuariosService {
       );
   }
 
-  async saveUserData(userData: IUsuario) {
-    localStorage.setItem("user", JSON.stringify(userData));
+
+  saveToken(token: string) {
+    localStorage.setItem("token", token);
   }
 
-  async readUserData(): Promise<IUsuario> {
-    const userData = localStorage.getItem("user");
-    if(userData) {
-      return JSON.parse(userData);
-    }
-    else {
-      const usuario: IUsuario = {
-        usuarioId: "",
-        nombre: "",
-        nickname: "",
-        correo: "",
-        lecturas: [],
-        novelasCreadas: []
-      }
-      return usuario;
-    }
+  readToken(): string {
+    const token = localStorage.getItem("token");
+    return token ?? "";
+  }
+
+  decodeJWT(token: string): ITokenData {
+    const decodeToken = JSON.parse(atob(token.split('.')[1]));
+    return decodeToken;
   }
 
   getUltimoRecurso(novelaId: string, usuario: IUsuario): IPlayRecursos {
