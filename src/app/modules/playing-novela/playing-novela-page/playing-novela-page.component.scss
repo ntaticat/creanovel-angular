@@ -1,0 +1,54 @@
+@import "src/styles/mixins.scss";
+
+.main {
+  font-family: 'Raleway', sans-serif;
+  font-weight: normal;
+
+	padding: 0px 20px;
+	background-color: #dfc0da;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+
+	@media screen and (max-width: 600px) {
+		padding: 0px 10px;
+	}
+}
+
+.novel-title {
+	@include classic-colors;
+
+	width: 100%;
+	height: auto;
+
+	font-weight: bold;
+	font-size: 26px;
+
+	padding: 10px;
+	border: 2px #707070;
+	border-style: solid none solid none;
+	margin-top: 10px;
+
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+.novel-info {
+	background-color: white;
+	color: black;
+	font-weight: bold;
+	padding: 20px;
+	width: 100%;
+	margin-bottom: 10px;
+	border: 2px 0px;
+	border: 2px #707070;
+	border-style: solid none solid none;
+
+	& h3 {
+		margin: 0px 0px 10px 0px;
+		font-size: 24px;
+	}
+}

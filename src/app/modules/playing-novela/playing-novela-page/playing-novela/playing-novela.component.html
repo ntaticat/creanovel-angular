@@ -1,14 +1,14 @@
 <div class="novel-container">
   <div class="stage">
-      <app-novela-message></app-novela-message>
+      <app-playing-novela-message></app-playing-novela-message>
       <div class="stage-character">
           <img src="https://i.pinimg.com/originals/55/6b/bd/556bbd57bb1d10813cb74744a573db33.png" alt="Kokichi Sprite" />
       </div>
       <div class="stage-character-name">
           <span>Kokichi Oma</span>
       </div>
-      <app-novela-decisions></app-novela-decisions>
+      <app-playing-novela-decisions></app-playing-novela-decisions>
   </div>
-  <app-novela-conversation [text]="recursoActual?.mensaje"></app-novela-conversation>
-  <app-novela-actions></app-novela-actions>
+  <app-playing-novela-conversation [text]="recursoActual?.mensaje"></app-playing-novela-conversation>
+  <app-playing-novela-actions></app-playing-novela-actions>
 </div>

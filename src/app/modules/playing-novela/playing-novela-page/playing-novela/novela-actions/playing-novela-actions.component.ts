@@ -1,4 +1,4 @@
-import { IConversacion, instanceOfIConversacion, instanceOfIDecision } from './../../../../../data/models/recurso.interfaces';
+import { IConversacion, instanceOfIConversacion, instanceOfIDecision } from '../../../../../data/models/recurso.interfaces';
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '@store/app.reducer';
@@ -8,11 +8,11 @@ import * as usuarioSelectors from "@store/usuarios/usuarios.selectors";
 import { ILecturaRecursoPost } from '@models/lectura.interfaces';
 
 @Component({
-  selector: 'app-novela-actions',
-  templateUrl: './novela-actions.component.html',
-  styleUrls: ['./novela-actions.component.scss']
+  selector: 'app-playing-novela-actions',
+  templateUrl: './playing-novela-actions.component.html',
+  styleUrls: ['./playing-novela-actions.component.scss']
 })
-export class NovelaActionsComponent implements OnInit {
+export class PlayingNovelaActionsComponent implements OnInit {
 
   lecturaId: string = "";
   siguienteRecursoId?: string = "";

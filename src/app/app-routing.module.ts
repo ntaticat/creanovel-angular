@@ -23,6 +23,10 @@ const routes: Routes = [
       {
         path: 'novelas-creator',
         loadChildren: () => import('./modules/novelas-creator/novelas-creator.module').then(m => m.NovelasCreatorModule)
+      },
+      {
+        path: 'play',
+        loadChildren: () => import('./modules/playing-novela/playing-novela.module').then(m => m.PlayingNovelaModule)
       }
     ]
   },

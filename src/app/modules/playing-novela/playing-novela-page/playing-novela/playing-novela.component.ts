@@ -7,11 +7,11 @@ import { AppState } from '@store/app.reducer';
 import * as lecturaSelectors from '@store/lecturas/lecturas.selectors';
 
 @Component({
-  selector: 'app-novela',
-  templateUrl: './novela.component.html',
-  styleUrls: ['./novela.component.scss']
+  selector: 'app-playing-novela',
+  templateUrl: './playing-novela.component.html',
+  styleUrls: ['./playing-novela.component.scss']
 })
-export class NovelaComponent implements OnInit {
+export class PlayingNovelaComponent implements OnInit {
 
   @Input() novelaId: string = "";
   recursoActual?: IDecision | IConversacion;

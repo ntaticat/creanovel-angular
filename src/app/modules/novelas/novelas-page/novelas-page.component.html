@@ -1,37 +1,31 @@
-<div class="novelas-page-container">
-	<div class="flex flex-col novelas-page-contained">
+<div class="bg-gray-900 text-gray-200 w-full flex flex-nowrap justify-center items-center">
 
-		<!-- Header -->
-		<div class="bg-gray-900 text-gray-200 h-14 w-full flex flex-nowrap justify-center items-center">
-			<div class="w-9/12 flex flex-row flex-nowrap">
-				<!-- Titulo y busqueda -->
-				<div class="w-9/12 flex flex-nowrap justify-between items-center">
-					<div class="px-1 py-2 mx-2">
-						<h1 class="text-2xl">Creanovel</h1>
-					</div>
-					<div class="px-1 py-2 w-full">
-						<input class="w-full text-center rounded-full py-2 px-4 text-gray-900" type="text"
-							placeholder="Buscar novela...">
-					</div>
-				</div>
-				<!-- Opciones -->
-				<div class="px-1 py-2 w-3/12 flex justify-end align-center">
-          <a routerLink="/novelas-creator" class="px-2 py-1 rounded-lg bg-green-700 text-white">
-						Crear novela
-					</a>
-					<button class="p-2">
-						<fa-icon [icon]="faCog"></fa-icon>
-					</button>
-          <button (click)="logout()" class="p-2">
-						<fa-icon [icon]="faSignOutAlt"></fa-icon>
-					</button>
-				</div>
-			</div>
-		</div>
-
-    <div class="w-full calc-heigth">
-      <app-novelas></app-novelas>
+  <div class="w-9/12 py-2 flex flex-row flex-nowrap justify-between items-center">
+    <!-- Titulo y busqueda -->
+    <div class="">
+      <h1 class="text-2xl">Creanovel</h1>
     </div>
-	</div>
+    <!-- Input -->
+    <div class="w-8/12 px-4">
+      <input class="w-full text-center rounded-full py-2 px-4 text-gray-900" type="text" placeholder="Buscar novela...">
+    </div>
+    <!-- Opciones -->
+    <div class="flex flex-nowrap justify-between items-center">
 
+      <a routerLink="/novelas-creator" class="w-auto px-2 py-1 rounded-lg bg-green-700 text-white text-sm">
+        Crear novela
+      </a>
+      <button class="p-2">
+        <fa-icon [icon]="faCog"></fa-icon>
+      </button>
+      <button (click)="logout()" class="p-2">
+        <fa-icon [icon]="faSignOutAlt"></fa-icon>
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<div class="w-full calc-heigth">
+  <app-novelas></app-novelas>
 </div>
