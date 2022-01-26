@@ -1,20 +1,17 @@
-<div class="w-full h-full bg-red-900">
-  <div class="relative w-full h-full overflow-y-auto">
-    <img class="w-full h-full object-cover object-center" src="https://www.xtrafondos.com/wallpapers/izuku-midoriya-my-hero-academia-3393.jpg" alt="">
-    <div class="absolute top-0 left-0 w-full h-full z-10 bg-gradient-to-b from-transparent to-red-900 flex justify-center">
-      <div class="absolute top-2/4 z-20 min-h-full w-8/12 h-auto mb-5 bg-gray-900 text-white p-5 rounded-tl-lg rounded-tr-lg">
-        <h2>{{ novelaInfo?.titulo || 'Sin titulo' }}</h2>
-        <p>{{ novelaInfo?.descripcion }}</p>
-        <p><span>{{ novelaInfo?.titulo? 'Disponible' : 'No disponible' }}</span></p>
-        <div>
-          <app-novela-creator-escena></app-novela-creator-escena>
-          <app-escena-creator-form></app-escena-creator-form>
-        </div>
+<div class="w-full h-full flex flex-wrap bg-gray-100">
+  <!-- Escenas -->
+  <div class="w-3/12 h-full bg-gray-700"></div>
+  <!-- Mapa -->
 
+  <div class="w-9/12 h-full p-5">
+    <pan-zoom [config]="panZoomConfig">
+
+      <div class="relative">
+
+        <img src="https://64.media.tumblr.com/cabc152302a8776158e01c0983c61499/tumblr_pk7kjriefd1tlwylu_1280.jpg">
 
       </div>
-    </div>
+
+    </pan-zoom>
   </div>
-  <!-- <div class="relative w-full h-auto flex justify-center bg-gray-900">
-  </div> -->
 </div>

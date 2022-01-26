@@ -5,7 +5,7 @@ import { PlayingNovelaPageComponent } from './playing-novela-page/playing-novela
 
 const routes: Routes = [
   { path: ':id', component: PlayingNovelaPageComponent, canActivate: [AuthGuard] },
-  { path: '**', pathMatch: 'full', redirectTo: '' }
+  { path: '**', pathMatch: 'full', redirectTo: '/novelas' }
 ];
 
 @NgModule({

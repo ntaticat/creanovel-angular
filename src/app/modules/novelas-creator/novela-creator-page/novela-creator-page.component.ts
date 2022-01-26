@@ -4,6 +4,7 @@ import { INovela, INovelaPost } from '@models/novela.interfaces';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '@store/app.reducer';
 import * as novelasCreatorSelectors from "@store/novela-creator/novelas-creator.selectors";
+import { PanZoomConfig } from 'ngx-panzoom';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -12,6 +13,8 @@ import { Observable } from 'rxjs';
   styleUrls: ['./novela-creator-page.component.scss']
 })
 export class NovelaCreatorPageComponent implements OnInit {
+
+  panZoomConfig: PanZoomConfig = new PanZoomConfig();
 
   novelaInfo?: INovela;
 
