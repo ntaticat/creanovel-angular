@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as faIcons from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-novela-page',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./novela-page.component.scss']
 })
 export class NovelaPageComponent implements OnInit {
+
+  faIcons = faIcons;
 
   constructor() {
   }
