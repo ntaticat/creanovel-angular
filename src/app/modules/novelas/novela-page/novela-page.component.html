@@ -1,97 +1,143 @@
-<!-- Contenedor de Titulo -->
-<div class="sticky top-0 w-full bg-gray-900 text-white flex justify-center">
-  <!-- Titulo -->
-  <div class="relative w-10/12">
-    <div class="relative z-50 p-3 w-8/12 outline-white flex flex-wrap justify-start">
-      <h1 class="text-2xl w-full">Titulo de la Novela</h1>
-      <p class="w-full text-sm">
-        Puntuacion:
-        <span>
-          4.7
-        </span>
-        <span>
-          <fa-icon [icon]="faIcons['faStar']"></fa-icon>
-          <fa-icon [icon]="faIcons['faStar']"></fa-icon>
-          <fa-icon [icon]="faIcons['faStar']"></fa-icon>
-          <fa-icon [icon]="faIcons['faStar']"></fa-icon>
-          <fa-icon [icon]="faIcons['faStarHalf']"></fa-icon>
-        </span>
-      </p>
+<div class="relative">
+  <!-- Contenedor de Titulo -->
+  <div class="sticky top-0 left-0 z-20 w-full bg-gray-900 text-white flex justify-center">
+    <div class="w-10/12">
+      <div class="p-3 w-8/12 flex flex-wrap justify-start">
+        <h1 class="text-2xl w-full">Titulo de la Novela</h1>
+        <p class="w-full text-sm">
+          Puntuacion:
+          <span>
+            4.7
+          </span>
+          <span>
+            <fa-icon [icon]="faIcons['faStar']"></fa-icon>
+            <fa-icon [icon]="faIcons['faStar']"></fa-icon>
+            <fa-icon [icon]="faIcons['faStar']"></fa-icon>
+            <fa-icon [icon]="faIcons['faStar']"></fa-icon>
+            <fa-icon [icon]="faIcons['faStarHalf']"></fa-icon>
+          </span>
+        </p>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="w-full bg-gray-800 text-gray-900 flex justify-center">
-  <div class="w-10/12 flex flex-wrap items-start relative">
-    <!-- Contenedor Descripcion y demas -->
-    <div class="w-8/12 p-3 bg-gray-600 text-white">
-      <!-- Categorias -->
-      <div class="flex flex-wrap">
-        <p class="mr-3 rounded-full text-sm border-2 border-solid border-gray-900 px-2 py-1">Rafael</p>
-        <p class="mr-3 rounded-full text-sm border-2 border-solid border-gray-900 px-2 py-1">Rafael</p>
-        <p class="mr-3 rounded-full text-sm border-2 border-solid border-gray-900 px-2 py-1">Rafael</p>
-      </div>
-
-      <!-- Descripcion -->
-      <div class="">
-        <P>Sinopsis</P>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla excepturi ullam consectetur dolorem quod
-          nesciunt officia velit expedita repellat? Quis quibusdam est nemo obcaecati? Asperiores corrupti possimus
-          numquam repellat unde?</p>
-        <p>Illum veritatis, dolor voluptate soluta minus facilis consectetur labore possimus adipisci enim non maxime
-          veniam delectus molestias consequatur libero esse nisi culpa. Quae sunt, distinctio delectus explicabo
-          possimus recusandae iusto!</p>
-        <p>Atque excepturi minima veritatis ad impedit provident enim, earum alias unde rerum. Exercitationem eius quod
-          quam quaerat maxime commodi enim in ad sed possimus officiis laudantium aliquam dolorum, rerum officia.</p>
-        <p>Exercitationem, iste quod cupiditate praesentium veritatis a ad debitis voluptas quo, deleniti perspiciatis
-          ipsa eum nesciunt ipsam placeat eaque unde aliquid harum vitae dolorem? Quidem quaerat quas cumque. Maxime,
-          autem!</p>
-        <p>Est reprehenderit aliquid dolore illum deleniti, saepe quasi ipsam quo neque voluptatibus blanditiis porro
-          velit dicta ratione pariatur optio aspernatur repellendus iste nobis. Veritatis temporibus architecto numquam
-          doloribus est fugiat.</p>
-        <p>Nisi unde debitis nesciunt ullam, itaque vero impedit dolorum blanditiis quis, in dignissimos sequi molestiae
-          aliquid repudiandae quas ducimus nihil! Atque animi ipsa qui earum molestias soluta dolorum sunt delectus.</p>
-        <p>Culpa soluta consectetur quis quod laudantium incidunt, alias mollitia exercitationem deserunt vitae ratione
-          expedita autem commodi aut magnam! Blanditiis neque veritatis unde rerum repudiandae deserunt perferendis
-          dolor ipsam commodi cupiditate.</p>
-        <p>Necessitatibus ex, eligendi quisquam hic porro ad eos, quibusdam commodi eaque eum saepe libero reprehenderit
-          vitae esse earum aperiam quam perferendis ut deleniti. Amet porro error commodi nostrum quidem hic.</p>
-        <p>Nihil id exercitationem aut fuga ipsa deleniti ex at, enim accusamus necessitatibus fugiat possimus nesciunt
-          quibusdam est odit aperiam totam! Quibusdam quod minima cum facere voluptatum, dicta eum repellat odit!</p>
-        <p>Rem ipsum sapiente quisquam labore suscipit. Neque minus earum voluptates ea eos nesciunt porro cupiditate
-          explicabo sit impedit aliquid nulla, quo, error distinctio voluptatum voluptatibus suscipit! Rem
-          exercitationem pariatur veniam.</p>
-      </div>
-
-    </div>
-
-    <!-- Contenedor para imagen y acciones -->
-    <div class="w-4/12 absolute right-0 h-screen" style="top: -40px;">
-      <div class="w-full sticky top-0 border-2 border-solid border-gray-600">
-        <!-- Portada -->
-        <div class="w-full">
-          <img src="https://yt3.ggpht.com/LR1e69SSkXgAZLxBEQfvoAq4TbjTBRf5wYs43fpWJcHOf8mcHu2mRq9ldgmXqQ8U1Mg=w1080-rw"
-            alt="">
+  <div class="w-full bg-gray-800 text-gray-900 flex justify-center">
+    <div class="relative w-10/12 flex flex-wrap items-start">
+      <!-- Contenedor Descripcion y demas -->
+      <div class="w-8/12 p-3 bg-gray-600 text-white">
+        <!-- Categorias -->
+        <div class="flex flex-wrap">
+          <p class="mr-3 rounded-full text-sm border-2 border-solid border-gray-900 px-2 py-1">Rafael</p>
+          <p class="mr-3 rounded-full text-sm border-2 border-solid border-gray-900 px-2 py-1">Rafael</p>
+          <p class="mr-3 rounded-full text-sm border-2 border-solid border-gray-900 px-2 py-1">Rafael</p>
         </div>
-        <!-- Acciones -->
-        <div class="w-full p-3 border-t-2 border-solid border-gray-600 bg-gray-200">
+
+        <!-- Descripcion -->
+        <div class="">
+          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Exercitationem assumenda excepturi expedita
+            tenetur! Tempore sequi placeat quia, nesciunt provident qui odio vel praesentium voluptatem aliquid aperiam?
+            Veniam aliquam esse pariatur.</p>
+          <p>Accusantium quam qui officiis placeat eveniet, dignissimos quo, asperiores aperiam unde quidem sint
+            deserunt
+            nisi ut consequuntur et labore. Mollitia quidem dolorem sapiente laborum molestias a numquam explicabo
+            cupiditate dicta!</p>
+          <p>Explicabo quae quisquam repudiandae aspernatur, natus odio eaque dicta velit iure? Cumque ipsa et totam
+            architecto, pariatur, nam eos dolores nesciunt porro, possimus rerum. Nobis minima at libero itaque
+            repellat.
+          </p>
+          <p>Ea minus incidunt nesciunt excepturi quis nemo laborum ipsam, inventore odio facilis, velit optio fugiat
+            deleniti repellendus quasi at, reiciendis beatae veritatis! Dolorum inventore aliquid aperiam, soluta
+            placeat
+            sunt omnis?</p>
+          <p>Libero ratione voluptatibus aut doloribus delectus? Inventore omnis enim pariatur. Sint officiis tempora
+            cum
+            fugit autem sed excepturi reiciendis nisi illo ex eos dolorem sit placeat, a mollitia quos omnis!</p>
+          <p>Laudantium, deserunt sint? Distinctio, dolorum impedit debitis earum quibusdam blanditiis. Porro, placeat.
+            Nam sed veritatis, ipsum, incidunt ipsa quod, vero ad eum voluptatum id voluptatibus itaque eveniet facere
+            ex
+            aliquam!</p>
+          <p>Perferendis id illo quasi vel similique culpa adipisci quidem, necessitatibus non deserunt accusantium
+            provident veniam odit, ipsum placeat quaerat, qui voluptatem sunt rem sed exercitationem dignissimos? Cum,
+            inventore! Fugiat, suscipit.</p>
+          <p>Temporibus omnis molestiae aperiam quos cumque repellat ipsam, unde corrupti excepturi sunt officiis
+            aliquam.
+            Corrupti sequi dolorum vitae illum animi aspernatur quia perferendis harum eum totam saepe sed, dicta
+            accusamus?</p>
+          <p>Natus, libero facilis rerum magni itaque suscipit est dolore cumque modi aut non repellendus quos harum
+            perferendis nulla in dolores. Praesentium explicabo veniam quod expedita beatae obcaecati doloribus ipsam.
+            Placeat!</p>
+          <p>Quisquam tempora, consectetur praesentium vitae explicabo dicta. Deserunt reprehenderit delectus commodi
+            labore, magnam ad pariatur doloribus architecto rerum, ducimus temporibus? Porro sit sunt, incidunt quas
+            fugit
+            voluptatum totam quod a!</p>
+          <p>Harum, sequi nulla deserunt explicabo, dignissimos sint aperiam exercitationem pariatur saepe consectetur
+            sit
+            recusandae, necessitatibus cupiditate! Necessitatibus ullam obcaecati voluptatibus consequatur voluptatum,
+            distinctio iure nulla rerum quisquam itaque, beatae omnis.</p>
+          <p>Ea facere totam mollitia inventore voluptate ut harum dolore enim magni magnam. Dolore soluta, porro et
+            aliquam aut sunt, deleniti ad unde quod amet temporibus voluptatibus, minima alias. Cum, illum!</p>
+          <p>Placeat magni consequuntur id doloribus nulla accusamus natus! Excepturi nesciunt corporis impedit dolor,
+            quo, temporibus ducimus vel tempore molestiae reprehenderit, inventore praesentium assumenda ullam facilis.
+            Nesciunt vero corrupti quam facere.</p>
+          <p>Ad, blanditiis atque dolor similique ipsa quam sit delectus doloribus inventore quibusdam quo mollitia
+            exercitationem! Distinctio et molestias quasi sit beatae fugit, corporis aut non unde id blanditiis fuga
+            accusantium?</p>
+          <p>Est ipsa quas nemo inventore non libero vel aliquam magnam reiciendis consequuntur, quia praesentium illo
+            vitae quidem similique quos? Cum, molestias harum unde ipsa aliquid ad est sed dolore omnis.</p>
+          <p>At repellendus magni reiciendis, sit optio libero rem aliquam doloribus expedita quasi reprehenderit fugit
+            id
+            quisquam iure tenetur repudiandae voluptatem nam ad impedit odio minus dolorum facere quam! Omnis, dolorum?
+          </p>
+          <p>Consectetur facilis corrupti ipsam voluptatum quae architecto beatae impedit alias at ullam eveniet
+            voluptate
+            hic eligendi nulla esse, dolor dolore accusamus quaerat natus sit, veniam possimus! Nobis recusandae alias
+            quas.</p>
+          <p>Magni dignissimos rerum laborum architecto sint perferendis magnam voluptates. Dicta suscipit iste quas
+            natus
+            sunt, cupiditate exercitationem officia voluptas enim ipsa ratione id. Obcaecati ut quae molestiae eum illum
+            nisi.</p>
+          <p>Pariatur provident aspernatur aut, ullam, iure repellat dolore quisquam error soluta eum quo. Aspernatur,
+            ea
+            modi perferendis ipsa temporibus maiores aut impedit enim reprehenderit rem sed repellat, pariatur obcaecati
+            labore.</p>
+          <p>Iusto amet porro necessitatibus quaerat ipsa debitis nisi officia reprehenderit eaque quo omnis illum
+            deleniti iure ratione eveniet repellendus similique ipsum quisquam, quas asperiores, neque animi voluptates
+            nostrum molestias. Temporibus!</p>
+        </div>
+
+      </div>
+
+      <!-- Contenedor para imagen y acciones -->
+      <div class="sticky top-0 right-0 z-30 w-4/12 h-screen">
+      <div class="w-full h-screen flex flex-col flex-nowrap overflow-hidden">
+
+        <div class="w-full h-auto p-3 bg-gray-800">
           <button
             class="mb-3 px-4 py-2 w-full border-2 border-solid border-green-800 bg-green-600 text-white">Jugar</button>
           <button class=" px-4 py-2 w-full border-2 border-solid border-red-800 bg-red-600 text-white">Añadir a
             favoritos</button>
         </div>
+
+        <div class="relative w-full h-full flex justify-center items-center overflow-hidden" style="max-height: 75vh;">
+          <div class="absolute top-0 left-0 bottom-0 right-0" style="background-image: url('https://thypix.com/wp-content/uploads/2021/05/anime-demon-slayer-kimetsu-no-yaiba-mobile-wallpaper-14-700x1400.jpg'); background-position: center; background-size: cover; filter: blur(8px); z-index: -1; box-shadow: inset 0 0 20px 15px #000;"></div>
+          <img class="w-full object-contain object-center bg-gray-700"
+            src="https://thypix.com/wp-content/uploads/2021/05/anime-demon-slayer-kimetsu-no-yaiba-mobile-wallpaper-14-700x1400.jpg"
+            alt="">
+        </div>
+
       </div>
     </div>
+    </div>
   </div>
+
+  <!-- Creador -->
+  <div class=""></div>
+  <!-- Contenido Multimedia -->
+  <div class=""></div>
+
+  <!-- Anuncios -->
+  <div class=""></div>
+
+  <!-- Reseñas -->
+  <div class=""></div>
 </div>
-
-<!-- Creador -->
-<div class=""></div>
-<!-- Contenido Multimedia -->
-<div class=""></div>
-
-<!-- Anuncios -->
-<div class=""></div>
-
-<!-- Reseñas -->
-<div class=""></div>
