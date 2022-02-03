@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import * as faIcons from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -9,8 +10,12 @@ import * as faIcons from '@fortawesome/free-solid-svg-icons';
 export class NovelaPageComponent implements OnInit {
 
   faIcons = faIcons;
+  novelaId: string = "";
 
-  constructor() {
+  constructor(private activatedRoute: ActivatedRoute) {
+    this.activatedRoute.params.subscribe((params) => {
+      this.novelaId = params["id"];
+    });
   }
 
   ngOnInit(): void {
