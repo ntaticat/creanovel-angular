@@ -1,17 +1,131 @@
-<div class="w-full h-full flex flex-wrap bg-gray-100">
+<div class="w-full h-full creator-container">
+  <div class="bg-gray-800 text-white creator-navbar">
+    <h1>Creanovel - Novel Creator</h1>
+  </div>
   <!-- Escenas -->
-  <div class="w-3/12 h-full bg-gray-700"></div>
+  <div class="bg-gray-700 creator-escenas flex flex-col justify-between flex-nowrap overflow-y-auto">
+    <div class="h-auto bg-gray-200 p-3">
+      <button class="w-full rounded-r-xl px-3 py-2 bg-gray-500 text-white mb-3">Escenas</button>
+      <button *ngFor="let item of [1,1,1,1]" class="w-full rounded-r-xl px-3 py-2 bg-gray-600 text-white mb-3">Escena
+        #1</button>
+    </div>
+    <div class="h-auto bg-gray-300">
+      <p>Rafael Estrada</p>
+    </div>
+  </div>
   <!-- Mapa -->
+  <div class="bg-white creator-map overflow-y-auto">
+    <div class="creator-top">
+      <button class="bg-black text-white w-full h-full">
+        <div class="">Arriba</div>
+      </button>
+    </div>
+    <div class="creator-left">
+      <button class="bg-black text-white w-full h-full">
+        <div class="">Izquierda</div>
+      </button>
+    </div>
+    <div class="creator-right">
+      <button class="bg-black text-white w-full h-full">
+        <div class="w-full">Derecha</div>
+      </button>
+    </div>
+    <div class="creator-bottom">
+      <button class="bg-black text-white w-full h-full">
+        <div class="">Abajo</div>
+      </button>
+    </div>
 
-  <div class="w-9/12 h-full p-5">
-    <pan-zoom [config]="panZoomConfig">
+    <div class="w-full h-full map-container p-3">
 
-      <div class="relative">
+      <!-- Recurso -->
+      <div class="">1</div>
+      <div class="">1</div>
+      <div class="">
+        <div class="w-full h-full overflow-hidden bg-gray-600 rounded-lg shadow-lg"></div>
+      </div>
+      <div class="">1</div>
+      <div class="">1</div>
 
-        <img src="https://64.media.tumblr.com/cabc152302a8776158e01c0983c61499/tumblr_pk7kjriefd1tlwylu_1280.jpg">
-
+      <!-- Imagen direccional -->
+      <div class="direction-item">
+        <div class="w-full h-full overflow-hidden">
+          <img class="w-full h-full object-contain object-center"
+            src="https://cdn3.iconfinder.com/data/icons/arrow-108/24/curved_left_down_arrow-512.png" alt="imagen de dirección del recurso" />
+        </div>
+      </div>
+      <div class="direction-item">
+        <div class="w-full h-full overflow-hidden">
+          <img class="w-full h-full object-contain object-center"
+            src="https://cdn-icons-png.flaticon.com/512/60/60624.png" alt="imagen de dirección del recurso" />
+        </div>
+      </div>
+      <div class="direction-item">
+        <div class="w-full h-full overflow-hidden">
+          <img class="w-full h-full object-contain object-center"
+            src="https://cdn1.iconfinder.com/data/icons/arrows-diagrams/24/split-fork-arrow-horizontal-diagram-512.png" alt="imagen de dirección del recurso" />
+        </div>
+      </div>
+      <div class="direction-item">
+        <div class="w-full h-full overflow-hidden">
+          <img class="w-full h-full object-contain object-center"
+            src="https://cdn-icons-png.flaticon.com/512/60/60624.png" alt="imagen de dirección del recurso" />
+        </div>
+      </div>
+      <div class="direction-item">
+        <div class="w-full h-full overflow-hidden">
+          <img class="w-full h-full object-contain object-center"
+            src="https://static.thenounproject.com/png/604183-200.png" alt="imagen de dirección del recurso" />
+        </div>
       </div>
 
-    </pan-zoom>
+      <!-- Recurso -->
+      <div class="">
+        <div class="w-full h-full overflow-hidden bg-gray-600 rounded-lg shadow-lg"></div>
+      </div>
+      <div class="">1</div>
+      <div class="">
+        <div class="w-full h-full overflow-hidden bg-gray-600 rounded-lg shadow-lg"></div>
+      </div>
+      <div class="">1</div>
+      <div class="">
+        <div class="w-full h-full overflow-hidden bg-gray-600 rounded-lg shadow-lg"></div>
+      </div>
+
+      <!-- Imagen direccional -->
+      <div class="">1</div>
+      <div class="">1</div>
+      <div class="">1</div>
+      <div class="">1</div>
+      <div class="">1</div>
+
+      <!-- Recurso -->
+      <div class="">1</div>
+      <div class="">1</div>
+      <div class="">1</div>
+      <div class="">1</div>
+      <div class="">1</div>
+
+      <!-- Imagen direccional -->
+      <div class="">1</div>
+      <div class="">1</div>
+      <div class="">1</div>
+      <div class="">1</div>
+      <div class="">1</div>
+
+      <!-- Recurso -->
+      <div class="">1</div>
+      <div class="">1</div>
+      <div class="">2</div>
+      <div class="">2</div>
+      <div class="">2</div>
+    </div>
   </div>
 </div>
+
+
+<!-- <pan-zoom [config]="panZoomConfig">
+      <div class="relative">
+        <app-novela-creator-escena></app-novela-creator-escena>
+      </div>
+    </pan-zoom> -->

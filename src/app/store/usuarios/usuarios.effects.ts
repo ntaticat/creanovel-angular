@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as usuarioActions from '@store/usuarios/usuarios.actions';
 import * as lecturaActions from '@store/lecturas/lecturas.actions';
+import * as novelaActions from '@store/novelas/novelas.actions';
 import * as usuarioSelectors from '@store/usuarios/usuarios.selectors';
 import { catchError, concatMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { EMPTY, from, of, Subject } from 'rxjs';
@@ -62,7 +63,7 @@ export class UsuariosEffects {
 
   getUsuarioById$ = createEffect(
     () => this.actions$.pipe(
-      ofType(usuarioActions.GET_USUARIO_ID),
+      ofType(usuarioActions.GET_USUARIO_ID, novelaActions.CREATE_NOVELA_SUCCESS),
       map(() => {
         const token = this.usuariosService.readToken();
         const tokenObject = this.usuariosService.decodeJWT(token);
