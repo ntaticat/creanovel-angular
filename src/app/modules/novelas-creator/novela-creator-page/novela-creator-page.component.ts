@@ -6,6 +6,7 @@ import { AppState } from '@store/app.reducer';
 import * as novelasCreatorSelectors from "@store/novela-creator/novelas-creator.selectors";
 import { PanZoomConfig } from 'ngx-panzoom';
 import { Observable } from 'rxjs';
+import * as faIcons from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-novela-creator-page',
@@ -15,6 +16,7 @@ import { Observable } from 'rxjs';
 export class NovelaCreatorPageComponent implements OnInit {
 
   panZoomConfig: PanZoomConfig = new PanZoomConfig();
+  faIcons = faIcons;
 
   novelaInfo?: INovela;
 

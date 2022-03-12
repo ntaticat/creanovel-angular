@@ -3,40 +3,61 @@
     <h1>Creanovel - Novel Creator</h1>
   </div>
   <!-- Escenas -->
-  <div class="bg-gray-700 creator-escenas flex flex-col justify-between flex-nowrap overflow-y-auto">
+  <div class="relative bg-gray-200 creator-escenas flex flex-col justify-between flex-nowrap overflow-y-auto">
     <div class="h-auto bg-gray-200 p-3">
       <button class="w-full rounded-r-xl px-3 py-2 bg-gray-500 text-white mb-3">Escenas</button>
-      <button *ngFor="let item of [1,1,1,1]" class="w-full rounded-r-xl px-3 py-2 bg-gray-600 text-white mb-3">Escena
+      <button *ngFor="let item of [1,1,1,1,1,1,1,1,1,1]"
+        class="w-full rounded-r-xl px-3 py-2 bg-gray-600 text-white mb-3">Escena
         #1</button>
     </div>
-    <div class="h-auto bg-gray-300">
-      <p>Rafael Estrada</p>
+
+    <div class="sticky bottom-0 h-auto px-3">
+      <div class="rounded-t-lg overflow-hidden border-l-2 border-r-2 border-t-2 border-solid border-gray-900">
+        <button class="w-full py-1 px-3 bg-gray-800 text-white align-middle border-b-2 border-solid border-gray-900">Añadir Escena <fa-icon
+            [icon]="faIcons['faAngleDown']"></fa-icon></button>
+        <form class="p-3 bg-gray-100">
+          <label for="escenaName" class="font-light">Nombre de la escena:</label>
+          <input name="escenaName" class="w-full mb-3 py-1 px-3" placeholder="Escena #123..." type="text" />
+          <button type="click" class="w-full rounded-lg py-1 px-3 bg-gray-700 text-white">Añadir</button>
+        </form>
+      </div>
     </div>
   </div>
+
+
+
   <!-- Mapa -->
-  <div class="bg-white creator-map overflow-y-auto">
+  <div class="bg-black creator-map overflow-y-auto">
     <div class="creator-top">
       <button class="bg-black text-white w-full h-full">
-        <div class="">Arriba</div>
+        <div class="">
+          <fa-icon [icon]="faIcons['faArrowUp']"></fa-icon>
+        </div>
       </button>
     </div>
     <div class="creator-left">
       <button class="bg-black text-white w-full h-full">
-        <div class="">Izquierda</div>
+        <div class="">
+          <fa-icon [icon]="faIcons['faArrowUp']"></fa-icon>
+        </div>
       </button>
     </div>
     <div class="creator-right">
       <button class="bg-black text-white w-full h-full">
-        <div class="w-full">Derecha</div>
+        <div class="w-full">
+          <fa-icon [icon]="faIcons['faArrowUp']"></fa-icon>
+        </div>
       </button>
     </div>
     <div class="creator-bottom">
       <button class="bg-black text-white w-full h-full">
-        <div class="">Abajo</div>
+        <div class="">
+          <fa-icon [icon]="faIcons['faArrowUp']"></fa-icon>
+        </div>
       </button>
     </div>
 
-    <div class="w-full h-full map-container p-3">
+    <div class="w-full h-full map-container p-3 bg-white">
 
       <!-- Recurso -->
       <div class="">1</div>
@@ -51,7 +72,8 @@
       <div class="direction-item">
         <div class="w-full h-full overflow-hidden">
           <img class="w-full h-full object-contain object-center"
-            src="https://cdn3.iconfinder.com/data/icons/arrow-108/24/curved_left_down_arrow-512.png" alt="imagen de dirección del recurso" />
+            src="https://cdn3.iconfinder.com/data/icons/arrow-108/24/curved_left_down_arrow-512.png"
+            alt="imagen de dirección del recurso" />
         </div>
       </div>
       <div class="direction-item">
@@ -63,7 +85,8 @@
       <div class="direction-item">
         <div class="w-full h-full overflow-hidden">
           <img class="w-full h-full object-contain object-center"
-            src="https://cdn1.iconfinder.com/data/icons/arrows-diagrams/24/split-fork-arrow-horizontal-diagram-512.png" alt="imagen de dirección del recurso" />
+            src="https://cdn1.iconfinder.com/data/icons/arrows-diagrams/24/split-fork-arrow-horizontal-diagram-512.png"
+            alt="imagen de dirección del recurso" />
         </div>
       </div>
       <div class="direction-item">
