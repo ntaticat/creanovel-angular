@@ -21,7 +21,9 @@ export class NovelasCreatorPageComponent implements OnInit {
 
   constructor(private store: Store<AppState>, private router: Router) {
     this.store.pipe(select(usuarioSelectors.usuario)).subscribe((usuario) => {
-      this.novelasCreadas = usuario.novelasCreadas;
+      if (usuario.novelasCreadas) {
+        this.novelasCreadas = usuario.novelasCreadas;
+      }
     });
   }
 
@@ -30,7 +32,6 @@ export class NovelasCreatorPageComponent implements OnInit {
 
   goNovelaPage(novelaIndex: number) {
     const novelaInfo = this.novelasCreadas[novelaIndex];
-    this.store.dispatch(novelaCreatorActions.SET_NOVELA({payload: novelaInfo.novelaId}));
     this.router.navigate(['novelas-creator', novelaInfo.novelaId]);
   }
 }

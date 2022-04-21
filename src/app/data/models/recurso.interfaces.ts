@@ -1,32 +1,41 @@
-export interface IRecurso {
+
+export interface IRecursoPost {
   recursoId: string;
   escenaId: string;
   recursoTipo: string;
   siguienteRecursoId?: string;
 }
 
-export interface IDecision {
+export interface IRecurso {
   recursoId: string;
   escenaId: string;
-  recursoTipo: string;
+}
 
-  mensaje: string;
+export interface IDecision extends IRecurso {
+  decisionMensaje: string;
   opciones?: IDecisionOpcion[];
+  primerRecurso: boolean;
+  ultimoRecurso: boolean;
+}
+
+export interface IDecisionOpcionPost {
+  opcionMensaje: string;
+  siguienteRecursoId?: string;
+  recursoDecisionId: string;
 }
 
 export interface IDecisionOpcion {
   recursoDecisionOpcionId: string;
-  recursoDecisionId: string;
   opcionMensaje: string;
   siguienteRecursoId?: string;
+  recursoDecisionId: string;
 }
 
-export interface IConversacion {
-  recursoId: string;
-  escenaId: string;
-  recursoTipo: string;
+export interface IConversacion extends IRecurso {
   mensaje: string;
   siguienteRecursoId?: string;
+  primerRecurso: boolean;
+  ultimoRecurso: boolean;
 }
 
 export function instanceOfIConversacion(object: any): object is IConversacion {

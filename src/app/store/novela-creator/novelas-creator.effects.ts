@@ -15,19 +15,19 @@ export class NovelasCreatorEffects {
   constructor(private actions$: Actions, private store: Store<AppState>, private novelasService: NovelasService) { }
 
   // Cuando se registra una lectura a un usuario
-  getNovelaEscenas$ = createEffect(
-    () => this.actions$.pipe(
-      ofType(novelasCreatorActions.SET_NOVELA),
-      mergeMap(
-        ({ payload }) => this.novelasService.getNovelaEscenas(payload)
-          .pipe(
-            map(dbNovela => novelasCreatorActions.SET_NOVELA_SUCCESS({ payload: dbNovela })),
-            catchError(err => {
-              console.log('Error en getNovelas effect', err)
-              return of(novelasCreatorActions.SET_NOVELA_ERROR({ payload: err }))
-            })
-          )
-      )
-    )
-  );
+  // getNovelaEscenas$ = createEffect(
+  //   () => this.actions$.pipe(
+  //     ofType(novelasCreatorActions.SET_NOVELA),
+  //     mergeMap(
+  //       ({ payload }) => this.novelasService.getNovelaEscenas(payload)
+  //         .pipe(
+  //           map(dbNovela => novelasCreatorActions.SET_NOVELA_SUCCESS({ payload: dbNovela })),
+  //           catchError(err => {
+  //             console.log('Error en getNovelas effect', err)
+  //             return of(novelasCreatorActions.SET_NOVELA_ERROR({ payload: err }))
+  //           })
+  //         )
+  //     )
+  //   )
+  // );
 }

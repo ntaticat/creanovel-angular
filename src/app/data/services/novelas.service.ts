@@ -15,43 +15,47 @@ export class NovelasService {
   constructor(private http: HttpClient) { }
 
   getNovelas(): Observable<INovela[]> {
-    const method = 'novelas';
+    const method = `${this.url}/novelas`;
 
-    return this.http.get<INovela[]>(`${this.url}/${method}`)
-      .pipe(
-        map(resp => resp)
-      );
+    return this.http.get<INovela[]>(method);
   }
 
-  postNovela(novelaInfo: INovelaPost): Observable<INovela> {
-    const method = 'novelas';
+  getNovela(novelaId: string): Observable<INovela> {
+    const method = `${this.url}/novelas/${novelaId}`;
+
+    return this.http.get<INovela>(method);
+  }
+
+  getNovelaEscenas(novelaId: string): Observable<INovela> {
+    const method = `${this.url}/novelas/${novelaId}/escenas`;
+
+    return this.http.get<INovela>(method);
+  }
+
+  postNovela(novelaInfo: INovelaPost): Observable<{}> {
+    const method = `${this.url}/novelas`;
 
     const request = {
       ...novelaInfo
     }
 
-    return this.http.post<INovela>(`${this.url}/${method}`, request)
-      .pipe(
-        map(resp => resp)
-      );
+    return this.http.post(method, request);
   }
 
-  getNovela(novelaId: string): Observable<INovela> {
-    const method = `novelas/${novelaId}`;
+  patchNovela(novelaId: string, novelaInfo: Partial<INovela>): Observable<{}> {
+    const method = `${this.url}/novelas/${novelaId}`;
 
-    return this.http.get<INovela>(`${this.url}/${method}`)
-      .pipe(
-        map(resp => resp)
-      );
+    const request = {
+      ...novelaInfo
+    }
+
+    return this.http.patch(method, request);
   }
 
-  getNovelaEscenas(novelaId: string): Observable<INovela> {
-    const method = `novelas/${novelaId}/escenas`;
+  deleteNovela(novelaId: string): Observable<{}> {
+    const method = `${this.url}/novelas/${novelaId}`;
 
-    return this.http.get<INovela>(`${this.url}/${method}`)
-      .pipe(
-        map(resp => resp)
-      );
+    return this.http.delete(method);
   }
 
 

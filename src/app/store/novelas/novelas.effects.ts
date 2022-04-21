@@ -33,9 +33,9 @@ export class NovelasEffects {
       mergeMap(
         ({payload}) => this.novelasService.postNovela(payload)
           .pipe(
-            map(dbNovela => novelaActions.CREATE_NOVELA_SUCCESS({ payload: dbNovela })),
+            map(() => novelaActions.CREATE_NOVELA_SUCCESS()),
             catchError(err => {
-              console.log('error createNovela effect', err)
+              console.error('error createNovela effect', err)
               return of(novelaActions.CREATE_NOVELA_ERROR({ payload: err }))
             })
           )

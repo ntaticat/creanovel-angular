@@ -14,7 +14,7 @@ import { AppState } from '@store/app.reducer';
   providedIn: 'root'
 })
 export class EscenasEffects {
-  constructor(private actions$: Actions, private escenasService: EscenasService, private store: Store<AppState>) { }
+  constructor(private actions$: Actions, private escenasService: EscenasService) { }
 
   createEscena$ = createEffect(
     () => this.actions$.pipe(
@@ -22,7 +22,7 @@ export class EscenasEffects {
       mergeMap(
         ({payload}) => this.escenasService.postEscena(payload)
           .pipe(
-            map(dbEscena => escenaActions.CREATE_ESCENA_SUCCESS({ payload: dbEscena })),
+            map(() => escenaActions.CREATE_ESCENA_SUCCESS()),
             catchError(err => {
               console.error('error createEscena effect', err)
               return of(escenaActions.CREATE_ESCENA_ERROR({ payload: err }))
@@ -31,30 +31,4 @@ export class EscenasEffects {
       )
     )
   );
-
-  // validateNuevaEscenaNovelaLecturasUsuario$ = createEffect(
-  //   () => this.actions$.pipe(
-  //     ofType(escenaActions.CREATE_ESCENA_SUCCESS),
-  //     mergeMap(
-  //       ({payload}) => {
-  //         let novelaExiste: boolean = false;
-  //         this.store.pipe(select(usuarioSelectors.usuario)).subscribe((usuario) => {
-  //           usuario.novelasCreadas.every((novelaCreada) => {
-  //             if(novelaCreada.novelaId === payload.novelaId) {
-  //               novelaExiste = true;
-  //               return false;
-  //             }
-  //             return true;
-  //           });
-  //         });
-  //         if(novelaExiste) {
-  //           return this.store.dispatch(usuarioActions.READ_USUARIO_DATA());
-  //         }
-
-  //         return of({ type: 'NO_ACTION' });
-  //       }
-  //     )
-  //   )
-  // );
-
 }

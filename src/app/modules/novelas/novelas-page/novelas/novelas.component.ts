@@ -62,7 +62,7 @@ export class NovelasComponent implements OnInit, OnDestroy {
   }
 
   novelaJugada(novela: INovela) {
-    const novelaIndex = this.lecturas!.findIndex((lectura) => lectura.lecturaNovelaId === novela.novelaId);
+    const novelaIndex = this.lecturas!.findIndex((lectura) => lectura.novelaRegistrosId === novela.novelaId);
     return novelaIndex !== -1;
   }
 

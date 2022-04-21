@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
+// TODO: Servicio
 @Injectable({
   providedIn: 'root'
 })
@@ -60,7 +61,7 @@ export class UsuariosService {
   }
 
   getUltimoRecurso(novelaId: string, usuario: IUsuario): IPlayRecursos {
-    const novelaIndex = usuario.lecturas?.findIndex(lectura => lectura.lecturaNovelaId === novelaId);
+    const novelaIndex = usuario.lecturas?.findIndex(lectura => lectura.novelaRegistrosId === novelaId);
     const { recursos } = usuario.lecturas![novelaIndex!];
 
     const recursoActualId = recursos![recursos?.length! - 1].recursoId;

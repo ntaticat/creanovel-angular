@@ -2,17 +2,18 @@ import { IConversacion, IDecision } from "./recurso.interfaces";
 
 export interface ILectura {
   lecturaId: string;
-  lecturaNovelaId: string;
-  lecturaUsuarioId: string;
+  novelaRegistrosId: string;
+  usuarioPropietarioId: string;
   recursos?: (IConversacion | IDecision)[];
 }
 
 export interface ILecturaPost {
-  lecturaNovelaId: string;
-  lecturaUsuarioId: string;
+  novelaRegistrosId: string;
+  usuarioPropietarioId: string;
 }
 
 export interface ILecturaRecursoPost {
   lecturaId: string;
   recursoId: string;
+  recursoOrder: number;
 }

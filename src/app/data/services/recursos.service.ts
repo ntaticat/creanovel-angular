@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IConversacion, IDecision, IRecurso } from '@models/recurso.interfaces';
+import { IConversacion, IDecision, IDecisionOpcionPost, IRecurso, IRecursoPost } from '@models/recurso.interfaces';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
@@ -13,11 +14,41 @@ export class RecursosService {
 
   constructor(private http: HttpClient) { }
 
-  getRecurso(recursoId: string) {
-    const method = `recursos/${recursoId}`;
-    return this.http.get<IConversacion | IDecision>(`${this.url}/${method}`)
-      .pipe(
-        map(resp => resp)
-      );
+  getRecurso(recursoId: string): Observable<IConversacion | IDecision> {
+    const method =  `${this.url}/recursos/${recursoId}`;
+
+    return this.http.get<IConversacion | IDecision>(method);
+  }
+
+  postRecurso(recursoInfo: IRecursoPost): Observable<{}> {
+    const method = `${this.url}/recursos`;
+
+    const request = {
+      ...recursoInfo
+    }
+
+    return this.http.post(method, request);
+  }
+
+  postRecursoSiguiente(recursoId: string, recursoSiguienteId: string): Observable<{}> {
+    const method = `${this.url}/recursos/${recursoId}/next/${recursoSiguienteId}`;
+
+    return this.http.post(method, {});
+  }
+
+  postRecursoOpcion(opcionInfo: IDecisionOpcionPost): Observable<{}> {
+    const method = `${this.url}/recursos/opciones`;
+
+    const request = {
+      ...opcionInfo
+    }
+
+    return this.http.post(method, method);
+  }
+
+  deleteRecurso(recursoId: string): Observable<{}> {
+    const method =  `${this.url}/recursos/${recursoId}`;
+
+    return this.http.delete(method);
   }
 }

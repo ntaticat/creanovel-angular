@@ -12,7 +12,7 @@ export const getNovelas = createSelector(
 
 export const novela = createSelector(
   selectNovelas,
-  (state: novelas.State) => state.array
+  (state: novelas.State) => state.object
 );
 
 export const loadedSuccess = createSelector(

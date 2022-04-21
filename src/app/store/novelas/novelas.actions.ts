@@ -21,8 +21,7 @@ export const CREATE_NOVELA = createAction(
 );
 
 export const CREATE_NOVELA_SUCCESS = createAction(
-  '[Novelas] CREATE_NOVELA_SUCCESS',
-  props<{ payload: INovela }>()
+  '[Novelas] CREATE_NOVELA_SUCCESS'
 );
 
 export const CREATE_NOVELA_ERROR = createAction(

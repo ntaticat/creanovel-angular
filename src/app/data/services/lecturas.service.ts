@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -14,35 +14,42 @@ export class LecturasService {
 
   constructor(private http: HttpClient) { }
 
-  postLectura(lecturaPost: ILecturaPost): Observable<ILectura> {
-    const method = 'lecturas';
+  postLectura(lecturaPost: ILecturaPost): Observable<{}> {
+    const method = `${this.url}/lecturas`;
 
     const request = {
       ...lecturaPost
     };
 
-    console.log("request", request);
-
-    return this.http.post<ILectura>(`${this.url}/${method}`, request)
-      .pipe(
-        tap(() => console.log("response", request)),
-        map(resp => resp)
-      );
+    return this.http.post(method, request);
   }
 
-  postLecturaRecurso(lecturaRecursoPost: ILecturaRecursoPost) {
-    const method = 'lecturas/recursos';
+  deleteLectura(lecturaId: string): Observable<{}> {
+    const method = `${this.url}/lecturas/${lecturaId}`;
+
+    return this.http.delete(method);
+  }
+
+  postLecturaRecurso(lecturaRecursoPost: ILecturaRecursoPost): Observable<{}> {
+    const method = `${this.url}/lecturas/recursos`;
 
     const request = {
       ...lecturaRecursoPost
     };
 
-    console.log("request", request);
+    return this.http.post(method, request);
+  }
 
-    return this.http.post<ILectura>(`${this.url}/${method}`, request)
-      .pipe(
-        tap(() => console.log("response", request)),
-        map(resp => resp)
-      );
+  deleteLecturaRecurso(lecturaRecursoPost: ILecturaRecursoPost): Observable<{}> {
+    const method = `${this.url}/lecturas/recursos`;
+
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      body: { ...lecturaRecursoPost }
+    };
+
+    return this.http.delete(method, options);
   }
 }

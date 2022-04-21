@@ -20,7 +20,9 @@ export class PlayingNovelaActionsComponent implements OnInit {
   constructor(private store: Store<AppState>) {
     this.store.pipe(select(lecturaSelectors.lectura)).subscribe((lectura) => {
       console.log("LECTURA ", lectura);
-      this.lecturaId = lectura.lecturaId;
+      if(lectura) {
+        this.lecturaId = lectura.lecturaId;
+      }
     });
     this.store.pipe(select(lecturaSelectors.recursoActual)).subscribe((recursoActual) => {
       if(instanceOfIConversacion(recursoActual)) {
@@ -41,7 +43,8 @@ export class PlayingNovelaActionsComponent implements OnInit {
     if(this.siguienteRecursoId) {
       const payload: ILecturaRecursoPost = {
         lecturaId: this.lecturaId,
-        recursoId: this.siguienteRecursoId
+        recursoId: this.siguienteRecursoId,
+        recursoOrder: 1 // TODO: CREAR METODO PARA ASIGNAR ORDEN A LOS RECURSOS
       }
       console.log(payload);
       this.store.dispatch(lecturaActions.POST_LECTURA_RECURSO({payload}));

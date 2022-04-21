@@ -21,9 +21,8 @@ export class UsuariosEffects {
 
   /*
   CASO DE USO:
-  CUANDO EL USUARIO ENTRA AL SISTEMA Y OBTIENE SU INFORMACION
+  CUANDO EL USUARIO ENTRA AL SISTEMA Y RECIBE TOKEN CON SU ID y ROLES
   */
-
   login$ = createEffect(
     () => this.actions$.pipe(
       ofType(usuarioActions.POST_LOGIN),
@@ -61,6 +60,10 @@ export class UsuariosEffects {
     )
   );
 
+  /*
+  CASO DE USO:
+  CUANDO SE NECESITA INFORMACIÓN DEL USUARIO EN EL SISTEMA
+  */
   getUsuarioById$ = createEffect(
     () => this.actions$.pipe(
       ofType(usuarioActions.GET_USUARIO_ID, novelaActions.CREATE_NOVELA_SUCCESS),
@@ -91,52 +94,60 @@ export class UsuariosEffects {
     )
   );
 
-  playFirstTime$ = createEffect(
-    () => this.actions$.pipe(
-      ofType(usuarioActions.PLAY_NOVEL_FIRST_TIME),
-      map(({novelaId}) => {
-        let usuarioId: string = "";
-        this.store.pipe(select(usuarioSelectors.usuario)).subscribe((usuario) => {
-          usuarioId = usuario.id;
-        });
+  // /*
+  // CASO DE USO:
+  // SIN DEFINIR
+  // */
+  // playFirstTime$ = createEffect(
+  //   () => this.actions$.pipe(
+  //     ofType(usuarioActions.PLAY_NOVEL_FIRST_TIME),
+  //     map(({novelaId}) => {
+  //       let usuarioId: string = "";
+  //       this.store.pipe(select(usuarioSelectors.usuario)).subscribe((usuario) => {
+  //         usuarioId = usuario.id;
+  //       });
 
-        let postLectura: ILecturaPost = {
-          lecturaUsuarioId: usuarioId,
-          lecturaNovelaId: novelaId
-        }
+  //       let postLectura: ILecturaPost = {
+  //         lecturaUsuarioId: usuarioId,
+  //         lecturaNovelaId: novelaId
+  //       }
 
-        return postLectura;
-      }),
-      switchMap(
-        (resp) => {
-          return [
-            lecturaActions.POST_LECTURA({ payload: {...resp} })
-          ];
-        }
-      )
-    )
-  );
+  //       return postLectura;
+  //     }),
+  //     switchMap(
+  //       (resp) => {
+  //         return [
+  //           lecturaActions.POST_LECTURA({ payload: {...resp} })
+  //         ];
+  //       }
+  //     )
+  //   )
+  // );
 
-  play$ = createEffect(
-    () => this.actions$.pipe(
-      ofType(usuarioActions.PLAY_NOVEL),
-      map(({novelaId}) => {
+  // /*
+  // CASO DE USO:
+  // SIN DEFINIR
+  // */
+  // play$ = createEffect(
+  //   () => this.actions$.pipe(
+  //     ofType(usuarioActions.PLAY_NOVEL),
+  //     map(({novelaId}) => {
 
-        let lectura: ILectura;
+  //       let lectura: ILectura;
 
-        this.store.pipe(select(usuarioSelectors.usuario)).subscribe((usuario) => {
-          const lecturaIndex = usuario.lecturas?.findIndex(lectura => lectura.lecturaNovelaId === novelaId);
+  //       this.store.pipe(select(usuarioSelectors.usuario)).subscribe((usuario) => {
+  //         const lecturaIndex = usuario.lecturas?.findIndex(lectura => lectura.lecturaNovelaId === novelaId);
 
-          if(lecturaIndex === -1) {
-            throw "No se encontró la lectura deseada";
-          }
+  //         if(lecturaIndex === -1) {
+  //           throw "No se encontró la lectura deseada";
+  //         }
 
-          lectura = usuario!.lecturas![lecturaIndex!];
-        });
+  //         lectura = usuario!.lecturas![lecturaIndex!];
+  //       });
 
-        return lecturaActions.SET_LECTURA_DATA({payload: lectura!});
-      })
-    )
-  );
+  //       return lecturaActions.SET_LECTURA_DATA({payload: lectura!});
+  //     })
+  //   )
+  // );
 
 }

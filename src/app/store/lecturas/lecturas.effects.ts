@@ -23,7 +23,7 @@ export class LecturasEffects {
       mergeMap(
         (lecturaPost) => this.lecturasService.postLectura(lecturaPost.payload)
           .pipe(
-            map(dbLectura => lecturaActions.POST_LECTURA_SUCCESS({ payload: dbLectura })),
+            map(() => lecturaActions.POST_LECTURA_SUCCESS()),
             tap(() => usuarioActions.POST_LOGIN({payload: {email: "123", password: "123"}})),
             catchError(err => {
               console.log('Error en getNovelas effect', err)
@@ -34,51 +34,56 @@ export class LecturasEffects {
     )
   );
 
-  setRecursosValues$ = createEffect(
-    () => this.actions$.pipe(
-      ofType(lecturaActions.SET_LECTURA_DATA),
-      map(({payload}) => {
-        const recursosValues: IPlayRecursos = {
-          recursoActualId: "",
-          recursoAnteriorId: ""
-        }
-
-        if(payload.recursos?.length) {
-          recursosValues.recursoAnteriorId = payload.recursos.length > 1? payload.recursos[payload.recursos.length - 2].recursoId: "";
-          recursosValues.recursoActualId = payload.recursos[payload.recursos.length - 1].recursoId;
-        }
-
-        console.log("recursoANterior", recursosValues.recursoAnteriorId);
-        console.log("recursoActual", recursosValues.recursoActualId);
-        return recursosValues;
-      }),
-      switchMap(
-        (resp) => {
-          if(resp?.recursoAnteriorId) {
-            return [
-              lecturaActions.SET_RECURSO_ACTUAL_ID({payload: resp.recursoActualId}),
-              lecturaActions.SET_RECURSO_ANTERIOR_ID({payload: resp.recursoAnteriorId})
-            ];
-          }
-          else {
-            return [
-              lecturaActions.SET_RECURSO_ACTUAL_ID({payload: resp.recursoActualId})
-            ];
-          }
-        }
-      )
-    )
-  );
-
+  // Cuando se añade un recurso a la lectura
   postLecturaRecurso$ = createEffect(
     () => this.actions$.pipe(
       ofType(lecturaActions.POST_LECTURA_RECURSO),
       mergeMap(
         ({payload}) => this.lecturasService.postLecturaRecurso(payload)
           .pipe(
-            map(dbLectura => lecturaActions.SET_LECTURA_DATA({ payload: dbLectura }))
+            map(() => lecturaActions.POST_LECTURA_RECURSO_SUCCESS()),
+            catchError(err => {
+              console.log('Error en postLecturaRecurso effect', err)
+              return of(lecturaActions.POST_LECTURA_RECURSO_ERROR({ payload: err }))
+            })
           )
       )
     )
   );
+
+  // setRecursosValues$ = createEffect(
+  //   () => this.actions$.pipe(
+  //     ofType(lecturaActions.SET_LECTURA_DATA),
+  //     map(({payload}) => {
+  //       const recursosValues: IPlayRecursos = {
+  //         recursoActualId: "",
+  //         recursoAnteriorId: ""
+  //       }
+
+  //       if(payload.recursos?.length) {
+  //         recursosValues.recursoAnteriorId = payload.recursos.length > 1? payload.recursos[payload.recursos.length - 2].recursoId: "";
+  //         recursosValues.recursoActualId = payload.recursos[payload.recursos.length - 1].recursoId;
+  //       }
+
+  //       console.log("recursoANterior", recursosValues.recursoAnteriorId);
+  //       console.log("recursoActual", recursosValues.recursoActualId);
+  //       return recursosValues;
+  //     }),
+  //     switchMap(
+  //       (resp) => {
+  //         if(resp?.recursoAnteriorId) {
+  //           return [
+  //             lecturaActions.SET_RECURSO_ACTUAL_ID({payload: resp.recursoActualId}),
+  //             lecturaActions.SET_RECURSO_ANTERIOR_ID({payload: resp.recursoAnteriorId})
+  //           ];
+  //         }
+  //         else {
+  //           return [
+  //             lecturaActions.SET_RECURSO_ACTUAL_ID({payload: resp.recursoActualId})
+  //           ];
+  //         }
+  //       }
+  //     )
+  //   )
+  // );
 }

@@ -9,8 +9,7 @@ export const POST_LECTURA = createAction(
 );
 
 export const POST_LECTURA_SUCCESS = createAction(
-  '[Lecturas] POST_LECTURA_SUCCESS',
-  props<{ payload: ILectura }>()
+  '[Lecturas] POST_LECTURA_SUCCESS'
 );
 
 export const POST_LECTURA_ERROR = createAction(
@@ -18,26 +17,24 @@ export const POST_LECTURA_ERROR = createAction(
   props<{ payload: any }>()
 );
 
+// -----------
+// API ACTIONS
+// -----------
+
 // Eliminar registro de lectura
 export const DELETE_LECTURA = createAction(
-  '[Lecturas] POST_LECTURA',
+  '[Lecturas] DELETE_LECTURA',
   props<{ payload: string }>()
 );
 
 export const DELETE_LECTURA_SUCCESS = createAction(
-  '[Lecturas] POST_LECTURA_SUCCESS',
-  props<{ payload: ILectura }>()
+  '[Lecturas] DELETE_LECTURA_SUCCESS'
 );
 
 export const DELETE_LECTURA_ERROR = createAction(
-  '[Lecturas] POST_LECTURA_ERROR',
+  '[Lecturas] DELETE_LECTURA_ERROR',
   props<{ payload: any }>()
 );
-
-
-
-
-
 
 // añadir recurso de lectura
 export const POST_LECTURA_RECURSO = createAction(
@@ -46,8 +43,7 @@ export const POST_LECTURA_RECURSO = createAction(
 );
 
 export const POST_LECTURA_RECURSO_SUCCESS = createAction(
-  '[Lecturas] POST_LECTURA_RECURSO_SUCCESS',
-  props<{ payload: ILectura }>()
+  '[Lecturas] POST_LECTURA_RECURSO_SUCCESS'
 );
 
 export const POST_LECTURA_RECURSO_ERROR = createAction(
@@ -62,8 +58,7 @@ export const DELETE_LECTURA_RECURSO = createAction(
 );
 
 export const DELETE_LECTURA_RECURSO_SUCCESS = createAction(
-  '[Lecturas] DELETE_LECTURA_RECURSO_SUCCESS',
-  props<{ payload: ILectura }>()
+  '[Lecturas] DELETE_LECTURA_RECURSO_SUCCESS'
 );
 
 export const DELETE_LECTURA_RECURSO_ERROR = createAction(
@@ -71,32 +66,31 @@ export const DELETE_LECTURA_RECURSO_ERROR = createAction(
   props<{ payload: any }>()
 );
 
+// -------------------
+// APPLICATION ACTIONS
+// -------------------
 
+// export const SET_LECTURA_DATA = createAction(
+//   '[Lecturas] SET_LECTURA_DATA',
+//   props<{ payload: ILectura }>()
+// );
 
-export const SET_LECTURA_DATA = createAction(
-  '[Lecturas] SET_LECTURA_DATA',
-  props<{ payload: ILectura }>()
-);
+// export const SET_RECURSO_ANTERIOR_ID = createAction(
+//   '[Lecturas] SET_RECURSO_ANTERIOR_ID',
+//   props<{ payload: string }>()
+// );
 
+// export const SET_RECURSO_ANTERIOR = createAction(
+//   '[Lecturas] SET_RECURSO_ANTERIOR',
+//   props<{ payload: IConversacion | IDecision }>()
+// );
 
+// export const SET_RECURSO_ACTUAL_ID = createAction(
+//   '[Lecturas] SET_RECURSO_ACTUAL_ID',
+//   props<{ payload: string }>()
+// );
 
-
-export const SET_RECURSO_ANTERIOR_ID = createAction(
-  '[Lecturas] SET_RECURSO_ANTERIOR_ID',
-  props<{ payload: string }>()
-);
-
-export const SET_RECURSO_ANTERIOR = createAction(
-  '[Lecturas] SET_RECURSO_ANTERIOR',
-  props<{ payload: IConversacion | IDecision }>()
-);
-
-export const SET_RECURSO_ACTUAL_ID = createAction(
-  '[Lecturas] SET_RECURSO_ACTUAL_ID',
-  props<{ payload: string }>()
-);
-
-export const SET_RECURSO_ACTUAL = createAction(
-  '[Lecturas] SET_RECURSO_ACTUAL',
-  props<{ payload: IConversacion | IDecision }>()
-);
+// export const SET_RECURSO_ACTUAL = createAction(
+//   '[Lecturas] SET_RECURSO_ACTUAL',
+//   props<{ payload: IConversacion | IDecision }>()
+// );

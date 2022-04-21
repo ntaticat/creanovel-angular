@@ -11,8 +11,8 @@ export interface State {
 };
 
 const initialObject: IEscena = {
-  EscenaId: '',
-  Recursos: [],
+  escenaId: '',
+  recursos: [],
   identificador: '',
   novelaId: ''
 }
@@ -29,8 +29,8 @@ export const escenasReducer = createReducer(initialState,
   on(actions.CREATE_ESCENA, (state) => (
     {...state, isLoading: true, loadedSuccess: false}
   )),
-  on(actions.CREATE_ESCENA_SUCCESS, (state, {payload}) => (
-    {...state, isLoading: false, loadedSuccess: true, object: {...payload}}
+  on(actions.CREATE_ESCENA_SUCCESS, (state) => (
+    {...state, isLoading: false, loadedSuccess: true}
   )),
   on(actions.CREATE_ESCENA_ERROR, (state, {payload}) => (
     {...state, isLoading: false, loadedSuccess: false, error: payload}

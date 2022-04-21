@@ -6,8 +6,8 @@ export interface IEscenaPost {
 }
 
 export interface IEscena {
-  EscenaId: string;
+  escenaId: string;
   novelaId: string;
   identificador: string;
-  Recursos: (IConversacion | IDecision)[];
+  recursos: (IConversacion | IDecision)[];
 }
