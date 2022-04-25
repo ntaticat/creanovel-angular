@@ -13,6 +13,7 @@ export class NovelasPageComponent implements OnInit {
 
   faCog = faCog;
   faSignOutAlt = faSignOutAlt;
+  showSearchInfo: boolean = false;
 
   constructor(private store: Store<AppState>) {}
 
@@ -21,6 +22,10 @@ export class NovelasPageComponent implements OnInit {
 
   logout() {
     this.store.dispatch(usuarioActions.LOGOUT());
+  }
+
+  public onNovelSearchFocus() {
+    this.showSearchInfo = !this.showSearchInfo;
   }
 
 }
