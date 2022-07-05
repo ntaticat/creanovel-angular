@@ -27,6 +27,22 @@ export class NovelasEffects {
     )
   );
 
+  getNovela$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(novelaActions.GET_NOVELA),
+      mergeMap(
+        ({ novelaId }) => this.novelasService.getNovela(novelaId)
+          .pipe(
+            map(novela => novelaActions.GET_NOVELA_SUCCESS({ payload: novela })),
+            catchError(err => {
+              console.log('Error en getNovela effect', err)
+              return of(novelaActions.GET_NOVELA_ERROR({ payload: err }))
+            })
+          )
+      )
+    )
+  );
+
   createNovela$ = createEffect(
     () => this.actions$.pipe(
       ofType(novelaActions.CREATE_NOVELA),

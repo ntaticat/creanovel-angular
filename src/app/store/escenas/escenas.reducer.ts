@@ -14,7 +14,9 @@ const initialObject: IEscena = {
   escenaId: '',
   recursos: [],
   identificador: '',
-  novelaId: ''
+  novelaId: '',
+  primerEscena: false,
+  ultimaEscena: false
 }
 
 const initialState: State = {

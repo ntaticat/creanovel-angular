@@ -15,6 +15,25 @@ export const GET_NOVELAS_ERROR = createAction(
   props<{ payload: any }>()
 );
 
+
+
+export const GET_NOVELA = createAction(
+  '[Novelas] GET_NOVELA',
+  props<{ novelaId: string }>()
+);
+
+export const GET_NOVELA_SUCCESS = createAction(
+  '[Novelas] GET_NOVELA_SUCCESS',
+  props<{ payload: INovela }>()
+);
+
+export const GET_NOVELA_ERROR = createAction(
+  '[Novelas] GET_NOVELA_ERROR',
+  props<{ payload: any }>()
+);
+
+
+
 export const CREATE_NOVELA = createAction(
   '[Novelas] CREATE_NOVELA',
   props<{ payload: INovelaPost }>()

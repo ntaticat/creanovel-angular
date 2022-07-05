@@ -1,10 +1,10 @@
-import { IConversacion, IDecision } from "./recurso.interfaces";
+import { IConversacion, IDecision, MixRecursosType } from "./recurso.interfaces";
 
 export interface ILectura {
   lecturaId: string;
   novelaRegistrosId: string;
   usuarioPropietarioId: string;
-  recursos?: (IConversacion | IDecision)[];
+  recursos?: MixRecursosType[];
 }
 
 export interface ILecturaPost {

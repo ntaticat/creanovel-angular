@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IConversacion, IDecision, IDecisionOpcionPost, IRecurso, IRecursoPost } from '@models/recurso.interfaces';
+import { IConversacion, IDecision, IDecisionOpcionPost, IRecurso, IRecursoPost, MixRecursosType } from '@models/recurso.interfaces';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -14,13 +14,19 @@ export class RecursosService {
 
   constructor(private http: HttpClient) { }
 
-  getRecurso(recursoId: string): Observable<IConversacion | IDecision> {
+  getRecurso(recursoId: string): Observable<MixRecursosType> {
     const method =  `${this.url}/recursos/${recursoId}`;
 
     return this.http.get<IConversacion | IDecision>(method);
   }
 
-  postRecurso(recursoInfo: IRecursoPost): Observable<{}> {
+  getPrimerRecursoNovela(novelaId: string): Observable<MixRecursosType> {
+    const method =  `${this.url}/recursos/first/${novelaId}`;
+
+    return this.http.get<IConversacion | IDecision>(method);
+  }
+
+  postRecurso(recursoInfo: MixRecursosType): Observable<{}> {
     const method = `${this.url}/recursos`;
 
     const request = {

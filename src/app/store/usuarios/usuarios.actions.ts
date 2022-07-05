@@ -27,7 +27,7 @@ export const POST_LOGIN_ERROR = createAction(
   props<{ payload: string }>()
 );
 
-// -------- MODO LECTURA -------- //
+// -------- LECTURA DE NOVELA -------- //
 
 export const PLAY_NOVEL_FIRST_TIME = createAction(
   '[Usuarios] PLAY_NOVEL_FIRST_TIME',
@@ -39,7 +39,7 @@ export const PLAY_NOVEL = createAction(
   props<{ novelaId: string }>()
 );
 
-// -------- MODO CREADOR -------- //
+// -------- CRUD -------- //
 
 // CREACION DE USUARIOS
 export const POST_USUARIO = createAction(

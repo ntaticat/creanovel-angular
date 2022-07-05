@@ -1,13 +1,18 @@
-import { IConversacion, IDecision } from "./recurso.interfaces";
+import { IConversacion, IDecision, MixRecursosType } from "./recurso.interfaces";
 
 export interface IEscenaPost {
   identificador: string;
   novelaId: string;
+  primerEscena: boolean;
+  ultimaEscena: boolean;
+
 }
 
 export interface IEscena {
   escenaId: string;
   novelaId: string;
   identificador: string;
-  recursos: (IConversacion | IDecision)[];
+  primerEscena: boolean;
+  ultimaEscena: boolean;
+  recursos: MixRecursosType[];
 }

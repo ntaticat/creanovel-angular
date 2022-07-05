@@ -5,35 +5,39 @@ import { IEscena } from '@models/escena.interfaces';
 import { IRecurso } from '@models/recurso.interfaces';
 
 export interface State {
-  novela?: INovela;
-  escena?: IEscena;
-  recurso?: IRecurso;
+  creatorNovela?: INovela;
+  creatorEscena?: IEscena;
+  creatorRecurso?: IRecurso;
   loading: boolean;
   error: string;
 };
 
 const initialState: State = {
-  novela: undefined,
-  escena: undefined,
-  recurso: undefined,
+  creatorNovela: undefined,
+  creatorEscena: undefined,
+  creatorRecurso: undefined,
   loading: false,
   error: ""
 };
 
 export const novelasCreatorReducer = createReducer(initialState,
-//   on(actions.SET_NOVELA, (state) => (
-//       {...state, loading: true}
-//   )),
-//   on(actions.SET_NOVELA_SUCCESS, (state, { payload }) => (
-//     {...state, novela: {...payload}, loading: false}
-// )),
-//   on(actions.SET_NOVELA_ERROR, (state, { payload }) => (
-//     {...state, novela: undefined, loading: false, error: payload}
-//   )),
-//   on(actions.SET_ESCENA, (state, { payload }) => (
-//     {...state, escena: {...payload}}
-//   )),
-//   on(actions.SET_RECURSO, (state, { payload }) => (
-//     {...state, recurso: {...payload}}
-//   )),
+  on(actions.GET_CREATOR_NOVELA, (state) => (
+    { ...state, loading: true }
+  )),
+  on(actions.GET_CREATOR_NOVELA_SUCCESS, (state, { payload }) => (
+    { ...state, creatorNovela: { ...payload }, loading: false }
+  )),
+  on(actions.GET_CREATOR_NOVELA_ERROR, (state, { payload }) => (
+    { ...state, novela: undefined, loading: false, error: payload }
+  )),
+
+  on(actions.GET_CREATOR_ESCENA, (state) => (
+    { ...state, loading: true }
+  )),
+  on(actions.GET_CREATOR_ESCENA_SUCCESS, (state, { payload }) => (
+    { ...state, creatorEscena: { ...payload }, loading: false }
+  )),
+  on(actions.GET_CREATOR_ESCENA_ERROR, (state, { payload }) => (
+    { ...state, novela: undefined, loading: false, error: payload }
+  ))
 );

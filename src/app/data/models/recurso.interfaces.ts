@@ -2,20 +2,21 @@
 export interface IRecursoPost {
   recursoId: string;
   escenaId: string;
-  recursoTipo: string;
+  tipoRecurso: string;
   siguienteRecursoId?: string;
 }
 
 export interface IRecurso {
   recursoId: string;
   escenaId: string;
+  primerRecurso: boolean;
+  ultimoRecurso: boolean;
+  tipoRecurso: string;
 }
 
 export interface IDecision extends IRecurso {
   decisionMensaje: string;
   opciones?: IDecisionOpcion[];
-  primerRecurso: boolean;
-  ultimoRecurso: boolean;
 }
 
 export interface IDecisionOpcionPost {
@@ -34,14 +35,19 @@ export interface IDecisionOpcion {
 export interface IConversacion extends IRecurso {
   mensaje: string;
   siguienteRecursoId?: string;
-  primerRecurso: boolean;
-  ultimoRecurso: boolean;
 }
 
-export function instanceOfIConversacion(object: any): object is IConversacion {
-  return object.recursoTipo === "recurso_conversacion";
+export function instanceOfIConversacion(object: MixRecursosType): object is IConversacion {
+  return object.tipoRecurso === RecursosEnum.conversacion;
 }
 
-export function instanceOfIDecision(object: any): object is IDecision {
-  return object.recursoTipo === "recurso_decision";
+export function instanceOfIDecision(object: MixRecursosType): object is IDecision {
+  return object.tipoRecurso === RecursosEnum.decision;
 }
+
+export type MixRecursosType = IConversacion | IDecision;
+
+export enum RecursosEnum {
+  conversacion = "recurso_conversacion",
+  decision = "recurso_decision"
+};

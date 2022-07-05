@@ -2,6 +2,10 @@ import { IConversacion, IDecision } from "@models/recurso.interfaces";
 import { createAction, props } from "@ngrx/store";
 import { ILectura, ILecturaPost, ILecturaRecursoPost } from "src/app/data/models/lectura.interfaces";
 
+// -----------
+// API ACTIONS
+// -----------
+
 // Registrar lectura cuando se juega por primera vez una novela
 export const POST_LECTURA = createAction(
   '[Lecturas] POST_LECTURA',
@@ -16,10 +20,6 @@ export const POST_LECTURA_ERROR = createAction(
   '[Lecturas] POST_LECTURA_ERROR',
   props<{ payload: any }>()
 );
-
-// -----------
-// API ACTIONS
-// -----------
 
 // Eliminar registro de lectura
 export const DELETE_LECTURA = createAction(
@@ -70,10 +70,10 @@ export const DELETE_LECTURA_RECURSO_ERROR = createAction(
 // APPLICATION ACTIONS
 // -------------------
 
-// export const SET_LECTURA_DATA = createAction(
-//   '[Lecturas] SET_LECTURA_DATA',
-//   props<{ payload: ILectura }>()
-// );
+export const SET_LECTURA_DATA = createAction(
+  '[Lecturas] SET_LECTURA_DATA',
+  props<{ payload: ILectura }>()
+);
 
 // export const SET_RECURSO_ANTERIOR_ID = createAction(
 //   '[Lecturas] SET_RECURSO_ANTERIOR_ID',

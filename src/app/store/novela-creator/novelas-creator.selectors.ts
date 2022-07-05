@@ -7,15 +7,15 @@ const selectNovelasCreator = createFeatureSelector<AppState, novelasCreator.Stat
 
 export const novela = createSelector(
   selectNovelasCreator,
-  (state: novelasCreator.State) => state.novela
+  (state: novelasCreator.State) => state.creatorNovela
 );
 
 export const escena = createSelector(
   selectNovelasCreator,
-  (state: novelasCreator.State) => state.escena
+  (state: novelasCreator.State) => state.creatorEscena
 );
 
 export const recurso = createSelector(
   selectNovelasCreator,
-  (state: novelasCreator.State) => state.recurso
+  (state: novelasCreator.State) => state.creatorRecurso
 );

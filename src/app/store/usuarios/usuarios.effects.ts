@@ -66,7 +66,7 @@ export class UsuariosEffects {
   */
   getUsuarioById$ = createEffect(
     () => this.actions$.pipe(
-      ofType(usuarioActions.GET_USUARIO_ID, novelaActions.CREATE_NOVELA_SUCCESS),
+      ofType(usuarioActions.GET_USUARIO_ID, novelaActions.CREATE_NOVELA_SUCCESS, lecturaActions.POST_LECTURA_SUCCESS),
       map(() => {
         const token = this.usuariosService.readToken();
         const tokenObject = this.usuariosService.decodeJWT(token);
@@ -94,60 +94,60 @@ export class UsuariosEffects {
     )
   );
 
-  // /*
-  // CASO DE USO:
-  // SIN DEFINIR
-  // */
-  // playFirstTime$ = createEffect(
-  //   () => this.actions$.pipe(
-  //     ofType(usuarioActions.PLAY_NOVEL_FIRST_TIME),
-  //     map(({novelaId}) => {
-  //       let usuarioId: string = "";
-  //       this.store.pipe(select(usuarioSelectors.usuario)).subscribe((usuario) => {
-  //         usuarioId = usuario.id;
-  //       });
+  /*
+  CASO DE USO:
+  CUANDO SE JUEGA POR PRIMERA VEZ, SE REGISTRA LA
+  */
+  playFirstTime$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(usuarioActions.PLAY_NOVEL_FIRST_TIME),
+      map(({novelaId}) => {
+        let usuarioId: string = "";
+        this.store.pipe(select(usuarioSelectors.usuario)).subscribe((usuario) => {
+          usuarioId = usuario.id;
+        });
 
-  //       let postLectura: ILecturaPost = {
-  //         lecturaUsuarioId: usuarioId,
-  //         lecturaNovelaId: novelaId
-  //       }
+        let postLectura: ILecturaPost = {
+          usuarioPropietarioId: usuarioId,
+          novelaRegistrosId: novelaId
+        }
 
-  //       return postLectura;
-  //     }),
-  //     switchMap(
-  //       (resp) => {
-  //         return [
-  //           lecturaActions.POST_LECTURA({ payload: {...resp} })
-  //         ];
-  //       }
-  //     )
-  //   )
-  // );
+        return postLectura;
+      }),
+      switchMap(
+        (resp) => {
+          return [
+            lecturaActions.POST_LECTURA({ payload: {...resp} })
+          ];
+        }
+      )
+    )
+  );
 
-  // /*
-  // CASO DE USO:
-  // SIN DEFINIR
-  // */
-  // play$ = createEffect(
-  //   () => this.actions$.pipe(
-  //     ofType(usuarioActions.PLAY_NOVEL),
-  //     map(({novelaId}) => {
+  /*
+  CASO DE USO:
+  CUANDO SE JUEGA LA NOVELA, SE OBTIENE DEL USUARIO LA LECTURA DEPENDIENTE DE LA NOVELA
+  */
+  play$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(usuarioActions.PLAY_NOVEL),
+      map(({novelaId}) => {
 
-  //       let lectura: ILectura;
+        let lectura: ILectura;
 
-  //       this.store.pipe(select(usuarioSelectors.usuario)).subscribe((usuario) => {
-  //         const lecturaIndex = usuario.lecturas?.findIndex(lectura => lectura.lecturaNovelaId === novelaId);
+        this.store.pipe(select(usuarioSelectors.usuario)).subscribe((usuario) => {
+          const lecturaIndex = usuario.lecturas?.findIndex(lectura => lectura.novelaRegistrosId === novelaId);
 
-  //         if(lecturaIndex === -1) {
-  //           throw "No se encontró la lectura deseada";
-  //         }
+          if(lecturaIndex === -1) {
+            throw "No se encontró la lectura deseada";
+          }
 
-  //         lectura = usuario!.lecturas![lecturaIndex!];
-  //       });
+          lectura = usuario!.lecturas![lecturaIndex!];
+        });
 
-  //       return lecturaActions.SET_LECTURA_DATA({payload: lectura!});
-  //     })
-  //   )
-  // );
+        return lecturaActions.SET_LECTURA_DATA({payload: lectura!});
+      })
+    )
+  );
 
 }
