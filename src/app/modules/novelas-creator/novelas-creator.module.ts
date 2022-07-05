@@ -10,7 +10,6 @@ import { RecursoCreatorFormComponent } from './components/recurso-creator-form/r
 import { PersonajeCreatorFormComponent } from './components/personaje-creator-form/personaje-creator-form.component';
 import { FondoCreatorFormComponent } from './components/fondo-creator-form/fondo-creator-form.component';
 import { NovelasCreatorPageComponent } from './novelas-creator-page/novelas-creator-page.component';
-import { NovelaCreatorEscenaComponent } from './novela-creator-page/novela-creator-escena/novela-creator-escena.component';
 
 
 @NgModule({
@@ -21,8 +20,7 @@ import { NovelaCreatorEscenaComponent } from './novela-creator-page/novela-creat
     RecursoCreatorFormComponent,
     PersonajeCreatorFormComponent,
     FondoCreatorFormComponent,
-    NovelasCreatorPageComponent,
-    NovelaCreatorEscenaComponent
+    NovelasCreatorPageComponent
   ],
   imports: [
     CommonModule,

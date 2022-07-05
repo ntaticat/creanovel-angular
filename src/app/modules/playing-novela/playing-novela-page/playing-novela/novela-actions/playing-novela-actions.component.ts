@@ -25,6 +25,9 @@ export class PlayingNovelaActionsComponent implements OnInit {
       }
     });
     this.store.pipe(select(lecturaSelectors.recursoActual)).subscribe((recursoActual) => {
+
+      if(!recursoActual) return;
+
       if(instanceOfIConversacion(recursoActual)) {
       console.log("RECURSOACTUAL ", recursoActual);
         this.siguienteRecursoId = recursoActual?.siguienteRecursoId;

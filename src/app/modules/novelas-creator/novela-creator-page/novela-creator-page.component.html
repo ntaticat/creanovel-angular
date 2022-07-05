@@ -5,20 +5,18 @@
   <!-- Escenas -->
   <div class="relative bg-gray-200 creator-escenas flex flex-col justify-between flex-nowrap overflow-y-auto">
     <div class="h-auto bg-gray-200 p-3">
-      <button class="w-full rounded-r-xl px-3 py-2 bg-gray-500 text-white mb-3">Escenas</button>
-      <button *ngFor="let item of [1,1,1,1,1,1,1,1,1,1]"
-        class="w-full rounded-r-xl px-3 py-2 bg-gray-600 text-white mb-3">Escena
-        #1</button>
+      <button class="text-left w-full rounded-r-xl px-3 py-2 bg-gray-500 text-white mb-3">Escenas</button>
+      <button type="button" *ngFor="let escena of novelaInfo?.escenas" (click)="onClickEscena(escena.escenaId)"
+        class="text-left w-full rounded-r-xl px-3 py-2 bg-gray-600 text-white last:mb-0 mb-3">{{ escena.identificador }}</button>
     </div>
 
     <div class="sticky bottom-0 h-auto px-3">
       <div class="rounded-t-lg overflow-hidden border-l-2 border-r-2 border-t-2 border-solid border-gray-900">
-        <button class="w-full py-1 px-3 bg-gray-800 text-white align-middle border-b-2 border-solid border-gray-900">Añadir Escena <fa-icon
-            [icon]="faIcons['faAngleDown']"></fa-icon></button>
-        <form class="p-3 bg-gray-100">
-          <label for="escenaName" class="font-light">Nombre de la escena:</label>
-          <input name="escenaName" class="w-full mb-3 py-1 px-3" placeholder="Escena #123..." type="text" />
-          <button type="click" class="w-full rounded-lg py-1 px-3 bg-gray-700 text-white">Añadir</button>
+        <button class="w-full py-1 px-3 bg-gray-800 text-white align-middle border-b-2 border-solid border-gray-900">Añadir Escena <fa-icon [icon]="faIcons['faAngleDown']"></fa-icon></button>
+        <form class="p-3 bg-gray-100" [formGroup]="escenaForm" (ngSubmit)="onSubmitEscena()">
+          <label for="escenaName" class="font-light">Identificador de la escena:</label>
+          <input name="escenaName" class="w-full mb-3 py-1 px-3" placeholder="Escena #123..." name="identificador" formControlName="identificador" type="text" />
+          <button type="click" class="w-full rounded-lg py-1 px-3 bg-gray-700 text-white">Registrar</button>
         </form>
       </div>
     </div>
@@ -58,92 +56,22 @@
     </div>
 
     <div class="w-full h-full map-container p-3 bg-white">
-
       <!-- Recurso -->
-      <div class="">1</div>
-      <div class="">1</div>
-      <div class="">
-        <div class="w-full h-full overflow-hidden bg-gray-600 rounded-lg shadow-lg"></div>
-      </div>
-      <div class="">1</div>
-      <div class="">1</div>
-
-      <!-- Imagen direccional -->
-      <div class="direction-item">
-        <div class="w-full h-full overflow-hidden">
-          <img class="w-full h-full object-contain object-center"
-            src="https://cdn3.iconfinder.com/data/icons/arrow-108/24/curved_left_down_arrow-512.png"
-            alt="imagen de dirección del recurso" />
-        </div>
-      </div>
-      <div class="direction-item">
-        <div class="w-full h-full overflow-hidden">
-          <img class="w-full h-full object-contain object-center"
-            src="https://cdn-icons-png.flaticon.com/512/60/60624.png" alt="imagen de dirección del recurso" />
-        </div>
-      </div>
-      <div class="direction-item">
-        <div class="w-full h-full overflow-hidden">
-          <img class="w-full h-full object-contain object-center"
-            src="https://cdn1.iconfinder.com/data/icons/arrows-diagrams/24/split-fork-arrow-horizontal-diagram-512.png"
-            alt="imagen de dirección del recurso" />
-        </div>
-      </div>
-      <div class="direction-item">
-        <div class="w-full h-full overflow-hidden">
-          <img class="w-full h-full object-contain object-center"
-            src="https://cdn-icons-png.flaticon.com/512/60/60624.png" alt="imagen de dirección del recurso" />
-        </div>
-      </div>
-      <div class="direction-item">
-        <div class="w-full h-full overflow-hidden">
-          <img class="w-full h-full object-contain object-center"
-            src="https://static.thenounproject.com/png/604183-200.png" alt="imagen de dirección del recurso" />
+      <div *ngFor="let recurso of this.escenaInfo?.recursos" class="">
+        <div class="w-full h-full overflow-hidden bg-gray-600 rounded-lg shadow-lg">
+          <div *ngIf="instanceOfIConversacion(recurso)">
+            <p>{{ recurso.mensaje }}</p>
+          </div>
+          <div *ngIf="instanceOfIDecision(recurso)">
+            <p>{{ recurso.decisionMensaje }}</p>
+          </div>
         </div>
       </div>
 
-      <!-- Recurso -->
-      <div class="">
-        <div class="w-full h-full overflow-hidden bg-gray-600 rounded-lg shadow-lg"></div>
-      </div>
-      <div class="">1</div>
-      <div class="">
-        <div class="w-full h-full overflow-hidden bg-gray-600 rounded-lg shadow-lg"></div>
-      </div>
-      <div class="">1</div>
-      <div class="">
-        <div class="w-full h-full overflow-hidden bg-gray-600 rounded-lg shadow-lg"></div>
-      </div>
-
-      <!-- Imagen direccional -->
-      <div class="">1</div>
-      <div class="">1</div>
-      <div class="">1</div>
-      <div class="">1</div>
-      <div class="">1</div>
-
-      <!-- Recurso -->
-      <div class="">1</div>
-      <div class="">1</div>
-      <div class="">1</div>
-      <div class="">1</div>
-      <div class="">1</div>
-
-      <!-- Imagen direccional -->
-      <div class="">1</div>
-      <div class="">1</div>
-      <div class="">1</div>
-      <div class="">1</div>
-      <div class="">1</div>
-
-      <!-- Recurso -->
-      <div class="">1</div>
-      <div class="">1</div>
-      <div class="">2</div>
-      <div class="">2</div>
-      <div class="">2</div>
     </div>
   </div>
+
+
 </div>
 
 

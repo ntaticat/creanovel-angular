@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { INovela, INovelaPost } from '@models/novela.interfaces';
+import { INovela } from '@models/novela.interfaces';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '@store/app.reducer';
-import * as novelaSelectors from "@store/novelas/novelas.selectors";
-import * as novelaActions from "@store/novelas/novelas.actions";
-import { PanZoomConfig } from 'ngx-panzoom';
-import { Observable } from 'rxjs';
 import * as faIcons from '@fortawesome/free-solid-svg-icons';
+import { ActivatedRoute } from '@angular/router';
+import * as novelaCreatorActions from '@store/novela-creator/novelas-creator.actions';
+import * as escenaActions from '@store/escenas/escenas.actions';
+import * as novelaCreatorSelectors from '@store/novela-creator/novelas-creator.selectors';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { IEscena, IEscenaPost } from '@models/escena.interfaces';
+import { instanceOfIConversacion, instanceOfIDecision } from '@models/recurso.interfaces';
 
 @Component({
   selector: 'app-novela-creator-page',
@@ -16,21 +18,61 @@ import * as faIcons from '@fortawesome/free-solid-svg-icons';
 })
 export class NovelaCreatorPageComponent implements OnInit {
 
-  panZoomConfig: PanZoomConfig = new PanZoomConfig();
+  instanceOfIConversacion = instanceOfIConversacion;
+  instanceOfIDecision = instanceOfIDecision;
+
   faIcons = faIcons;
 
   novelaId: string = "";
   novelaInfo?: INovela;
+  escenaInfo?: IEscena;
 
-  constructor(private store: Store<AppState>) {
-    // this.store.dispatch(novelaActions.GET_NOVELA_BY_ID(novelaId));
+  escenaForm: FormGroup = this.fb.group({
+    identificador: ['', Validators.required]
+  });
+
+  constructor(private store: Store<AppState>, private activatedRoute: ActivatedRoute, private fb: FormBuilder) {
+    this.activatedRoute.params.subscribe((params) => {
+      this.novelaId = params["id"];
+    });
+    console.log("NOVELAID", this.novelaId);
   }
 
   ngOnInit(): void {
-    this.store.pipe(select(novelaSelectors.novela)).subscribe((novela) => {
+    this.store.dispatch(novelaCreatorActions.GET_CREATOR_NOVELA({payload: this.novelaId}));
+    this.store.pipe(select(novelaCreatorSelectors.novela)).subscribe((novela) => {
       if (novela) {
         this.novelaInfo = novela;
+        console.log(this.novelaInfo);
       }
     });
+    this.store.pipe(select(novelaCreatorSelectors.escena)).subscribe((escena) => {
+      if (escena) {
+        this.escenaInfo = escena;
+        this.escenaInfo.recursos.forEach((recurso) => {
+          console.log("RECURSO TIPO: ", typeof recurso);
+          console.log("RECURSO IS CONVERSACION: ", instanceOfIConversacion(recurso));
+          console.log("RECURSO IS DECISION: ", instanceOfIDecision(recurso));
+        });
+        console.log(this.escenaInfo);
+      }
+    });
+  }
+
+  onSubmitEscena() {
+    if(!this.escenaForm.valid) { return };
+    const escenaPost: IEscenaPost = {
+      ...this.escenaForm.value,
+      primerEscena: false,
+      ultimaEscena: false
+    };
+    escenaPost.novelaId = this.novelaId!;
+    console.log("escenaPost", escenaPost);
+    this.store.dispatch(escenaActions.CREATE_ESCENA({payload: escenaPost}));
+  }
+
+  onClickEscena(escenaId: string) {
+    console.log("ONCLICKESCENA");
+    this.store.dispatch(novelaCreatorActions.GET_CREATOR_ESCENA({payload: escenaId}));
   }
 }

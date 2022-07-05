@@ -23,8 +23,6 @@ export class NovelasComponent implements OnInit, OnDestroy {
 
   faIcons = faIcons;
 
-
-
   lecturas?: ILectura[] = [];
   novelasCreadas?: INovela[] = [];
 

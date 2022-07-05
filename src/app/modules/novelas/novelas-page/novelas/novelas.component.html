@@ -43,11 +43,11 @@
 
         <!-- Jugadas -->
         <div class="h-auto bg-gray-50">
-          <h3 class="px-3 py-2 text-lg bg-red-600/75 text-white mb-3">Si quieres seguir jugando...</h3>
+          <h3 class="px-3 py-2 text-lg bg-red-600/75 text-white mb-3">Novelas jugadas</h3>
           <div class="relative align-middle h-40 w-full overflow-y-hidden overflow-x-scroll whitespace-nowrap">
             <!-- Novela Card -->
             <ng-container *ngFor="let novelaPlayer of novelasPlayer">
-              <div *ngIf="novelaPlayer.played"
+              <a [routerLink]="['/', 'play', novelaPlayer.novela.novelaId]" *ngIf="novelaPlayer.played"
                 class="cursor-pointer inline-block mr-3 first:ml-3 relative w-36 h-36 rounded-lg bg-gray-700 overflow-hidden">
                 <img class="object-cover w-full h-full"
                   src="https://yt3.ggpht.com/LR1e69SSkXgAZLxBEQfvoAq4TbjTBRf5wYs43fpWJcHOf8mcHu2mRq9ldgmXqQ8U1Mg=w1080-rw"
@@ -56,7 +56,7 @@
                   class="bg-opacity-50 bg-gray-700 text-white absolute top-0 right-0 z-10 w-full h-full flex flex-wrap justify-center items-center">
                   <h5>{{novelaPlayer.novela.titulo}}</h5>
                 </div>
-              </div>
+              </a>
             </ng-container>
 
           </div>
