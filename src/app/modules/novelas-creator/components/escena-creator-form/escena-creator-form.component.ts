@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { IEscenaPost } from '@models/escena.interfaces';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '@store/app.reducer';
@@ -13,13 +13,13 @@ import * as novelasCreatorSelectors from '@store/novela-creator/novelas-creator.
 })
 export class EscenaCreatorFormComponent implements OnInit {
 
-  escenaForm: FormGroup = this.fb.group({
+  escenaForm: UntypedFormGroup = this.fb.group({
     identificador: ['', Validators.required]
   });
 
   novelaId?: string = "";
 
-  constructor(private store: Store<AppState>, private fb: FormBuilder) {
+  constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) {
     this.store.pipe(select(novelasCreatorSelectors.novela)).subscribe((novela) => {
       this.novelaId = novela?.novelaId;
     });

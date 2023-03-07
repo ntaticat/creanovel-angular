@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ILoginPost } from '@models/usuario.interfaces';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.reducer';
@@ -12,9 +12,9 @@ import * as usuarioActions from 'src/app/store/usuarios/usuarios.actions';
 })
 export class LoginPageComponent implements OnInit {
 
-  loginForm: FormGroup;
+  loginForm: UntypedFormGroup;
 
-  constructor(private formBuilder: FormBuilder, private store: Store<AppState>) {
+  constructor(private formBuilder: UntypedFormBuilder, private store: Store<AppState>) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]

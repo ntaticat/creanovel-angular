@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import * as novelaCreatorActions from '@store/novela-creator/novelas-creator.actions';
 import * as escenaActions from '@store/escenas/escenas.actions';
 import * as novelaCreatorSelectors from '@store/novela-creator/novelas-creator.selectors';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { IEscena, IEscenaPost } from '@models/escena.interfaces';
 import { instanceOfIConversacion, instanceOfIDecision } from '@models/recurso.interfaces';
 
@@ -27,11 +27,11 @@ export class NovelaCreatorPageComponent implements OnInit {
   novelaInfo?: INovela;
   escenaInfo?: IEscena;
 
-  escenaForm: FormGroup = this.fb.group({
+  escenaForm: UntypedFormGroup = this.fb.group({
     identificador: ['', Validators.required]
   });
 
-  constructor(private store: Store<AppState>, private activatedRoute: ActivatedRoute, private fb: FormBuilder) {
+  constructor(private store: Store<AppState>, private activatedRoute: ActivatedRoute, private fb: UntypedFormBuilder) {
     this.activatedRoute.params.subscribe((params) => {
       this.novelaId = params["id"];
     });

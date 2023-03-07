@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { INovelaPost } from '@models/novela.interfaces';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '@store/app.reducer';
@@ -18,13 +18,13 @@ export class NovelaCreatorFormComponent implements OnInit {
   isLoading: Observable<boolean>;
   loadedSuccess: Observable<boolean>;
 
-  novelaForm: FormGroup = this.fb.group({
+  novelaForm: UntypedFormGroup = this.fb.group({
     titulo: ["", Validators.required],
     descripcion: ["", Validators.required],
     disponible: [false, Validators.required],
   });
 
-  constructor(private store: Store<AppState>, private fb: FormBuilder) {
+  constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) {
     this.isLoading = this.store.pipe(select(novelaSelectors.loading));
     this.loadedSuccess = this.store.pipe(select(novelaSelectors.loadedSuccess));
   }
