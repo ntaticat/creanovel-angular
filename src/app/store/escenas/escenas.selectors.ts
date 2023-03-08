@@ -3,7 +3,7 @@ import { AppState } from '@store/app.reducer';
 import * as escenas from "@store/escenas/escenas.reducer";
 
 const featureKey = 'escenas';
-const selectEscenas = createFeatureSelector<AppState, escenas.State>(featureKey);
+const selectEscenas = createFeatureSelector< escenas.State>(featureKey);
 
 export const getEscenas = createSelector(
   selectEscenas,

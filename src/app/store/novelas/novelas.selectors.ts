@@ -3,7 +3,7 @@ import { AppState } from '@store/app.reducer';
 import * as novelas from "./novelas.reducer";
 
 const featureKey = 'novelas';
-const selectNovelas = createFeatureSelector<AppState, novelas.State>(featureKey);
+const selectNovelas = createFeatureSelector< novelas.State>(featureKey);
 
 export const getNovelas = createSelector(
   selectNovelas,

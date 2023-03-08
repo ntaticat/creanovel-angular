@@ -3,7 +3,7 @@ import { AppState } from '@store/app.reducer';
 import * as usuarios from "./usuarios.reducer";
 
 const featureKey = 'usuarios';
-const selectUsuario = createFeatureSelector<AppState, usuarios.State>(featureKey);
+const selectUsuario = createFeatureSelector< usuarios.State>(featureKey);
 
 export const usuario = createSelector(
   selectUsuario,

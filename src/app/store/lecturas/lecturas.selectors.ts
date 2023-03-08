@@ -3,7 +3,7 @@ import { AppState } from '@store/app.reducer';
 import * as lecturas from "@store/lecturas/lecturas.reducer";
 
 const featureKey = 'lecturas';
-const selectLectura = createFeatureSelector<AppState, lecturas.State>(featureKey);
+const selectLectura = createFeatureSelector< lecturas.State>(featureKey);
 
 export const recursoActual = createSelector(
   selectLectura,
