@@ -7,15 +7,19 @@
     <div class="h-auto bg-gray-200 p-3">
       <button class="text-left w-full rounded-r-xl px-3 py-2 bg-gray-500 text-white mb-3">Escenas</button>
       <button type="button" *ngFor="let escena of novelaInfo?.escenas" (click)="onClickEscena(escena.escenaId)"
-        class="text-left w-full rounded-r-xl px-3 py-2 bg-gray-600 text-white last:mb-0 mb-3">{{ escena.identificador }}</button>
+        class="text-left w-full rounded-r-xl px-3 py-2 bg-gray-600 text-white last:mb-0 mb-3">{{ escena.identificador
+        }}</button>
     </div>
 
     <div class="sticky bottom-0 h-auto px-3">
       <div class="rounded-t-lg overflow-hidden border-l-2 border-r-2 border-t-2 border-solid border-gray-900">
-        <button class="w-full py-1 px-3 bg-gray-800 text-white align-middle border-b-2 border-solid border-gray-900">Añadir Escena <fa-icon [icon]="faIcons['faAngleDown']"></fa-icon></button>
+        <button
+          class="w-full py-1 px-3 bg-gray-800 text-white align-middle border-b-2 border-solid border-gray-900">Añadir
+          Escena <fa-icon [icon]="faIcons['faAngleDown']"></fa-icon></button>
         <form class="p-3 bg-gray-100" [formGroup]="escenaForm" (ngSubmit)="onSubmitEscena()">
           <label for="escenaName" class="font-light">Identificador de la escena:</label>
-          <input name="escenaName" class="w-full mb-3 py-1 px-3" placeholder="Escena #123..." name="identificador" formControlName="identificador" type="text" />
+          <input name="escenaName" class="w-full mb-3 py-1 px-3" placeholder="Escena #123..." name="identificador"
+            formControlName="identificador" type="text" />
           <button type="click" class="w-full rounded-lg py-1 px-3 bg-gray-700 text-white">Registrar</button>
         </form>
       </div>

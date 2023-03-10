@@ -1,0 +1,13 @@
+<div class="relative w-full h-full flex flex-wrap justify-center">
+  <!-- Background -->
+  <div class="absolute top-0 left-0 right-0 bottom-0 overflow-auto bg-gray-700/50 blur-sm" style="z-index: -1;">
+  </div>
+
+  <!-- Contenido -->
+  <div class="w-8/12 h-screen overflow-auto bg-gray-700 p-5" (click)="$event.stopPropagation()">
+    <div class="bg-white rounded-lg p-3 min-h-full">
+      Hola Mundo
+      <button class="bg-blue-700/75 text-white p-2 rounded-lg" (click)="logout()">Sign Out</button>
+    </div>
+  </div>
+</div>

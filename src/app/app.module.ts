@@ -10,11 +10,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { appReducers } from './store/app.reducer';
 import { NovelasEffects } from './store/novelas/novelas.effects';
 
-
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NovelasModule } from './modules/novelas/novelas.module';
 import { UsuariosEffects } from './store/usuarios/usuarios.effects';
 import { LecturasEffects } from '@store/lecturas/lecturas.effects';
 import { RecursosEffects } from '@store/recursos/recursos.effects';
@@ -22,24 +19,30 @@ import { EscenasEffects } from '@store/escenas/escenas.effects';
 import { MainPageComponent } from './layouts/main-page/main-page.component';
 import { NovelasCreatorEffects } from '@store/novela-creator/novelas-creator.effects';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    MainPageComponent
-  ],
+  declarations: [AppComponent, MainPageComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     StoreModule.forRoot(appReducers),
-    EffectsModule.forRoot([NovelasEffects, UsuariosEffects, LecturasEffects, RecursosEffects, EscenasEffects, NovelasCreatorEffects]),
+    EffectsModule.forRoot([
+      NovelasEffects,
+      UsuariosEffects,
+      LecturasEffects,
+      RecursosEffects,
+      EscenasEffects,
+      NovelasCreatorEffects,
+    ]),
     environment.production ? [] : StoreDevtoolsModule.instrument(),
-    NovelasModule,
+    FontAwesomeModule,
   ],
+  exports: [],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

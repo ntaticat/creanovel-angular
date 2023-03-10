@@ -10,7 +10,8 @@ import { RecursoCreatorFormComponent } from './components/recurso-creator-form/r
 import { PersonajeCreatorFormComponent } from './components/personaje-creator-form/personaje-creator-form.component';
 import { FondoCreatorFormComponent } from './components/fondo-creator-form/fondo-creator-form.component';
 import { NovelasCreatorPageComponent } from './novelas-creator-page/novelas-creator-page.component';
-
+import { NovelaCreatePageComponent } from './novela-create-page/novela-create-page.component';
+import { NovelasCreatorModuleLayoutComponent } from 'src/app/layouts/novelas-creator-module-layout/novelas-creator-module-layout.component';
 
 @NgModule({
   declarations: [
@@ -20,12 +21,10 @@ import { NovelasCreatorPageComponent } from './novelas-creator-page/novelas-crea
     RecursoCreatorFormComponent,
     PersonajeCreatorFormComponent,
     FondoCreatorFormComponent,
-    NovelasCreatorPageComponent
+    NovelasCreatorPageComponent,
+    NovelaCreatePageComponent,
+    NovelasCreatorModuleLayoutComponent,
   ],
-  imports: [
-    CommonModule,
-    NovelasCreatorRoutingModule,
-    SharedModule
-  ]
+  imports: [CommonModule, NovelasCreatorRoutingModule, SharedModule],
 })
-export class NovelasCreatorModule { }
+export class NovelasCreatorModule {}
