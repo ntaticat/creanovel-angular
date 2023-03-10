@@ -29,38 +29,15 @@
 
 
   <!-- Mapa -->
-  <div class="bg-black creator-map overflow-y-auto">
-    <div class="creator-top">
-      <button class="bg-black text-white w-full h-full">
-        <div class="">
-          <fa-icon [icon]="faIcons['faArrowUp']"></fa-icon>
-        </div>
-      </button>
-    </div>
-    <div class="creator-left">
-      <button class="bg-black text-white w-full h-full">
-        <div class="">
-          <fa-icon [icon]="faIcons['faArrowUp']"></fa-icon>
-        </div>
-      </button>
-    </div>
-    <div class="creator-right">
-      <button class="bg-black text-white w-full h-full">
-        <div class="w-full">
-          <fa-icon [icon]="faIcons['faArrowUp']"></fa-icon>
-        </div>
-      </button>
-    </div>
-    <div class="creator-bottom">
-      <button class="bg-black text-white w-full h-full">
-        <div class="">
-          <fa-icon [icon]="faIcons['faArrowUp']"></fa-icon>
-        </div>
-      </button>
+  <div class="bg-black w-full h-full overflow-y-auto">
+    <div class="w-full h-full bg-gray-100">
+      <ng-container *ngIf="this.escenaInfo !== undefined">
+        <app-mapa-recursos *ngIf="this.escenaInfo.recursos !== undefined"
+          [recursos]="this.escenaInfo.recursos"></app-mapa-recursos>
+      </ng-container>
     </div>
 
-    <div class="w-full h-full map-container p-3 bg-white">
-      <!-- Recurso -->
+    <!-- <div #mapaRecursos class="w-full h-full map-container bg-gray-100">
       <div *ngFor="let recurso of this.escenaInfo?.recursos" class="">
         <div class="w-full h-full overflow-hidden bg-gray-600 rounded-lg shadow-lg">
           <div *ngIf="instanceOfIConversacion(recurso)">
@@ -71,10 +48,9 @@
           </div>
         </div>
       </div>
-
-    </div>
+    </div> -->
   </div>
-
+  <!-- Mapa fin -->
 
 </div>
 

@@ -12,6 +12,7 @@ import { FondoCreatorFormComponent } from './components/fondo-creator-form/fondo
 import { NovelasCreatorPageComponent } from './novelas-creator-page/novelas-creator-page.component';
 import { NovelaCreatePageComponent } from './novela-create-page/novela-create-page.component';
 import { NovelasCreatorModuleLayoutComponent } from 'src/app/layouts/novelas-creator-module-layout/novelas-creator-module-layout.component';
+import { MapaRecursosComponent } from './components/mapa-recursos/mapa-recursos.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { NovelasCreatorModuleLayoutComponent } from 'src/app/layouts/novelas-cre
     NovelasCreatorPageComponent,
     NovelaCreatePageComponent,
     NovelasCreatorModuleLayoutComponent,
+    MapaRecursosComponent,
   ],
   imports: [CommonModule, NovelasCreatorRoutingModule, SharedModule],
 })
