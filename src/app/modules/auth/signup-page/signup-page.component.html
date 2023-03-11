@@ -1,35 +1,94 @@
-<form>
-  <input
-      type="text"
-      class="input-nuevo-usuario"
-      name="name"
-      placeholder="nombre..."
-      value=""
-  />
-  <input
-      type="text"
-      class="input-nuevo-usuario"
-      name="username"
-      placeholder="usuario...."
-      value=""
-  />
-  <input
-      type="email"
-      class="input-nuevo-usuario"
-      name="email"
-      placeholder="correo..."
-      value=""
-  />
-  <input
-      type="password"
-      class="input-nuevo-usuario"
-      name="password"
-      placeholder="contraseña..."
-      value=""
-  />
-  <input
-      type="submit"
-      value="Enviar"
-  />
-  <a class="lawea" routerLink="../login">Iniciar Sesion</a>
-</form>
+<!-- Main -->
+<div class="px-3 pt-3">
+  <!-- Titulo -->
+  <div class="w-full mb-3 p-2 border-2 border-solid border-gray-700/75">
+    <p class="mb-0 text-xl text-center">Registrar Usuario</p>
+  </div>
+  <!-- Novela -->
+  <div class="relative w-full h-auto border-2 border-solid border-gray-700/75 mb-3">
+    <!-- Form -->
+    <div [ngClass]="{ 'hidden': !formEnable, 'flex': formEnable }"
+      class="absolute w-full h-full top-0 left-0 z-40 bg-transparent text-black p-5 flex flex-wrap justify-center items-start">
+      <div class="mt-20 w-full h-auto bg-white">
+        <form class="p-3" [ngSwitch]="formIndex" [formGroup]="signUpForm"
+          (submit)="$event.preventDefault(); onSubmitSignUp()">
+          <div *ngSwitchCase="0" class="w-full">
+            <label for="name">Ingresa tu nombre (opcional)</label>
+            <input type="text" class="w-full px-3 py-2 border-b-2 border-solid border-gray-600" name="name"
+              placeholder="Juanito" value="" formControlName="name" />
+            <button (click)="onClickNextForm()">Siguiente</button>
+          </div>
+          <div *ngSwitchCase="1" class="w-full">
+            <label for="username">Ingresa tu usuario</label>
+            <input type="text" class="w-full px-3 py-2 border-b-2 border-solid border-gray-600" name="username"
+              placeholder="notAnAdmin123" value="" formControlName="username" />
+            <button (click)="onClickNextForm()">Siguiente</button>
+          </div>
+          <div *ngSwitchCase="2" class="w-full">
+            <label for="email">Correo</label>
+            <input type="email" class="w-full px-3 py-2 border-b-2 border-solid border-gray-600" name="email"
+              placeholder="user@domain.com" value="" formControlName="email" />
+            <button (click)="onClickNextForm()">Siguiente</button>
+          </div>
+          <div *ngSwitchCase="3" class="w-full">
+            <label for="password">Contraseña</label>
+            <input type="password" class="w-full px-3 py-2 border-b-2 border-solid border-gray-600" name="password"
+              placeholder="Your password" value="" formControlName="password" />
+            <label for="same-password">Confirmar contraseña</label>
+            <input type="password" class="w-full px-3 py-2 border-b-2 border-solid border-gray-600" name="same-password"
+              placeholder="Your password, again" value="" formControlName="samePassword" />
+            <button (click)="onClickNextForm()">Siguiente</button>
+          </div>
+
+          <div *ngSwitchCase="4" class="w-full">
+            <p>Enviar formulario</p>
+            <input class="w-full py-2 px-3 mb-5 cursor-pointer bg-blue-700/70 text-white" type="submit"
+              value="Registrarme" />
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Stage -->
+    <div class="relative w-full aspect-[1/1] bg-blue-200 flex flex-wrap justify-center items-end overflow-hidden">
+      <!-- Background image -->
+      <div class="absolute top-0 left-0 w-full h-full z-10">
+        <img class="w-full h-full object-cover object-center" src="https://wallpapercave.com/wp/QNapxxG.jpg"
+          alt="horror mansion">
+      </div>
+
+      <!-- Alert -->
+      <div class="absolute w-full h-auto top-0 left-0 z-30 box-border px-2 py-1 text-sm bg-white text-black">
+        <span>Aquí se mostrarán los mensajes...</span>
+      </div>
+
+      <!-- Character -->
+      <div class="absolute w-full h-full top-0 left-0 z-20 box-border">
+        <img class="w-full h-full object-contain object-center"
+          src="https://i.pinimg.com/originals/55/6b/bd/556bbd57bb1d10813cb74744a573db33.png" alt="Kokichi Sprite" />
+      </div>
+
+      <!-- Character name -->
+      <div
+        class="absolute w-auto h-auto max-h-full overflow-auto bottom-0 left-0 z-30 box-border px-2 py-1 text-lg bg-white text-black">
+        <span class="">Kokichi Oma</span>
+      </div>
+    </div>
+    <!-- Conversacion y opciones -->
+    <div class="w-full border-t-2 border-solid border-gray-700/75">
+      <div class="w-full h-40 p-3 overflow-auto box-border">
+        <p class="text-justify text-md">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vitae, mollitia
+          eveniet iure est delectus praesentium rem nihil eaque quia cum autem, fuga nisi qui quidem! Deserunt
+          voluptatum quod dolores similique!</p>
+      </div>
+      <div class="w-full flex flex-nowrap">
+        <button class="w-full p-2 bg-black text-white"><fa-icon [icon]="faArrowLeft"></fa-icon></button>
+        <button class="w-full p-2 bg-black text-white"><fa-icon [icon]="faCog"></fa-icon></button>
+        <button class="w-full p-2 bg-black text-white"><fa-icon [icon]="faArrowRight"></fa-icon></button>
+      </div>
+    </div>
+  </div>
+  <!-- Extra -->
+  <a class="block w-full px-4 py-2 mb-3 text-center bg-gray-700/75 text-white box-border" routerLink="../login">Iniciar
+    Sesion</a>
+</div>

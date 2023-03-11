@@ -1,14 +1,1 @@
 @import "src/styles/mixins.scss";
-
-.lawea {
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-  background-color: crimson;
-  padding: 10px;
-  margin: 20px;
-  border-radius: 10px;
-  &:active {
-      background-color: rgb(168, 16, 46);
-  }
-}
