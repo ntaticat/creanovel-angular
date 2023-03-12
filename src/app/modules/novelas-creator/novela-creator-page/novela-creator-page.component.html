@@ -1,11 +1,19 @@
 <div class="w-full h-full creator-container">
-  <div class="bg-gray-800 text-white creator-navbar">
-    <h1>Creanovel - Novel Creator</h1>
+  <!-- Header -->
+  <div class="creator-navbar bg-gray-800 text-white flex flex-wrap justify-center items-center">
+    <p class="text-xl">CreaNovel - Novel Creator</p>
+    <a class="mx-3 px-3 py-2 text-white" routerLink="../">Regresar</a>
   </div>
   <!-- Escenas -->
-  <div class="relative bg-gray-200 creator-escenas flex flex-col justify-between flex-nowrap overflow-y-auto">
+  <div #escenasSidebar
+    class="creator-escenas relative bg-gray-200 flex flex-col justify-between flex-nowrap overflow-y-auto">
+
+    <!-- Escenas resizable -->
+    <div #escenasSidebarResizer class="w-1 absolute top-0 right-0 cursor-col-resize h-full bg-gray-900">
+    </div>
+
     <div class="h-auto bg-gray-200 p-3">
-      <button class="text-left w-full rounded-r-xl px-3 py-2 bg-gray-500 text-white mb-3">Escenas</button>
+      <div class="text-left w-full px-3 py-2 bg-gray-500 text-white mb-3">Escenas</div>
       <button type="button" *ngFor="let escena of novelaInfo?.escenas" (click)="onClickEscena(escena.escenaId)"
         class="text-left w-full rounded-r-xl px-3 py-2 bg-gray-600 text-white last:mb-0 mb-3">{{ escena.identificador
         }}</button>
@@ -24,9 +32,8 @@
         </form>
       </div>
     </div>
+
   </div>
-
-
 
   <!-- Mapa -->
   <div class="bg-black w-full h-full overflow-y-auto">
@@ -36,27 +43,5 @@
           [recursos]="this.escenaInfo.recursos"></app-mapa-recursos>
       </ng-container>
     </div>
-
-    <!-- <div #mapaRecursos class="w-full h-full map-container bg-gray-100">
-      <div *ngFor="let recurso of this.escenaInfo?.recursos" class="">
-        <div class="w-full h-full overflow-hidden bg-gray-600 rounded-lg shadow-lg">
-          <div *ngIf="instanceOfIConversacion(recurso)">
-            <p>{{ recurso.mensaje }}</p>
-          </div>
-          <div *ngIf="instanceOfIDecision(recurso)">
-            <p>{{ recurso.decisionMensaje }}</p>
-          </div>
-        </div>
-      </div>
-    </div> -->
   </div>
-  <!-- Mapa fin -->
-
 </div>
-
-
-<!-- <pan-zoom [config]="panZoomConfig">
-      <div class="relative">
-        <app-novela-creator-escena></app-novela-creator-escena>
-      </div>
-    </pan-zoom> -->

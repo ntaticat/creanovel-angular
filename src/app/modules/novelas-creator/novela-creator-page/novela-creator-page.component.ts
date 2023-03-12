@@ -17,6 +17,7 @@ import {
   instanceOfIConversacion,
   instanceOfIDecision,
 } from '@models/recurso.interfaces';
+import { fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-novela-creator-page',
@@ -24,6 +25,9 @@ import {
   styleUrls: ['./novela-creator-page.component.scss'],
 })
 export class NovelaCreatorPageComponent implements OnInit {
+  @ViewChild('escenasSidebar') escenasSidebar!: ElementRef;
+  @ViewChild('escenasSidebarResizer') escenasSidebarResizer!: ElementRef;
+
   instanceOfIConversacion = instanceOfIConversacion;
   instanceOfIDecision = instanceOfIDecision;
 
@@ -36,6 +40,9 @@ export class NovelaCreatorPageComponent implements OnInit {
   escenaForm: UntypedFormGroup = this.fb.group({
     identificador: ['', Validators.required],
   });
+
+  mousePositionX: number = 0;
+  escenaSidebarWidth: number = 0;
 
   constructor(
     private store: Store<AppState>,
@@ -84,5 +91,31 @@ export class NovelaCreatorPageComponent implements OnInit {
     this.store.dispatch(
       novelaCreatorActions.GET_CREATOR_ESCENA({ payload: escenaId })
     );
+  }
+
+  onMouseDownEscenaResizer(e: MouseEvent) {
+    this.mousePositionX = e.clientX;
+    let sidebarWidth = window.getComputedStyle(
+      this.escenasSidebar.nativeElement
+    ).width;
+    this.escenaSidebarWidth = parseInt(sidebarWidth, 10);
+
+    console.log('DOWN X:', this.mousePositionX);
+    console.log('DOWN WIDTH:', this.escenaSidebarWidth);
+  }
+
+  onMouseUpEscenaResizer(e: MouseEvent) {}
+
+  onMouseMoveEscenaResizer(e: MouseEvent) {
+    let newXValue = e.clientX - this.mousePositionX;
+    let newWidthValue = this.escenaSidebarWidth + newXValue;
+
+    console.log(newXValue);
+
+    // if (newWidthValue < 700) {
+    //   window.getComputedStyle(
+    //     this.escenasSidebar.nativeElement
+    //   ).width = `${newWidthValue}px`;
+    // }
   }
 }
