@@ -1,4 +1,27 @@
-<div class="w-full h-full creator-container">
+<div class="relative w-full h-full creator-container">
+  <div class="hidden absolute top-0 left-0 w-full h-full z-10 bg-transparent flex-wrap justify-center items-center">
+    <div class="w-6/12 h-auto bg-slate-400 p-3">
+      <!-- Recurso Decision -->
+      <p>Registrar Recurso</p>
+      <form>
+        <input id="rbtn_conversacion" type="radio" name="tipo_recurso" value="recurso_conversacion">
+        <label for="rbtn_conversacion">Conversacion</label>
+        <input id="rbtn_decision" type="radio" name="tipo_recurso" value="recurso_decision">
+        <label for="rbtn_decision">Decision</label>
+
+        <label for="mensaje">Mensaje</label>
+        <input type="text" name="mensaje" placeholder="Mensaje de la conversacion">
+
+        <input type="checkbox" name="primerRecurso" id="check_primer">
+        <label for="check_primer">Primer Recurso</label>
+        <input type="checkbox" name="ultimoRecurso" id="check_ultimo">
+        <label for="check_ultimo">Ultimo Recurso</label>
+
+        <input type="submit" value="Enviar">
+      </form>
+    </div>
+  </div>
+
   <!-- Header -->
   <div class="creator-navbar bg-gray-800 text-white flex flex-wrap justify-center items-center">
     <p class="text-xl">CreaNovel - Novel Creator</p>
