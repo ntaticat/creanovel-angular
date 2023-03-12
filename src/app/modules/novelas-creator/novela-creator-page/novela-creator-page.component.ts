@@ -45,7 +45,6 @@ export class NovelaCreatorPageComponent implements OnInit {
     this.activatedRoute.params.subscribe((params) => {
       this.novelaId = params['id'];
     });
-    console.log('NOVELAID', this.novelaId);
   }
 
   ngOnInit(): void {
@@ -57,7 +56,6 @@ export class NovelaCreatorPageComponent implements OnInit {
       .subscribe((novela) => {
         if (novela) {
           this.novelaInfo = novela;
-          console.log(this.novelaInfo);
         }
       });
     this.store
@@ -65,15 +63,6 @@ export class NovelaCreatorPageComponent implements OnInit {
       .subscribe((escena) => {
         if (escena) {
           this.escenaInfo = escena;
-          this.escenaInfo.recursos.forEach((recurso) => {
-            console.log('RECURSO TIPO: ', typeof recurso);
-            console.log(
-              'RECURSO IS CONVERSACION: ',
-              instanceOfIConversacion(recurso)
-            );
-            console.log('RECURSO IS DECISION: ', instanceOfIDecision(recurso));
-          });
-          console.log(this.escenaInfo);
         }
       });
   }
@@ -88,12 +77,10 @@ export class NovelaCreatorPageComponent implements OnInit {
       ultimaEscena: false,
     };
     escenaPost.novelaId = this.novelaId!;
-    console.log('escenaPost', escenaPost);
     this.store.dispatch(escenaActions.CREATE_ESCENA({ payload: escenaPost }));
   }
 
   onClickEscena(escenaId: string) {
-    console.log('ONCLICKESCENA');
     this.store.dispatch(
       novelaCreatorActions.GET_CREATOR_ESCENA({ payload: escenaId })
     );

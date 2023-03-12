@@ -1,10 +1,18 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import {
   instanceOfIConversacion,
   MixRecursosType,
   instanceOfIDecision,
 } from '@models/recurso.interfaces';
-import { Subject } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { Data, DataSet, Edge, Network, Node, Options } from 'vis';
 
 @Component({
@@ -12,7 +20,7 @@ import { Data, DataSet, Edge, Network, Node, Options } from 'vis';
   templateUrl: './mapa-recursos.component.html',
   styleUrls: ['./mapa-recursos.component.scss'],
 })
-export class MapaRecursosComponent implements OnInit {
+export class MapaRecursosComponent implements OnInit, OnChanges {
   @ViewChild('mapaRecursos', { static: true }) mapaRecursos!: ElementRef;
   @Input() recursos: MixRecursosType[] = [];
 
@@ -30,7 +38,14 @@ export class MapaRecursosComponent implements OnInit {
   constructor() {
     this.selectedData = new Subject<Data>();
   }
-  ngOnInit(): void {
+
+  ngOnInit(): void {}
+
+  ngOnChanges(): void {
+    this.setupMapaRecursos();
+  }
+
+  setupMapaRecursos() {
     this.nodes = this.getNodes();
     this.edges = this.getEdges();
 
@@ -49,8 +64,6 @@ export class MapaRecursosComponent implements OnInit {
   }
 
   getNodes(): DataSet<Node> {
-    console.log('RECURSOS NODOS: ', this.recursos);
-
     let mapaRecursosNodos: Node[] = this.recursos.map((recurso) => {
       let tipoRecurso = '';
 
