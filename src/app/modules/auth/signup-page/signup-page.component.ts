@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormBuilder,
-  FormGroup,
-  UntypedFormBuilder,
-  UntypedFormGroup,
-  Validators,
-} from '@angular/forms';
-import {
   faArrowRight,
   faArrowLeft,
   faCog,
 } from '@fortawesome/free-solid-svg-icons';
+import {
+  MixRecursosType,
+  instanceOfIConversacion,
+  instanceOfIDecision,
+} from '@models/recurso.interfaces';
+import { SignupService } from '@services/signup.service';
 
 @Component({
   selector: 'app-signup-page',
@@ -18,46 +17,17 @@ import {
   styleUrls: ['./signup-page.component.scss'],
 })
 export class SignupPageComponent implements OnInit {
+  instanceOfIConversacion = instanceOfIConversacion;
+  instanceOfIDecision = instanceOfIDecision;
+
   faArrowRight = faArrowRight;
   faArrowLeft = faArrowLeft;
   faCog = faCog;
 
-  signUpForm: UntypedFormGroup;
+  currentRecursoId: string = '1';
+  currentRecurso!: MixRecursosType;
 
-  formEnable: boolean = true;
-  formIndex: number = 0;
-
-  constructor(private fb: UntypedFormBuilder) {
-    this.signUpForm = this.fb.group({
-      name: ['', Validators.required],
-      username: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-      samePassword: ['', [Validators.required]],
-    });
-  }
+  constructor(private signupService: SignupService) {}
 
   ngOnInit(): void {}
-
-  onClickNextForm() {
-    this.formIndex = this.formIndex + 1;
-  }
-
-  onSubmitSignUp() {
-    if (this.signUpForm.valid) {
-      const name = this.signUpForm.get('name')?.value;
-      const username = this.signUpForm.get('username')?.value;
-      const email = this.signUpForm.get('email')?.value;
-      const password = this.signUpForm.get('password')?.value;
-
-      const userPost = {
-        name,
-        username,
-        email,
-        password,
-      };
-
-      // this.store.dispatch(usuarioActions.POST_LOGIN({ payload: {...credentials} }));
-    }
-  }
 }

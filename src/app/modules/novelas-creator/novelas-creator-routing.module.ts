@@ -10,17 +10,17 @@ const routes: Routes = [
   {
     path: '',
     component: NovelasCreatorPageComponent,
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
   },
   {
     path: ':id',
     component: NovelaCreatorPageComponent,
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
   },
   {
     path: 'create',
     component: NovelaCreatePageComponent,
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
   },
   { path: '**', pathMatch: 'full', redirectTo: '' },
 ];

@@ -52,8 +52,7 @@ export class AuthGuard implements CanActivate, CanLoad {
   canAccessObs(): Promise<boolean> {
     return new Promise((resolve) => {
       this.store
-        .pipe(select(usuarioSelectors.userLoaded))
-        .pipe(take(1))
+        .pipe(select(usuarioSelectors.userLoaded), take(1))
         .subscribe((userLoaded) => {
           if (!userLoaded) {
             this.store.dispatch(usuarioActions.GET_USUARIO_ID());

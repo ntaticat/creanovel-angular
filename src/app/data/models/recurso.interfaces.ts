@@ -1,4 +1,3 @@
-
 export interface IRecursoPost {
   recursoId: string;
   escenaId: string;
@@ -12,6 +11,9 @@ export interface IRecurso {
   primerRecurso: boolean;
   ultimoRecurso: boolean;
   tipoRecurso: string;
+  personajeNombre: string;
+  personajeUrl: string;
+  backgroundUrl: string;
 }
 
 export interface IDecision extends IRecurso {
@@ -37,17 +39,21 @@ export interface IConversacion extends IRecurso {
   siguienteRecursoId?: string;
 }
 
-export function instanceOfIConversacion(object: MixRecursosType): object is IConversacion {
+export function instanceOfIConversacion(
+  object: MixRecursosType
+): object is IConversacion {
   return object.tipoRecurso === RecursosEnum.conversacion;
 }
 
-export function instanceOfIDecision(object: MixRecursosType): object is IDecision {
+export function instanceOfIDecision(
+  object: MixRecursosType
+): object is IDecision {
   return object.tipoRecurso === RecursosEnum.decision;
 }
 
 export type MixRecursosType = IConversacion | IDecision;
 
 export enum RecursosEnum {
-  conversacion = "recurso_conversacion",
-  decision = "recurso_decision"
-};
+  conversacion = 'recurso_conversacion',
+  decision = 'recurso_decision',
+}
