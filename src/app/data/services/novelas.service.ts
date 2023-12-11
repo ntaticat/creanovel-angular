@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map, tap } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, map, retry, tap } from 'rxjs/operators';
 import { INovela, INovelaPost } from '../models/novela.interfaces';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -13,10 +13,30 @@ export class NovelasService {
 
   constructor(private http: HttpClient) {}
 
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      console.error(
+        `Backend returned code ${error.status}, body was: `,
+        error.error
+      );
+    }
+    // Return an observable with a user-facing error message.
+    return throwError(
+      () => new Error('Something bad happened; please try again later.')
+    );
+  }
+
   getNovelas(): Observable<INovela[]> {
     const method = `${this.url}/novelas`;
 
-    return this.http.get<INovela[]>(method);
+    return this.http
+      .get<INovela[]>(method)
+      .pipe(retry(3), catchError(this.handleError));
   }
 
   getNovela(novelaId: string): Observable<INovela> {

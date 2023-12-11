@@ -16,6 +16,7 @@ export interface IToken {
 
 export interface ITokenData {
   userId: string;
+  exp: number;
 }
 
 export interface ILoginPost {

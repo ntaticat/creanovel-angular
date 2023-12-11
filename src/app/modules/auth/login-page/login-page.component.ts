@@ -4,7 +4,9 @@ import {
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ILoginPost } from '@models/usuario.interfaces';
+import { AuthService } from '@services/auth.service';
 
 @Component({
   selector: 'app-login-page',
@@ -14,7 +16,11 @@ import { ILoginPost } from '@models/usuario.interfaces';
 export class LoginPageComponent implements OnInit {
   loginForm: UntypedFormGroup;
 
-  constructor(private formBuilder: UntypedFormBuilder) {
+  constructor(
+    private formBuilder: UntypedFormBuilder,
+    private router: Router,
+    private api: AuthService
+  ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -24,6 +30,8 @@ export class LoginPageComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmitLogin() {
+    console.log('onSubmitLogin');
+
     if (this.loginForm.valid) {
       const email = this.loginForm.get('email')?.value;
       const password = this.loginForm.get('password')?.value;
@@ -32,6 +40,10 @@ export class LoginPageComponent implements OnInit {
         email,
         password,
       };
+
+      this.api.login(credentials).subscribe(() => {
+        this.router.navigateByUrl('/novelas');
+      });
     }
   }
 }

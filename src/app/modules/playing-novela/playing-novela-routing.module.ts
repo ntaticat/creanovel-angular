@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     path: ':id',
     component: PlayingNovelaPageComponent,
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   { path: '**', pathMatch: 'full', redirectTo: '/novelas' },
 ];

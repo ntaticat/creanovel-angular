@@ -8,7 +8,7 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, shareReplay, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 // TODO: Servicio
@@ -28,37 +28,12 @@ export class UsuariosService {
       .pipe(map(resp => resp));
   }
 
-  login(loginPost: ILoginPost) {
-    const method = `usuarios/login`;
-    return this.http
-      .post<IToken>(`${this.url}/${method}`, loginPost)
-      .pipe(map(resp => resp));
-  }
-
-  clearSession() {
-    localStorage.clear();
-  }
-
   getUsuarioById(usuarioId: string): Observable<IUsuario> {
     const method = `usuarios/${usuarioId}`;
 
     return this.http
       .get<IUsuario>(`${this.url}/${method}`)
       .pipe(map(resp => resp));
-  }
-
-  saveToken(token: string) {
-    localStorage.setItem('token', token);
-  }
-
-  readToken(): string {
-    const token = localStorage.getItem('token');
-    return token ?? '';
-  }
-
-  decodeJWT(token: string): ITokenData {
-    const decodeToken = JSON.parse(atob(token.split('.')[1]));
-    return decodeToken;
   }
 
   getUltimoRecurso(novelaId: string, usuario: IUsuario): IPlayRecursos {

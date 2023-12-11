@@ -7,6 +7,7 @@ import {
   UrlSegment,
   UrlTree,
 } from '@angular/router';
+import { AuthService } from '@services/auth.service';
 import {
   Observable,
   Observer,
@@ -21,13 +22,28 @@ import { first, map, mapTo, skip, take, takeLast, tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthGuard {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   async canLoad(route: Route, segments: UrlSegment[]) {
-    return true;
+    const isLoggedIn = this.authService.isLoggedIn();
+
+    if (!isLoggedIn) {
+      this.router.navigateByUrl('/auth/login');
+    }
+
+    return isLoggedIn;
   }
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return true;
+    const isLoggedIn = this.authService.isLoggedIn();
+
+    if (!isLoggedIn) {
+      this.router.navigateByUrl('/auth/login');
+    }
+
+    return isLoggedIn;
   }
 }

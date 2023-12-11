@@ -6,6 +6,7 @@ import { INovela } from '@models/novela.interfaces';
 
 import * as faIcons from '@fortawesome/free-solid-svg-icons';
 import { skip } from 'rxjs/operators';
+import { NovelasService } from '@services/novelas.service';
 
 @Component({
   selector: 'app-novelas',
@@ -18,10 +19,17 @@ export class NovelasComponent implements OnInit, OnDestroy {
   lecturas?: ILectura[] = [];
   novelasCreadas?: INovela[] = [];
 
-  novelasSub!: Subscription;
+  novelasSub: Subscription;
   novelasPlayer: INovelaUser[] = [];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private novelasService: NovelasService
+  ) {
+    this.novelasSub = novelasService.getNovelas().subscribe(novelas => {
+      console.log(novelas);
+    });
+  }
 
   ngOnInit(): void {}
 
