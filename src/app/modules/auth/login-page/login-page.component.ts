@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ILoginPost } from '@models/usuario.interfaces';
-import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/store/app.reducer';
-import * as usuarioActions from 'src/app/store/usuarios/usuarios.actions';
 
 @Component({
   selector: 'app-login-page',
@@ -14,7 +11,7 @@ export class LoginPageComponent implements OnInit {
 
   loginForm: UntypedFormGroup;
 
-  constructor(private formBuilder: UntypedFormBuilder, private store: Store<AppState>) {
+  constructor(private formBuilder: UntypedFormBuilder) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
@@ -34,8 +31,6 @@ export class LoginPageComponent implements OnInit {
         email,
         password
       }
-
-      this.store.dispatch(usuarioActions.POST_LOGIN({ payload: {...credentials} }));
     }
   }
 }

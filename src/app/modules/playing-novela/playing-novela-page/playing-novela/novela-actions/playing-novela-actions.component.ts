@@ -1,10 +1,5 @@
 import { IConversacion, instanceOfIConversacion, instanceOfIDecision } from '../../../../../data/models/recurso.interfaces';
 import { Component, OnInit } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '@store/app.reducer';
-import * as lecturaActions from "@store/lecturas/lecturas.actions";
-import * as lecturaSelectors from "@store/lecturas/lecturas.selectors";
-import * as usuarioSelectors from "@store/usuarios/usuarios.selectors";
 import { ILecturaRecursoPost } from '@models/lectura.interfaces';
 
 @Component({
@@ -17,22 +12,8 @@ export class PlayingNovelaActionsComponent implements OnInit {
   lecturaId: string = "";
   siguienteRecursoId?: string = "";
 
-  constructor(private store: Store<AppState>) {
-    this.store.pipe(select(lecturaSelectors.lectura)).subscribe((lectura) => {
-      console.log("LECTURA ", lectura);
-      if(lectura) {
-        this.lecturaId = lectura.lecturaId;
-      }
-    });
-    this.store.pipe(select(lecturaSelectors.recursoActual)).subscribe((recursoActual) => {
+  constructor() {
 
-      if(!recursoActual) return;
-
-      if(instanceOfIConversacion(recursoActual)) {
-      console.log("RECURSOACTUAL ", recursoActual);
-        this.siguienteRecursoId = recursoActual?.siguienteRecursoId;
-      }
-    });
   }
 
   ngOnInit(): void {
@@ -50,7 +31,6 @@ export class PlayingNovelaActionsComponent implements OnInit {
         recursoOrder: 1 // TODO: CREAR METODO PARA ASIGNAR ORDEN A LOS RECURSOS
       }
       console.log(payload);
-      this.store.dispatch(lecturaActions.POST_LECTURA_RECURSO({payload}));
     }
   }
 }

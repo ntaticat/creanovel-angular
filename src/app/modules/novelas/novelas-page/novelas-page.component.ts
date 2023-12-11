@@ -1,7 +1,4 @@
-import { AppState } from 'src/app/store/app.reducer';
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import * as usuarioActions from 'src/app/store/usuarios/usuarios.actions';
 import { faCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -14,12 +11,11 @@ export class NovelasPageComponent implements OnInit {
   faSignOutAlt = faSignOutAlt;
   showSearchInfo: boolean = false;
 
-  constructor(private store: Store<AppState>) {}
+  constructor() {}
 
   ngOnInit(): void {}
 
   logout() {
-    this.store.dispatch(usuarioActions.LOGOUT());
   }
 
   public onNovelSearchFocus() {

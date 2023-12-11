@@ -1,7 +1,4 @@
 import { Component } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState } from '@store/app.reducer';
-import * as usuarioActions from 'src/app/store/usuarios/usuarios.actions';
 
 @Component({
   selector: 'app-sidebar-menu',
@@ -9,9 +6,8 @@ import * as usuarioActions from 'src/app/store/usuarios/usuarios.actions';
   styleUrls: ['./sidebar-menu.component.scss'],
 })
 export class SidebarMenuComponent {
-  constructor(private store: Store<AppState>) {}
+  constructor() {}
 
   logout() {
-    this.store.dispatch(usuarioActions.LOGOUT());
   }
 }

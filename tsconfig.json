@@ -11,9 +11,6 @@
       "@services/*": [
         "./src/app/data/services/*"
       ],
-      "@store/*": [
-        "./src/app/store/*"
-      ]
     },
     "forceConsistentCasingInFileNames": true,
     "strict": true,
