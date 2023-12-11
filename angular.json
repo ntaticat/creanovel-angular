@@ -72,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "creanovel:build:production"
+              "buildTarget": "creanovel:build:production"
             },
             "development": {
-              "browserTarget": "creanovel:build:development"
+              "buildTarget": "creanovel:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -83,7 +83,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "creanovel:build"
+            "buildTarget": "creanovel:build"
           }
         },
         "test": {
