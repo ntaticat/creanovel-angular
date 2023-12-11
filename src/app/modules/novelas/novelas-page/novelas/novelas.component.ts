@@ -10,10 +10,9 @@ import { skip } from 'rxjs/operators';
 @Component({
   selector: 'app-novelas',
   templateUrl: './novelas.component.html',
-  styleUrls: ['./novelas.component.scss']
+  styleUrls: ['./novelas.component.scss'],
 })
 export class NovelasComponent implements OnInit, OnDestroy {
-
   faIcons = faIcons;
 
   lecturas?: ILectura[] = [];
@@ -22,28 +21,30 @@ export class NovelasComponent implements OnInit, OnDestroy {
   novelasSub!: Subscription;
   novelasPlayer: INovelaUser[] = [];
 
-  constructor(private router: Router) {
-  }
+  constructor(private router: Router) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.novelasSub.unsubscribe();
   }
 
   novelaJugada(novela: INovela) {
-    const novelaIndex = this.lecturas!.findIndex((lectura) => lectura.novelaRegistrosId === novela.novelaId);
+    const novelaIndex = this.lecturas!.findIndex(
+      lectura => lectura.novelaRegistrosId === novela.novelaId
+    );
     return novelaIndex !== -1;
   }
 
   novelaCreada(novela: INovela) {
-    const novelaIndex = this.novelasCreadas!.findIndex((novelaCreada) => novelaCreada.novelaId === novela.novelaId);
+    const novelaIndex = this.novelasCreadas!.findIndex(
+      novelaCreada => novelaCreada.novelaId === novela.novelaId
+    );
     return novelaIndex !== -1;
   }
 
   jugarNovela(novela: INovelaUser) {
-    if(!novela.played) {
+    if (!novela.played) {
     }
   }
 }

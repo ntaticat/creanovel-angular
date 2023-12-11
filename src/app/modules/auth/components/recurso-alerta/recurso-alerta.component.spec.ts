@@ -8,9 +8,8 @@ describe('RecursoAlertaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RecursoAlertaComponent ]
-    })
-    .compileComponents();
+      declarations: [RecursoAlertaComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RecursoAlertaComponent);
     component = fixture.componentInstance;

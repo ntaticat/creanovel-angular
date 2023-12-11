@@ -6,15 +6,14 @@ import { PlayingNovelaPageComponent } from './playing-novela-page/playing-novela
 const routes: Routes = [
   {
     path: ':id',
-    component:
-    PlayingNovelaPageComponent,
+    component: PlayingNovelaPageComponent,
     // canActivate: [AuthGuard]
   },
-  { path: '**', pathMatch: 'full', redirectTo: '/novelas' }
+  { path: '**', pathMatch: 'full', redirectTo: '/novelas' },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class PlayingNovelaRoutingModule { }
+export class PlayingNovelaRoutingModule {}

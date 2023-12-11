@@ -1,13 +1,21 @@
-<div [ngClass]="{ 'hidden': true, 'flex': false }"
-    class="absolute w-full h-full top-0 left-0 z-50 bg-black/50 p-5 flex flex-wrap items-center">
-    <div class="mt-20 w-full h-auto bg-white text-black">
-        <form class="p-3" (submit)="$event.preventDefault(); onClickRegisterValue()">
-            <div class="w-full">
-                <label for="name">Ingresa tu nombre (opcional)</label>
-                <input type="text" class="w-full px-3 py-2 border-b-2 border-solid border-gray-600" name="name"
-                    placeholder="Juanito" value="" formControlName="recursoEntradaControl" />
-                <button type="submit">Enviar</button>
-            </div>
-        </form>
-    </div>
+<div
+  [ngClass]="{ hidden: true, flex: false }"
+  class="absolute w-full h-full top-0 left-0 z-50 bg-black/50 p-5 flex flex-wrap items-center">
+  <div class="mt-20 w-full h-auto bg-white text-black">
+    <form
+      class="p-3"
+      (submit)="$event.preventDefault(); onClickRegisterValue()">
+      <div class="w-full">
+        <label for="name">Ingresa tu nombre (opcional)</label>
+        <input
+          type="text"
+          class="w-full px-3 py-2 border-b-2 border-solid border-gray-600"
+          name="name"
+          placeholder="Juanito"
+          value=""
+          formControlName="recursoEntradaControl" />
+        <button type="submit">Enviar</button>
+      </div>
+    </form>
+  </div>
 </div>

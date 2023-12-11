@@ -21,8 +21,7 @@ export class NovelaCreatorFormComponent implements OnInit {
     descripcion: ['', Validators.required],
   });
 
-  constructor(private fb: UntypedFormBuilder) {
-  }
+  constructor(private fb: UntypedFormBuilder) {}
 
   ngOnInit(): void {}
 

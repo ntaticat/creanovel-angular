@@ -14,17 +14,17 @@ const routes: Routes = [
       {
         path: '',
         component: NovelasPageComponent,
-        // canActivate: [AuthGuard],
+        canActivate: [AuthGuard],
       },
       {
         path: ':id',
         component: NovelaPageComponent,
-        // canActivate: [AuthGuard],
+        canActivate: [AuthGuard],
       },
       {
         path: 'create',
         component: NovelaCreatePageComponent,
-        // canActivate: [AuthGuard],
+        canActivate: [AuthGuard],
       },
     ],
   },

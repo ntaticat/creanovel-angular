@@ -10,7 +10,6 @@ import { RecursoConversacionComponent } from './components/recurso-conversacion/
 import { RecursoEntradaComponent } from './components/recurso-entrada/recurso-entrada.component';
 import { RecursoAlertaComponent } from './components/recurso-alerta/recurso-alerta.component';
 
-
 @NgModule({
   declarations: [
     LoginPageComponent,
@@ -18,12 +17,8 @@ import { RecursoAlertaComponent } from './components/recurso-alerta/recurso-aler
     RecursoDecisionComponent,
     RecursoConversacionComponent,
     RecursoEntradaComponent,
-    RecursoAlertaComponent
+    RecursoAlertaComponent,
   ],
-  imports: [
-    CommonModule,
-    AuthRoutingModule,
-    SharedModule
-  ]
+  imports: [CommonModule, AuthRoutingModule, SharedModule],
 })
-export class AuthModule { }
+export class AuthModule {}

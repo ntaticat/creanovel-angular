@@ -15,8 +15,7 @@ export class NovelasPageComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  logout() {
-  }
+  logout() {}
 
   public onNovelSearchFocus() {
     this.showSearchInfo = !this.showSearchInfo;

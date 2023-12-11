@@ -8,9 +8,8 @@ describe('NovelasCreatorModuleLayoutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NovelasCreatorModuleLayoutComponent ]
-    })
-    .compileComponents();
+      declarations: [NovelasCreatorModuleLayoutComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NovelasCreatorModuleLayoutComponent);
     component = fixture.componentInstance;

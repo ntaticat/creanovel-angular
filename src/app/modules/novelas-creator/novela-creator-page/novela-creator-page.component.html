@@ -1,68 +1,104 @@
 <div class="relative w-full h-full creator-container">
-  <div class="hidden absolute top-0 left-0 w-full h-full z-10 bg-transparent flex-wrap justify-center items-center">
+  <div
+    class="hidden absolute top-0 left-0 w-full h-full z-10 bg-transparent flex-wrap justify-center items-center">
     <div class="w-6/12 h-auto bg-slate-400 p-3">
       <!-- Recurso Decision -->
       <p>Registrar Recurso</p>
       <form>
-        <input id="rbtn_conversacion" type="radio" name="tipo_recurso" value="recurso_conversacion">
+        <input
+          id="rbtn_conversacion"
+          type="radio"
+          name="tipo_recurso"
+          value="recurso_conversacion" />
         <label for="rbtn_conversacion">Conversacion</label>
-        <input id="rbtn_decision" type="radio" name="tipo_recurso" value="recurso_decision">
+        <input
+          id="rbtn_decision"
+          type="radio"
+          name="tipo_recurso"
+          value="recurso_decision" />
         <label for="rbtn_decision">Decision</label>
 
         <label for="mensaje">Mensaje</label>
-        <input type="text" name="mensaje" placeholder="Mensaje de la conversacion">
+        <input
+          type="text"
+          name="mensaje"
+          placeholder="Mensaje de la conversacion" />
 
-        <input type="checkbox" name="primerRecurso" id="check_primer">
+        <input type="checkbox" name="primerRecurso" id="check_primer" />
         <label for="check_primer">Primer Recurso</label>
-        <input type="checkbox" name="ultimoRecurso" id="check_ultimo">
+        <input type="checkbox" name="ultimoRecurso" id="check_ultimo" />
         <label for="check_ultimo">Ultimo Recurso</label>
 
-        <input type="submit" value="Enviar">
+        <input type="submit" value="Enviar" />
       </form>
     </div>
   </div>
 
   <!-- Header -->
-  <div class="creator-navbar bg-gray-800 text-white flex flex-wrap justify-center items-center">
+  <div
+    class="creator-navbar bg-gray-800 text-white flex flex-wrap justify-center items-center">
     <p class="text-xl">CreaNovel - Novel Creator</p>
     <a class="mx-3 px-3 py-2 text-white" routerLink="../">Regresar</a>
   </div>
   <!-- Escenas -->
-  <div #escenasSidebar
+  <div
+    #escenasSidebar
     class="creator-escenas relative bg-gray-200 flex flex-col justify-between flex-nowrap overflow-y-auto">
-
     <!-- Escenas resizable -->
-    <div #escenasSidebarResizer class="w-1 absolute top-0 right-0 cursor-col-resize h-full bg-gray-900">
-    </div>
+    <div
+      #escenasSidebarResizer
+      class="w-1 absolute top-0 right-0 cursor-col-resize h-full bg-gray-900"></div>
 
     <div class="h-auto bg-gray-200 p-3">
-      <div class="text-left w-full px-3 py-2 bg-gray-500 text-white mb-3">Escenas</div>
-      <button type="button" *ngFor="let escena of novelaInfo?.escenas" (click)="onClickEscena(escena.escenaId)"
-        class="text-left w-full rounded-r-xl px-3 py-2 bg-gray-600 text-white last:mb-0 mb-3">{{ escena.identificador
-        }}</button>
+      <div class="text-left w-full px-3 py-2 bg-gray-500 text-white mb-3">
+        Escenas
+      </div>
+      <button
+        type="button"
+        *ngFor="let escena of novelaInfo?.escenas"
+        (click)="onClickEscena(escena.escenaId)"
+        class="text-left w-full rounded-r-xl px-3 py-2 bg-gray-600 text-white last:mb-0 mb-3">
+        {{ escena.identificador }}
+      </button>
     </div>
 
     <div class="sticky bottom-0 h-auto px-3">
-      <div class="rounded-t-lg overflow-hidden border-l-2 border-r-2 border-t-2 border-solid border-gray-900">
+      <div
+        class="rounded-t-lg overflow-hidden border-l-2 border-r-2 border-t-2 border-solid border-gray-900">
         <button
-          class="w-full py-1 px-3 bg-gray-800 text-white align-middle border-b-2 border-solid border-gray-900">Añadir
-          Escena <fa-icon [icon]="faIcons['faAngleDown']"></fa-icon></button>
-        <form class="p-3 bg-gray-100" [formGroup]="escenaForm" (ngSubmit)="onSubmitEscena()">
-          <label for="escenaName" class="font-light">Identificador de la escena:</label>
-          <input name="escenaName" class="w-full mb-3 py-1 px-3" placeholder="Escena #123..." name="identificador"
-            formControlName="identificador" type="text" />
-          <button type="click" class="w-full rounded-lg py-1 px-3 bg-gray-700 text-white">Registrar</button>
+          class="w-full py-1 px-3 bg-gray-800 text-white align-middle border-b-2 border-solid border-gray-900">
+          Añadir Escena <fa-icon [icon]="faIcons['faAngleDown']"></fa-icon>
+        </button>
+        <form
+          class="p-3 bg-gray-100"
+          [formGroup]="escenaForm"
+          (ngSubmit)="onSubmitEscena()">
+          <label for="escenaName" class="font-light"
+            >Identificador de la escena:</label
+          >
+          <input
+            name="escenaName"
+            class="w-full mb-3 py-1 px-3"
+            placeholder="Escena #123..."
+            name="identificador"
+            formControlName="identificador"
+            type="text" />
+          <button
+            type="click"
+            class="w-full rounded-lg py-1 px-3 bg-gray-700 text-white">
+            Registrar
+          </button>
         </form>
       </div>
     </div>
-
   </div>
 
   <!-- Mapa -->
   <div class="bg-black w-full h-full overflow-y-auto">
     <div class="w-full h-full bg-gray-100">
       <ng-container *ngIf="this.escenaInfo !== undefined">
-        <app-mapa-recursos *ngIf="this.escenaInfo.recursos !== undefined"
+        <app-mapa-recursos
+          *ngIf="this.escenaInfo.recursos !== undefined"
           [recursos]="this.escenaInfo.recursos"></app-mapa-recursos>
       </ng-container>
     </div>

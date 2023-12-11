@@ -43,13 +43,12 @@ export class NovelaCreatorPageComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private fb: UntypedFormBuilder
   ) {
-    this.activatedRoute.params.subscribe((params) => {
+    this.activatedRoute.params.subscribe(params => {
       this.novelaId = params['id'];
     });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   onSubmitEscena() {
     if (!this.escenaForm.valid) {
@@ -63,8 +62,7 @@ export class NovelaCreatorPageComponent implements OnInit {
     escenaPost.novelaId = this.novelaId!;
   }
 
-  onClickEscena(escenaId: string) {
-  }
+  onClickEscena(escenaId: string) {}
 
   onMouseDownEscenaResizer(e: MouseEvent) {
     this.mousePositionX = e.clientX;

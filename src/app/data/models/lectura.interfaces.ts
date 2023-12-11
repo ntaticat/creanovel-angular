@@ -1,4 +1,8 @@
-import { IConversacion, IDecision, MixRecursosType } from "./recurso.interfaces";
+import {
+  IConversacion,
+  IDecision,
+  MixRecursosType,
+} from './recurso.interfaces';
 
 export interface ILectura {
   lecturaId: string;

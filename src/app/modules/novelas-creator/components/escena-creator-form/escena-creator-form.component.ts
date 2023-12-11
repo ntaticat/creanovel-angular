@@ -1,32 +1,34 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { IEscenaPost } from '@models/escena.interfaces';
 
 @Component({
   selector: 'app-escena-creator-form',
   templateUrl: './escena-creator-form.component.html',
-  styleUrls: ['./escena-creator-form.component.scss']
+  styleUrls: ['./escena-creator-form.component.scss'],
 })
 export class EscenaCreatorFormComponent implements OnInit {
-
   escenaForm: UntypedFormGroup = this.fb.group({
-    identificador: ['', Validators.required]
+    identificador: ['', Validators.required],
   });
 
-  novelaId?: string = "";
+  novelaId?: string = '';
 
-  constructor(private fb: UntypedFormBuilder) {
-  }
+  constructor(private fb: UntypedFormBuilder) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   onSubmitNovela() {
-    if(!this.escenaForm.valid) { return };
-    const escenaPost: IEscenaPost = {...this.escenaForm.value};
+    if (!this.escenaForm.valid) {
+      return;
+    }
+    const escenaPost: IEscenaPost = { ...this.escenaForm.value };
     escenaPost.novelaId = this.novelaId!;
 
-    console.log("escenaPost", escenaPost);
+    console.log('escenaPost', escenaPost);
   }
-
 }

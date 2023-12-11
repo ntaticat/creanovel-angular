@@ -1,6 +1,6 @@
-import { IBackground } from "./background.interfaces";
-import { IEscena } from "./escena.interfaces";
-import { IPersonaje } from "./personaje.interfaces";
+import { IBackground } from './background.interfaces';
+import { IEscena } from './escena.interfaces';
+import { IPersonaje } from './personaje.interfaces';
 
 export interface INovela {
   novelaId: string;

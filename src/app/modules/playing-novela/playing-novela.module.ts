@@ -9,7 +9,6 @@ import { PlayingNovelaConversationComponent } from './playing-novela-page/playin
 import { PlayingNovelaDecisionsComponent } from './playing-novela-page/playing-novela/novela-decisions/playing-novela-decisions.component';
 import { PlayingNovelaMessageComponent } from './playing-novela-page/playing-novela/novela-message/playing-novela-message.component';
 
-
 @NgModule({
   declarations: [
     PlayingNovelaPageComponent,
@@ -17,11 +16,8 @@ import { PlayingNovelaMessageComponent } from './playing-novela-page/playing-nov
     PlayingNovelaActionsComponent,
     PlayingNovelaConversationComponent,
     PlayingNovelaDecisionsComponent,
-    PlayingNovelaMessageComponent
+    PlayingNovelaMessageComponent,
   ],
-  imports: [
-    CommonModule,
-    PlayingNovelaRoutingModule
-  ]
+  imports: [CommonModule, PlayingNovelaRoutingModule],
 })
-export class PlayingNovelaModule { }
+export class PlayingNovelaModule {}

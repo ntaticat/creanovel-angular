@@ -1,5 +1,5 @@
-import { ILectura } from "./lectura.interfaces";
-import { INovela } from "./novela.interfaces";
+import { ILectura } from './lectura.interfaces';
+import { INovela } from './novela.interfaces';
 
 export interface IUsuario {
   id: string;

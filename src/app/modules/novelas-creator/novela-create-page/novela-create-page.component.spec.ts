@@ -8,9 +8,8 @@ describe('NovelaCreatePageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NovelaCreatePageComponent ]
-    })
-    .compileComponents();
+      declarations: [NovelaCreatePageComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NovelaCreatePageComponent);
     component = fixture.componentInstance;

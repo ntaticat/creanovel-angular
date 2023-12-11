@@ -1,7 +1,7 @@
 export interface IBackground {
   backgroundId: string;
   descripcion: string;
-  sprites?: IBackgroundSprite[]
+  sprites?: IBackgroundSprite[];
 }
 
 export interface IBackgroundSprite {

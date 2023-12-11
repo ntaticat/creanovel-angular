@@ -3,22 +3,25 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { ILectura, ILecturaPost, ILecturaRecursoPost } from '../models/lectura.interfaces';
+import {
+  ILectura,
+  ILecturaPost,
+  ILecturaRecursoPost,
+} from '../models/lectura.interfaces';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LecturasService {
-
   url = environment.url;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   postLectura(lecturaPost: ILecturaPost): Observable<{}> {
     const method = `${this.url}/lecturas`;
 
     const request = {
-      ...lecturaPost
+      ...lecturaPost,
     };
 
     return this.http.post(method, request);
@@ -34,20 +37,22 @@ export class LecturasService {
     const method = `${this.url}/lecturas/recursos`;
 
     const request = {
-      ...lecturaRecursoPost
+      ...lecturaRecursoPost,
     };
 
     return this.http.post(method, request);
   }
 
-  deleteLecturaRecurso(lecturaRecursoPost: ILecturaRecursoPost): Observable<{}> {
+  deleteLecturaRecurso(
+    lecturaRecursoPost: ILecturaRecursoPost
+  ): Observable<{}> {
     const method = `${this.url}/lecturas/recursos`;
 
     const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
-      body: { ...lecturaRecursoPost }
+      body: { ...lecturaRecursoPost },
     };
 
     return this.http.delete(method, options);

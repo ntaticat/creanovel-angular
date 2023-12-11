@@ -60,11 +60,11 @@ export class MapaRecursosComponent implements OnInit, OnChanges {
       this.getNetworkOptions()
     );
 
-    this.network.on('select', (params) => this.onSelect(params));
+    this.network.on('select', params => this.onSelect(params));
   }
 
   getNodes(): DataSet<Node> {
-    let mapaRecursosNodos: Node[] = this.recursos.map((recurso) => {
+    let mapaRecursosNodos: Node[] = this.recursos.map(recurso => {
       let tipoRecurso = '';
 
       if (instanceOfIConversacion(recurso)) {
@@ -89,7 +89,7 @@ export class MapaRecursosComponent implements OnInit, OnChanges {
   getEdges(): DataSet<Edge> {
     let mapaRecursosAristas: Edge[] = [];
 
-    this.recursos.forEach((recurso) => {
+    this.recursos.forEach(recurso => {
       if (instanceOfIConversacion(recurso)) {
         const mapaRecursosArista: Edge = {
           from: recurso.recursoId,
@@ -100,7 +100,7 @@ export class MapaRecursosComponent implements OnInit, OnChanges {
       }
 
       if (instanceOfIDecision(recurso)) {
-        recurso.opciones?.forEach((decisionOpcion) => {
+        recurso.opciones?.forEach(decisionOpcion => {
           const mapaRecursosArista: Edge = {
             from: recurso.recursoId,
             to: decisionOpcion.siguienteRecursoId,
@@ -189,23 +189,23 @@ export class MapaRecursosComponent implements OnInit, OnChanges {
 
       const newEdges = this.edges
         .get()
-        .filter((value) => {
+        .filter(value => {
           return this.network
             .getSelectedEdges()
-            .some((val) => val == value['id']);
+            .some(val => val == value['id']);
         })
-        .map((value) => {
+        .map(value => {
           return { to: value['to'], from: value['from'] };
         });
 
       const rootSelected: number = <number>this.network.getSelectedNodes()[0];
 
-      let newNodes = this.nodes.get().filter((value) => {
-        return newEdges.some((s) => s.to == value.id);
+      let newNodes = this.nodes.get().filter(value => {
+        return newEdges.some(s => s.to == value.id);
       });
 
-      if (!newNodes.some((value) => value.id == rootSelected)) {
-        const self = this.nodes.get().find((val) => val.id == rootSelected)!;
+      if (!newNodes.some(value => value.id == rootSelected)) {
+        const self = this.nodes.get().find(val => val.id == rootSelected)!;
         newNodes.unshift(self);
       } else {
         const root = this.nodes.get()[0];

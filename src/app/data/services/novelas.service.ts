@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, tap } from "rxjs/operators";
+import { map, tap } from 'rxjs/operators';
 import { INovela, INovelaPost } from '../models/novela.interfaces';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NovelasService {
-
   url = environment.url;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getNovelas(): Observable<INovela[]> {
     const method = `${this.url}/novelas`;
@@ -36,8 +35,8 @@ export class NovelasService {
     const method = `${this.url}/novelas`;
 
     const request = {
-      ...novelaInfo
-    }
+      ...novelaInfo,
+    };
 
     return this.http.post(method, request);
   }
@@ -46,8 +45,8 @@ export class NovelasService {
     const method = `${this.url}/novelas/${novelaId}`;
 
     const request = {
-      ...novelaInfo
-    }
+      ...novelaInfo,
+    };
 
     return this.http.patch(method, request);
   }
@@ -57,6 +56,4 @@ export class NovelasService {
 
     return this.http.delete(method);
   }
-
-
 }

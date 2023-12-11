@@ -5,11 +5,13 @@
     <p class="mb-0 text-xl text-center">Registrar Usuario</p>
   </div>
   <!-- Novela -->
-  <div class="w-full h-screen flex flex-col flex-wrap border-2 border-solid border-gray-700/75 mb-3">
+  <div
+    class="w-full h-screen flex flex-col flex-wrap border-2 border-solid border-gray-700/75 mb-3">
     <!-- Stage -->
 
-    <div class="relative w-full flex-grow bg-black/90 flex flex-wrap justify-center items-end overflow-hidden">
-      <ng-container *ngIf="currentRecurso">
+    <div
+      class="relative w-full flex-grow bg-black/90 flex flex-wrap justify-center items-end overflow-hidden">
+      @if (currentRecurso) {
         <!-- Alert -->
         <app-recurso-alerta></app-recurso-alerta>
 
@@ -17,40 +19,52 @@
         <app-recurso-entrada></app-recurso-entrada>
 
         <!-- Decisions -->
-        <ng-container *ngIf="instanceOfIDecision(currentRecurso)">
+        @if (instanceOfIDecision(currentRecurso)) {
           <app-recurso-decision></app-recurso-decision>
-        </ng-container>
+        }
 
         <!-- Character Dialogue -->
-        <ng-container *ngIf="instanceOfIConversacion(currentRecurso)">
+        @if (instanceOfIConversacion(currentRecurso)) {
           <app-recurso-conversacion></app-recurso-conversacion>
-        </ng-container>
+        }
 
         <!-- Background image -->
         <div class="absolute top-0 left-0 w-full h-full z-10">
-          <img class="w-full h-full object-cover object-center" [src]="currentRecurso.backgroundUrl"
-            alt="horror mansion">
+          <img
+            class="w-full h-full object-cover object-center"
+            [src]="currentRecurso.backgroundUrl"
+            alt="horror mansion" />
         </div>
 
         <!-- Character image -->
         <div class="absolute w-full h-full top-0 left-0 z-20 box-border">
-          <img class="w-full h-full object-cover md:object-contain"
-            src="https://i.pinimg.com/originals/55/6b/bd/556bbd57bb1d10813cb74744a573db33.png" alt="Kokichi Sprite" />
+          <img
+            class="w-full h-full object-cover md:object-contain"
+            src="https://i.pinimg.com/originals/55/6b/bd/556bbd57bb1d10813cb74744a573db33.png"
+            alt="Kokichi Sprite" />
         </div>
-      </ng-container>
-
+      }
     </div>
 
     <!-- Acciones -->
     <div class="flex-grow-0 w-full h-auto">
       <div class="w-full flex flex-nowrap">
-        <button class="w-full p-2 bg-black text-white"><fa-icon [icon]="faArrowLeft"></fa-icon></button>
-        <button class="w-full p-2 bg-black text-white"><fa-icon [icon]="faCog"></fa-icon></button>
-        <button class="w-full p-2 bg-black text-white"><fa-icon [icon]="faArrowRight"></fa-icon></button>
+        <button class="w-full p-2 bg-black text-white">
+          <fa-icon [icon]="faArrowLeft"></fa-icon>
+        </button>
+        <button class="w-full p-2 bg-black text-white">
+          <fa-icon [icon]="faCog"></fa-icon>
+        </button>
+        <button class="w-full p-2 bg-black text-white">
+          <fa-icon [icon]="faArrowRight"></fa-icon>
+        </button>
       </div>
     </div>
   </div>
   <!-- Extra -->
-  <a class="block w-full px-4 py-2 mb-3 text-center bg-gray-700/75 text-white box-border" routerLink="../login">Iniciar
-    Sesion</a>
+  <a
+    class="block w-full px-4 py-2 mb-3 text-center bg-gray-700/75 text-white box-border"
+    routerLink="../login"
+    >Iniciar Sesion</a
+  >
 </div>

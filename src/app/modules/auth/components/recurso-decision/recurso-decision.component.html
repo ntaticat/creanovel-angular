@@ -1,41 +1,66 @@
-<div [ngClass]="{ 'hidden': true, 'flex': false }"
-    class="absolute top-0 left-0 w-full h-full z-50 overflow-auto flex-wrap content-start bg-black/50">
-    <!-- Mensaje -->
-    <div
-        class="sticky top-0 w-full h-auto box-border px-2 py-1 bg-white text-black border-b-2 border-solid border-gray-700/75">
-        <span>Selecciona una respuesta</span>
+<div
+  [ngClass]="{ hidden: true, flex: false }"
+  class="absolute top-0 left-0 w-full h-full z-50 overflow-auto flex-wrap content-start bg-black/50">
+  <!-- Mensaje -->
+  <div
+    class="sticky top-0 w-full h-auto box-border px-2 py-1 bg-white text-black border-b-2 border-solid border-gray-700/75">
+    <span>Selecciona una respuesta</span>
+  </div>
+  <!-- Respuestas -->
+  <div class="w-full h-auto bg-white text-black">
+    <div class="w-full">
+      <input
+        class="hidden peer"
+        type="radio"
+        id="decision1"
+        name="decision"
+        value="1" />
+      <label
+        for="decision1"
+        class="block peer-checked:bg-blue-400/75 peer-checked:text-white w-full p-3 text-gray-900">
+        <span
+          >Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis vel
+          dolorem consequuntur obcaecati, itaque culpa excepturi reiciendis quis
+          hic blanditiis consectetur minima necessitatibus, animi magni aperiam,
+          officia iusto illo provident?</span
+        >
+      </label>
     </div>
-    <!-- Respuestas -->
-    <div class="w-full h-auto bg-white text-black">
-        <div class="w-full">
-            <input class="hidden peer" type="radio" id="decision1" name="decision" value="1" />
-            <label for="decision1"
-                class="block peer-checked:bg-blue-400/75 peer-checked:text-white w-full p-3 text-gray-900">
-                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis vel dolorem consequuntur obcaecati,
-                    itaque culpa excepturi reiciendis quis hic blanditiis consectetur minima necessitatibus, animi magni
-                    aperiam, officia iusto illo provident?</span>
-            </label>
-        </div>
-        <div class="w-full">
-            <input class="hidden peer" type="radio" id="decision2" name="decision" value="2" />
-            <label for="decision2"
-                class="block peer-checked:bg-blue-400/75 peer-checked:text-white w-full p-3 text-gray-900">
-                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, laudantium at. Voluptate nam
-                    delectus
-                    quo facere temporibus sequi iure dicta eveniet totam. Saepe rem ratione placeat quasi! Voluptates,
-                    fuga
-                    eos.</span>
-            </label>
-        </div>
-        <div class="w-full">
-            <input class="hidden peer" type="radio" id="decision3" name="decision" value="3" />
-            <label for="decision3"
-                class="block peer-checked:bg-blue-400/75 peer-checked:text-white w-full p-3 text-gray-900">
-                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam pariatur ut ducimus similique
-                    aliquam
-                    reprehenderit blanditiis provident, sed corrupti quam! Quibusdam molestias distinctio temporibus eos
-                    earum repellat deserunt dignissimos quaerat.</span>
-            </label>
-        </div>
+    <div class="w-full">
+      <input
+        class="hidden peer"
+        type="radio"
+        id="decision2"
+        name="decision"
+        value="2" />
+      <label
+        for="decision2"
+        class="block peer-checked:bg-blue-400/75 peer-checked:text-white w-full p-3 text-gray-900">
+        <span
+          >Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit,
+          laudantium at. Voluptate nam delectus quo facere temporibus sequi iure
+          dicta eveniet totam. Saepe rem ratione placeat quasi! Voluptates, fuga
+          eos.</span
+        >
+      </label>
     </div>
+    <div class="w-full">
+      <input
+        class="hidden peer"
+        type="radio"
+        id="decision3"
+        name="decision"
+        value="3" />
+      <label
+        for="decision3"
+        class="block peer-checked:bg-blue-400/75 peer-checked:text-white w-full p-3 text-gray-900">
+        <span
+          >Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam
+          pariatur ut ducimus similique aliquam reprehenderit blanditiis
+          provident, sed corrupti quam! Quibusdam molestias distinctio
+          temporibus eos earum repellat deserunt dignissimos quaerat.</span
+        >
+      </label>
+    </div>
+  </div>
 </div>

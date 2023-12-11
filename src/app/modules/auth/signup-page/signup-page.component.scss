@@ -1,25 +1,25 @@
 .novel-decision-radio {
-	cursor: pointer;
-	width: 100%;
-	padding: 10px;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	align-items: center;
-	cursor: default;
+  cursor: pointer;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  cursor: default;
 
-	& [type='radio'] {
-		display: none;
-	}
+  & [type='radio'] {
+    display: none;
+  }
 
-	&:active {
-		background-color: rgba(230, 230, 230, 0.5);
-	}
+  &:active {
+    background-color: rgba(230, 230, 230, 0.5);
+  }
 }
 
 .novel-decision-info {
-	text-shadow: 0 0 2px #000000;
-	font-size: 20px;
-	font-weight: bold;
-	color: black;
+  text-shadow: 0 0 2px #000000;
+  font-size: 20px;
+  font-weight: bold;
+  color: black;
 }

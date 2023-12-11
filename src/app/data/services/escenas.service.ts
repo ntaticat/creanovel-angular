@@ -5,13 +5,12 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EscenasService {
-
   url = environment.url;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getEscena(escenaId: string): Observable<IEscena> {
     const method = `${this.url}/escenas/${escenaId}`;
@@ -23,8 +22,8 @@ export class EscenasService {
     const method = `${this.url}/escenas`;
 
     const request = {
-      ...escenaInfo
-    }
+      ...escenaInfo,
+    };
 
     return this.http.post(method, request);
   }
@@ -33,8 +32,8 @@ export class EscenasService {
     const method = `${this.url}/escenas/${escenaId}`;
 
     const request = {
-      ...escenaInfo
-    }
+      ...escenaInfo,
+    };
 
     return this.http.patch(method, request);
   }

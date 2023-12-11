@@ -8,9 +8,8 @@ describe('RecursoDecisionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RecursoDecisionComponent ]
-    })
-    .compileComponents();
+      declarations: [RecursoDecisionComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RecursoDecisionComponent);
     component = fixture.componentInstance;

@@ -3,15 +3,12 @@ import { Component, Input, OnInit } from '@angular/core';
 @Component({
   selector: 'app-playing-novela-conversation',
   templateUrl: './playing-novela-conversation.component.html',
-  styleUrls: ['./playing-novela-conversation.component.scss']
+  styleUrls: ['./playing-novela-conversation.component.scss'],
 })
 export class PlayingNovelaConversationComponent implements OnInit {
+  @Input() text?: string = '';
 
-  @Input() text?: string = "";
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }
