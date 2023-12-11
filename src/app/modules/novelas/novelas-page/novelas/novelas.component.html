@@ -10,49 +10,53 @@
         <h3 class="w-full text-lg bg-blue-600/75 text-white py-2 px-3">
           Novelas por descubrir...
         </h3>
-        <ng-container *ngFor="let novelaPlayer of novelasPlayer">
-          <div
-            *ngIf="!novelaPlayer.created && !novelaPlayer.played"
-            class="my-3">
-            <div
-              class="relative w-full h-auto lg:h-40 rounded-lg overflow-hidden flex flex-wrap lg:flex-nowrap justify-between bg-gray-50 text-gray-900 shadow-lg">
+        @for (novelaPlayer of novelasPlayer; track $index) {
+          @if (!novelaPlayer.created && !novelaPlayer.played) {
+            <div class="my-3">
               <div
-                class="order-last lg:order-first p-3 overflow-y-auto w-full font-normal">
+                class="relative w-full h-auto lg:h-40 rounded-lg overflow-hidden flex flex-wrap lg:flex-nowrap justify-between bg-gray-50 text-gray-900 shadow-lg">
+                <div
+                  class="order-last lg:order-first p-3 overflow-y-auto w-full font-normal">
+                  <a
+                    [routerLink]="[
+                      '/',
+                      'novelas',
+                      novelaPlayer.novela.novelaId
+                    ]"
+                    class="text-xl font-bold text-blue-900/75"
+                    >{{ novelaPlayer.novela.titulo }}</a
+                  >
+                  <h6>Creador de la novela</h6>
+                  <p class="text-sm">
+                    Puntuación:
+                    <span>
+                      <fa-icon [icon]="faIcons['faStar']"></fa-icon>
+                      <fa-icon [icon]="faIcons['faStar']"></fa-icon>
+                      <fa-icon [icon]="faIcons['faStar']"></fa-icon>
+                      <fa-icon [icon]="faIcons['faStar']"></fa-icon>
+                    </span>
+                    (170)
+                  </p>
+                  <p class="text-base my-1">
+                    {{ novelaPlayer.novela.descripcion }}
+                  </p>
+                  <p class="text-sm">
+                    Idiomas: <span>Español</span>, <span>Inglés</span>
+                  </p>
+                </div>
+                <img
+                  class="lg:order-last order-first w-full h-auto lg:h-40 lg:w-40 object-cover object-center"
+                  src="https://yt3.ggpht.com/LR1e69SSkXgAZLxBEQfvoAq4TbjTBRf5wYs43fpWJcHOf8mcHu2mRq9ldgmXqQ8U1Mg=w1080-rw"
+                  alt="novela test" />
                 <a
-                  [routerLink]="['/', 'novelas', novelaPlayer.novela.novelaId]"
-                  class="text-xl font-bold text-blue-900/75"
-                  >{{ novelaPlayer.novela.titulo }}</a
-                >
-                <h6>Creador de la novela</h6>
-                <p class="text-sm">
-                  Puntuación:
-                  <span>
-                    <fa-icon [icon]="faIcons['faStar']"></fa-icon>
-                    <fa-icon [icon]="faIcons['faStar']"></fa-icon>
-                    <fa-icon [icon]="faIcons['faStar']"></fa-icon>
-                    <fa-icon [icon]="faIcons['faStar']"></fa-icon>
-                  </span>
-                  (170)
-                </p>
-                <p class="text-base my-1">
-                  {{ novelaPlayer.novela.descripcion }}
-                </p>
-                <p class="text-sm">
-                  Idiomas: <span>Español</span>, <span>Inglés</span>
-                </p>
+                  [routerLink]="['/', 'play', novelaPlayer.novela.novelaId]"
+                  class="absolute top-0 lg:bottom-0 lg:top-auto w-10 h-10 right-0 p-2 rounded-full bg-blue-600 text-white m-2 flex justify-center items-center">
+                  <fa-icon [icon]="faIcons['faPlay']"></fa-icon>
+                </a>
               </div>
-              <img
-                class="lg:order-last order-first w-full h-auto lg:h-40 lg:w-40 object-cover object-center"
-                src="https://yt3.ggpht.com/LR1e69SSkXgAZLxBEQfvoAq4TbjTBRf5wYs43fpWJcHOf8mcHu2mRq9ldgmXqQ8U1Mg=w1080-rw"
-                alt="novela test" />
-              <a
-                [routerLink]="['/', 'play', novelaPlayer.novela.novelaId]"
-                class="absolute top-0 lg:bottom-0 lg:top-auto w-10 h-10 right-0 p-2 rounded-full bg-blue-600 text-white m-2 flex justify-center items-center">
-                <fa-icon [icon]="faIcons['faPlay']"></fa-icon>
-              </a>
             </div>
-          </div>
-        </ng-container>
+          }
+        }
       </div>
     </div>
 
@@ -68,21 +72,22 @@
           <div
             class="relative align-middle h-40 w-full overflow-y-hidden overflow-x-scroll whitespace-nowrap">
             <!-- Novela Card -->
-            <ng-container *ngFor="let novelaPlayer of novelasPlayer">
-              <a
-                [routerLink]="['/', 'play', novelaPlayer.novela.novelaId]"
-                *ngIf="novelaPlayer.played"
-                class="cursor-pointer inline-block mr-3 first:ml-3 relative w-36 h-36 rounded-lg bg-gray-700 overflow-hidden">
-                <img
-                  class="object-cover w-full h-full"
-                  src="https://yt3.ggpht.com/LR1e69SSkXgAZLxBEQfvoAq4TbjTBRf5wYs43fpWJcHOf8mcHu2mRq9ldgmXqQ8U1Mg=w1080-rw"
-                  alt="novela-bg" />
-                <div
-                  class="bg-opacity-50 bg-gray-700 text-white absolute top-0 right-0 z-10 w-full h-full flex flex-wrap justify-center items-center">
-                  <h5>{{ novelaPlayer.novela.titulo }}</h5>
-                </div>
-              </a>
-            </ng-container>
+            @for (novelaPlayer of novelasPlayer; track $index) {
+              @if (novelaPlayer.played) {
+                <a
+                  [routerLink]="['/', 'play', novelaPlayer.novela.novelaId]"
+                  class="cursor-pointer inline-block mr-3 first:ml-3 relative w-36 h-36 rounded-lg bg-gray-700 overflow-hidden">
+                  <img
+                    class="object-cover w-full h-full"
+                    src="https://yt3.ggpht.com/LR1e69SSkXgAZLxBEQfvoAq4TbjTBRf5wYs43fpWJcHOf8mcHu2mRq9ldgmXqQ8U1Mg=w1080-rw"
+                    alt="novela-bg" />
+                  <div
+                    class="bg-opacity-50 bg-gray-700 text-white absolute top-0 right-0 z-10 w-full h-full flex flex-wrap justify-center items-center">
+                    <h5>{{ novelaPlayer.novela.titulo }}</h5>
+                  </div>
+                </a>
+              }
+            }
           </div>
         </div>
 
@@ -93,21 +98,22 @@
           </h3>
           <div
             class="flex flex-nowrap flex-row items-stretch overflow-x-scroll h-40 w-full">
-            <ng-container *ngFor="let novelaPlayer of novelasPlayer">
-              <a
-                [routerLink]="[novelaPlayer.novela.novelaId]"
-                *ngIf="novelaPlayer.created"
-                class="cursor-pointer w-36 h-36 flex-grow-0 flex-shrink-0 mr-3 first:ml-3 relative rounded-lg bg-gray-700 overflow-hidden">
-                <img
-                  class="object-cover w-full h-full"
-                  src="https://yt3.ggpht.com/LR1e69SSkXgAZLxBEQfvoAq4TbjTBRf5wYs43fpWJcHOf8mcHu2mRq9ldgmXqQ8U1Mg=w1080-rw"
-                  alt="novela-bg" />
-                <div
-                  class="bg-opacity-50 bg-gray-700 text-white absolute top-0 right-0 z-10 w-full h-full flex flex-wrap justify-center items-center">
-                  <h5>{{ novelaPlayer.novela.titulo }}</h5>
-                </div>
-              </a>
-            </ng-container>
+            @for (novelaPlayer of novelasPlayer; track $index) {
+              @if (novelaPlayer.created) {
+                <a
+                  [routerLink]="[novelaPlayer.novela.novelaId]"
+                  class="cursor-pointer w-36 h-36 flex-grow-0 flex-shrink-0 mr-3 first:ml-3 relative rounded-lg bg-gray-700 overflow-hidden">
+                  <img
+                    class="object-cover w-full h-full"
+                    src="https://yt3.ggpht.com/LR1e69SSkXgAZLxBEQfvoAq4TbjTBRf5wYs43fpWJcHOf8mcHu2mRq9ldgmXqQ8U1Mg=w1080-rw"
+                    alt="novela-bg" />
+                  <div
+                    class="bg-opacity-50 bg-gray-700 text-white absolute top-0 right-0 z-10 w-full h-full flex flex-wrap justify-center items-center">
+                    <h5>{{ novelaPlayer.novela.titulo }}</h5>
+                  </div>
+                </a>
+              }
+            }
           </div>
         </div>
       </div>

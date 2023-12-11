@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { INovela } from '@models/novela.interfaces';
 import * as faIcons from '@fortawesome/free-solid-svg-icons';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IUsuario } from '@models/usuario.interfaces';
 
 @Component({
   selector: 'app-novelas-creator-page',
@@ -9,16 +10,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./novelas-creator-page.component.scss'],
 })
 export class NovelasCreatorPageComponent implements OnInit {
+  usuarioData: IUsuario = this.route.snapshot.data['usuarioData'];
+
   faIcons = faIcons;
 
-  novelasCreadas: INovela[] = [];
-
-  constructor(private router: Router) {}
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {}
-
-  goNovelaPage(novelaIndex: number) {
-    const novelaInfo = this.novelasCreadas[novelaIndex];
-    this.router.navigate(['novelas-creator', novelaInfo.novelaId]);
-  }
 }

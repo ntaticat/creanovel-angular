@@ -5,6 +5,7 @@ import { NovelasModuleLayoutComponent } from 'src/app/layouts/novelas-module-lay
 import { NovelaCreatePageComponent } from '../novelas-creator/novela-create-page/novela-create-page.component';
 import { NovelaPageComponent } from './novela-page/novela-page.component';
 import { NovelasPageComponent } from './novelas-page/novelas-page.component';
+import { userDataResolver } from 'src/app/core/resolvers/user-data.resolver';
 
 const routes: Routes = [
   {
@@ -15,6 +16,7 @@ const routes: Routes = [
         path: '',
         component: NovelasPageComponent,
         canActivate: [AuthGuard],
+        resolve: { usuarioData: userDataResolver },
       },
       {
         path: ':id',

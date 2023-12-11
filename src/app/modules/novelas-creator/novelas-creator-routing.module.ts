@@ -5,12 +5,14 @@ import { NovelasCreatorModuleLayoutComponent } from 'src/app/layouts/novelas-cre
 import { NovelaCreatePageComponent } from './novela-create-page/novela-create-page.component';
 import { NovelaCreatorPageComponent } from './novela-creator-page/novela-creator-page.component';
 import { NovelasCreatorPageComponent } from './novelas-creator-page/novelas-creator-page.component';
+import { userDataResolver } from 'src/app/core/resolvers/user-data.resolver';
 
 const routes: Routes = [
   {
     path: '',
     component: NovelasCreatorPageComponent,
     canActivate: [AuthGuard],
+    resolve: { usuarioData: userDataResolver },
   },
   {
     path: ':id',
