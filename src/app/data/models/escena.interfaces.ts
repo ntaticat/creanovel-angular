@@ -6,14 +6,14 @@ import {
 
 export interface IEscenaPost {
   identificador: string;
-  novelaId: string;
+  novelaVersionId: string;
   primerEscena: boolean;
   ultimaEscena: boolean;
 }
 
 export interface IEscena {
   escenaId: string;
-  novelaId: string;
+  novelaVersionId: string;
   identificador: string;
   primerEscena: boolean;
   ultimaEscena: boolean;

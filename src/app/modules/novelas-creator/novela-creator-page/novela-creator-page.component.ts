@@ -13,6 +13,10 @@ import {
   instanceOfIDecision,
 } from '@models/recurso.interfaces';
 import { fromEvent } from 'rxjs';
+import { NovelasService } from '@services/novelas.service';
+import { NovelasVersionesService } from '@services/novelas-versiones.service';
+import { INovelaVersion } from '@models/novela-version.interfaces';
+import { EscenasService } from '@services/escenas.service';
 
 @Component({
   selector: 'app-novela-creator-page',
@@ -28,8 +32,8 @@ export class NovelaCreatorPageComponent implements OnInit {
 
   faIcons = faIcons;
 
-  novelaId: string = '';
-  novelaInfo?: INovela;
+  novelaVersionId: string = '';
+  novelaInfo?: INovelaVersion;
   escenaInfo?: IEscena;
 
   escenaForm: UntypedFormGroup = this.fb.group({
@@ -41,14 +45,22 @@ export class NovelaCreatorPageComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private fb: UntypedFormBuilder
+    private fb: UntypedFormBuilder,
+    private novelasVersionesService: NovelasVersionesService,
+    private escenasService: EscenasService
   ) {
     this.activatedRoute.params.subscribe(params => {
-      this.novelaId = params['id'];
+      this.novelaVersionId = params['id'];
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.novelasVersionesService
+      .getNovelaVersion(this.novelaVersionId)
+      .subscribe(novelaVersion => {
+        this.novelaInfo = novelaVersion;
+      });
+  }
 
   onSubmitEscena() {
     if (!this.escenaForm.valid) {
@@ -59,10 +71,14 @@ export class NovelaCreatorPageComponent implements OnInit {
       primerEscena: false,
       ultimaEscena: false,
     };
-    escenaPost.novelaId = this.novelaId!;
+    escenaPost.novelaVersionId = this.novelaVersionId!;
   }
 
-  onClickEscena(escenaId: string) {}
+  onClickEscena(escenaId: string) {
+    this.escenasService.getEscena(escenaId).subscribe(escena => {
+      this.escenaInfo = escena;
+    });
+  }
 
   onMouseDownEscenaResizer(e: MouseEvent) {
     this.mousePositionX = e.clientX;

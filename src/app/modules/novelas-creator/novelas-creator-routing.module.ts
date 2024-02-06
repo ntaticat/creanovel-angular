@@ -6,6 +6,7 @@ import { NovelaCreatePageComponent } from './novela-create-page/novela-create-pa
 import { NovelaCreatorPageComponent } from './novela-creator-page/novela-creator-page.component';
 import { NovelasCreatorPageComponent } from './novelas-creator-page/novelas-creator-page.component';
 import { userDataResolver } from 'src/app/core/resolvers/user-data.resolver';
+import { NovelasCreatorDetailPageComponent } from './novelas-creator-detail-page/novelas-creator-detail-page.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,11 @@ const routes: Routes = [
     component: NovelasCreatorPageComponent,
     canActivate: [AuthGuard],
     resolve: { usuarioData: userDataResolver },
+  },
+  {
+    path: 'edit/:id',
+    component: NovelasCreatorDetailPageComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: ':id',

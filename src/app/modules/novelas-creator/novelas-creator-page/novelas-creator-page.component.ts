@@ -14,7 +14,9 @@ export class NovelasCreatorPageComponent implements OnInit {
 
   faIcons = faIcons;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute) {
+    console.log(this.usuarioData);
+  }
 
   ngOnInit(): void {}
 }

@@ -13,6 +13,7 @@ import { NovelasCreatorPageComponent } from './novelas-creator-page/novelas-crea
 import { NovelaCreatePageComponent } from './novela-create-page/novela-create-page.component';
 import { NovelasCreatorModuleLayoutComponent } from 'src/app/layouts/novelas-creator-module-layout/novelas-creator-module-layout.component';
 import { MapaRecursosComponent } from './components/mapa-recursos/mapa-recursos.component';
+import { NovelasCreatorDetailPageComponent } from './novelas-creator-detail-page/novelas-creator-detail-page.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { MapaRecursosComponent } from './components/mapa-recursos/mapa-recursos.
     NovelaCreatePageComponent,
     NovelasCreatorModuleLayoutComponent,
     MapaRecursosComponent,
+    NovelasCreatorDetailPageComponent,
   ],
   imports: [CommonModule, NovelasCreatorRoutingModule, SharedModule],
 })

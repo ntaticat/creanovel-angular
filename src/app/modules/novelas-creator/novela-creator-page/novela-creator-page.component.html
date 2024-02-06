@@ -53,13 +53,14 @@
       <div class="text-left w-full px-3 py-2 bg-gray-500 text-white mb-3">
         Escenas
       </div>
-      <button
-        type="button"
-        *ngFor="let escena of novelaInfo?.escenas"
-        (click)="onClickEscena(escena.escenaId)"
-        class="text-left w-full rounded-r-xl px-3 py-2 bg-gray-600 text-white last:mb-0 mb-3">
-        {{ escena.identificador }}
-      </button>
+      @for (escena of novelaInfo?.escenas; track $index) {
+        <button
+          type="button"
+          (click)="onClickEscena(escena.escenaId)"
+          class="text-left w-full rounded-r-xl px-3 py-2 bg-gray-600 text-white last:mb-0 mb-3">
+          {{ escena.identificador }}
+        </button>
+      }
     </div>
 
     <div class="sticky bottom-0 h-auto px-3">
@@ -96,11 +97,12 @@
   <!-- Mapa -->
   <div class="bg-black w-full h-full overflow-y-auto">
     <div class="w-full h-full bg-gray-100">
-      <ng-container *ngIf="this.escenaInfo !== undefined">
+      @if (
+        this.escenaInfo !== undefined && this.escenaInfo.recursos !== undefined
+      ) {
         <app-mapa-recursos
-          *ngIf="this.escenaInfo.recursos !== undefined"
           [recursos]="this.escenaInfo.recursos"></app-mapa-recursos>
-      </ng-container>
+      }
     </div>
   </div>
 </div>

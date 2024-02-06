@@ -27,7 +27,7 @@ export class EscenaCreatorFormComponent implements OnInit {
       return;
     }
     const escenaPost: IEscenaPost = { ...this.escenaForm.value };
-    escenaPost.novelaId = this.novelaId!;
+    escenaPost.novelaVersionId = this.novelaId!;
 
     console.log('escenaPost', escenaPost);
   }
