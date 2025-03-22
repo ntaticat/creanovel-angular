@@ -1,5 +1,6 @@
 import { IBackground } from './background.interfaces';
 import { IEscena } from './escena.interfaces';
+import { INovelaVersion } from './novela-version.interfaces';
 import { IPersonaje } from './personaje.interfaces';
 
 export interface INovela {
@@ -11,6 +12,7 @@ export interface INovela {
   escenas?: IEscena[];
   personajes?: IPersonaje[];
   backgrounds?: IBackground[];
+  versiones?: INovelaVersion[];
 }
 
 export interface INovelaBackgroundPost {

@@ -1,0 +1,8 @@
+<div
+  class="absolute z-10 w-screen h-screen top-0 left-0 flex justify-center bg-red-700/50">
+  <div
+    (click)="$event.stopPropagation()"
+    class="w-10/12 h-screen overflow-auto bg-gray-700 p-5">
+    <ng-content></ng-content>
+  </div>
+</div>

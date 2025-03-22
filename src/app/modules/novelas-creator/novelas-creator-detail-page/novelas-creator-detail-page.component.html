@@ -1,5 +1,5 @@
 <div class="w-full">
-  <!-- Header -->
+  <!-- Informacion de la novela -->
   <div class="p-3 w-full text-center border-b-2 border-solid border-gray-700">
     <h1>Novel Creator</h1>
   </div>
@@ -7,12 +7,31 @@
   <!-- Buscador de novelas -->
   <!-- <div class="p-3 w-full flex justify-center"></div> -->
 
-  <!-- Lista de novelas creadas -->
+  <!-- Contenido de la novela -->
+  <div class="">
+    <p>{{ novelaInfo?.titulo }}</p>
+    <p>{{ novelaInfo?.descripcion }}</p>
+    <div class="w-full flex flex-wrap">
+      <div class="w-1/2">
+        @for (novelaVersion of novelaInfo?.versiones; track $index) {
+          <a
+            [routerLink]="['/novelas-creator', novelaVersion.novelaVersionId]"
+            class="mr-2 inline-block px-3 py-1 rounded-lg bg-gray-700 text-white">
+            {{ novelaVersion.numeroVersion }}
+          </a>
+        }
+      </div>
+      <div class="w-1/2">
+        <button class="px-2 py-1 bg-red-500 text-white rounded-xl">
+          Editar landing page
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulario para editar info esencial de la novela -->
   <div class=""></div>
 
-  <!-- <div class="py-3 w-full flex justify-center">
-    <div class="w-6/12">
-      <app-escena-creator-form></app-escena-creator-form>
-    </div>
-  </div> -->
+  <!-- Acciones importantes (habilitar/eliminar) -->
+  <div class=""></div>
 </div>

@@ -1,9 +1,11 @@
 import {
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
   OnInit,
+  Output,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -23,6 +25,9 @@ import { Data, DataSet, Edge, Network, Node, Options } from 'vis';
 export class MapaRecursosComponent implements OnInit, OnChanges {
   @ViewChild('mapaRecursos', { static: true }) mapaRecursos!: ElementRef;
   @Input() recursos: MixRecursosType[] = [];
+  @Input() escenaId: string = '';
+  @Output() reloadRecursosEventEmiter = new EventEmitter<string>();
+  @Output() onClickRecursoNode = new EventEmitter<string>();
 
   menuStatus: boolean = true;
   selectNode: any;
@@ -60,7 +65,7 @@ export class MapaRecursosComponent implements OnInit, OnChanges {
       this.getNetworkOptions()
     );
 
-    this.network.on('select', params => this.onSelect(params));
+    this.network.on('select', params => this.onSelect2(params));
   }
 
   getNodes(): DataSet<Node> {
@@ -91,6 +96,10 @@ export class MapaRecursosComponent implements OnInit, OnChanges {
 
     this.recursos.forEach(recurso => {
       if (instanceOfIConversacion(recurso)) {
+        if (recurso.siguienteRecursoId === null) {
+          return;
+        }
+
         const mapaRecursosArista: Edge = {
           from: recurso.recursoId,
           to: recurso.siguienteRecursoId,
@@ -101,6 +110,10 @@ export class MapaRecursosComponent implements OnInit, OnChanges {
 
       if (instanceOfIDecision(recurso)) {
         recurso.opciones?.forEach(decisionOpcion => {
+          if (decisionOpcion.siguienteRecursoId === null) {
+            return;
+          }
+
           const mapaRecursosArista: Edge = {
             from: recurso.recursoId,
             to: decisionOpcion.siguienteRecursoId,
@@ -166,7 +179,7 @@ export class MapaRecursosComponent implements OnInit, OnChanges {
     };
   }
 
-  private onSelect(params: any): void {
+  private onSelect(params: INetworkOnSelectParams): void {
     if (params.nodes.length == 1) {
       this.nodes.add({
         id: this.nodeNo,
@@ -214,4 +227,28 @@ export class MapaRecursosComponent implements OnInit, OnChanges {
       this.selectedData.next({ edges: newEdges, nodes: newNodes });
     }
   }
+
+  onSelect2(params: INetworkOnSelectParams): void {
+    if (params.nodes.length === 1) {
+      const nodeId = params.nodes[0];
+
+      this.onClickRecursoNode.emit(nodeId);
+    }
+  }
+}
+
+export interface INetworkOnSelectParams {
+  edges: string[];
+  events: object;
+  nodes: string[];
+  pointer: {
+    DOM: {
+      x: number;
+      y: number;
+    };
+    canvas: {
+      x: number;
+      y: number;
+    };
+  };
 }

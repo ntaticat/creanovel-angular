@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-recurso-creator-form',
@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./recurso-creator-form.component.scss'],
 })
 export class RecursoCreatorFormComponent implements OnInit {
+  @Input('escenaId') escenaId: string = '';
+  @Input('nextRecursoId') nextRecursoId: string = '';
+
   constructor() {}
 
   ngOnInit(): void {}

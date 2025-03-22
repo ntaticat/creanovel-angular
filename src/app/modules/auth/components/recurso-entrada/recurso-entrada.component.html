@@ -1,19 +1,19 @@
 <div
-  [ngClass]="{ hidden: true, flex: false }"
+  [ngClass]="{ hidden: false, flex: true }"
   class="absolute w-full h-full top-0 left-0 z-50 bg-black/50 p-5 flex flex-wrap items-center">
   <div class="mt-20 w-full h-auto bg-white text-black">
     <form
       class="p-3"
       (submit)="$event.preventDefault(); onClickRegisterValue()">
-      <div class="w-full">
-        <label for="name">Ingresa tu nombre (opcional)</label>
+      <div [formGroup]="recursoEntradaForm" class="w-full">
+        <label for="name">{{ recursoEntrada.etiqueta }}</label>
         <input
           type="text"
           class="w-full px-3 py-2 border-b-2 border-solid border-gray-600"
           name="name"
-          placeholder="Juanito"
+          [placeholder]="recursoEntrada.etiqueta"
           value=""
-          formControlName="recursoEntradaControl" />
+          formControlName="entradaEmail" />
         <button type="submit">Enviar</button>
       </div>
     </form>

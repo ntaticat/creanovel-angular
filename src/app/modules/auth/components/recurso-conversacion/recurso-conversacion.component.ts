@@ -16,5 +16,5 @@ export class RecursoConversacionComponent {
   faArrowLeft = faArrowLeft;
   faCog = faCog;
 
-  @Input() recurso!: IConversacion;
+  @Input() recursoConversacion!: IConversacion;
 }

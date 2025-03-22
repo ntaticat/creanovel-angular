@@ -21,14 +21,11 @@ export class AuthInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    console.log('req url', req.url);
-    console.log('req method', req.method);
-
     if (
       req.url.includes('usuarios/login') ||
       (req.url.includes('usuarios') && req.method == 'POST')
     ) {
-      return next.handle(req).pipe(finalize(() => console.log('Terminó')));
+      return next.handle(req).pipe(finalize(() => null));
     }
 
     const token = localStorage.getItem('token');
@@ -42,7 +39,7 @@ export class AuthInterceptor implements HttpInterceptor {
     }
 
     return next.handle(req).pipe(
-      finalize(() => console.log('Terminó')),
+      finalize(() => null),
       catchError((err: HttpErrorResponse) => {
         if (err.status === 401) {
           console.error('AuthInterceptor: Error 401');

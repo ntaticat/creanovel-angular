@@ -1,9 +1,5 @@
 <!-- Main -->
-<div class="px-3 pt-3">
-  <!-- Titulo -->
-  <div class="w-full mb-3 p-2 border-2 border-solid border-gray-700/75">
-    <p class="mb-0 text-xl text-center">Registrar Usuario</p>
-  </div>
+<div class="p-0">
   <!-- Novela -->
   <div
     class="w-full h-screen flex flex-col flex-wrap border-2 border-solid border-gray-700/75 mb-3">
@@ -16,16 +12,24 @@
         <app-recurso-alerta></app-recurso-alerta>
 
         <!-- Form -->
-        <app-recurso-entrada></app-recurso-entrada>
+        @if (instanceOfIEntrada(currentRecurso)) {
+          <app-recurso-entrada
+            [recursoEntrada]="currentRecurso"
+            (recursoEntradaReady)="
+              handleEntradaEmit($event)
+            "></app-recurso-entrada>
+        }
 
         <!-- Decisions -->
         @if (instanceOfIDecision(currentRecurso)) {
-          <app-recurso-decision></app-recurso-decision>
+          <app-recurso-decision
+            [recursoDecision]="currentRecurso"></app-recurso-decision>
         }
 
         <!-- Character Dialogue -->
         @if (instanceOfIConversacion(currentRecurso)) {
-          <app-recurso-conversacion></app-recurso-conversacion>
+          <app-recurso-conversacion
+            [recursoConversacion]="currentRecurso"></app-recurso-conversacion>
         }
 
         <!-- Background image -->
@@ -40,7 +44,7 @@
         <div class="absolute w-full h-full top-0 left-0 z-20 box-border">
           <img
             class="w-full h-full object-cover md:object-contain"
-            src="https://i.pinimg.com/originals/55/6b/bd/556bbd57bb1d10813cb74744a573db33.png"
+            [src]="currentRecurso.personajeUrl"
             alt="Kokichi Sprite" />
         </div>
       }
@@ -49,22 +53,20 @@
     <!-- Acciones -->
     <div class="flex-grow-0 w-full h-auto">
       <div class="w-full flex flex-nowrap">
-        <button class="w-full p-2 bg-black text-white">
+        <button
+          (click)="onClickPreviousRecurso()"
+          class="w-full p-2 bg-black text-white">
           <fa-icon [icon]="faArrowLeft"></fa-icon>
         </button>
         <button class="w-full p-2 bg-black text-white">
           <fa-icon [icon]="faCog"></fa-icon>
         </button>
-        <button class="w-full p-2 bg-black text-white">
+        <button
+          (click)="onClickNextRecurso()"
+          class="w-full p-2 bg-black text-white">
           <fa-icon [icon]="faArrowRight"></fa-icon>
         </button>
       </div>
     </div>
   </div>
-  <!-- Extra -->
-  <a
-    class="block w-full px-4 py-2 mb-3 text-center bg-gray-700/75 text-white box-border"
-    routerLink="../login"
-    >Iniciar Sesion</a
-  >
 </div>

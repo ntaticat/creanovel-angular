@@ -39,8 +39,13 @@ export class NovelasService {
       .pipe(retry(3), catchError(this.handleError));
   }
 
-  getNovela(novelaId: string): Observable<INovela> {
-    const method = `${this.url}/novelas/${novelaId}`;
+  getNovela(
+    novelaId: string,
+    hasVersiones: string = 'False',
+    hasPersonajes: string = 'False',
+    hasBackgrounds: string = 'False'
+  ): Observable<INovela> {
+    const method = `${this.url}/novelas/${novelaId}?versiones=${hasVersiones}&personajes=${hasPersonajes}&backgrounds=${hasBackgrounds}`;
 
     return this.http.get<INovela>(method);
   }

@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormControl,
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
+import { IEntrada } from '@models/recurso.interfaces';
 
 @Component({
   selector: 'app-recurso-entrada',
@@ -12,11 +13,20 @@ import {
   styleUrls: ['./recurso-entrada.component.scss'],
 })
 export class RecursoEntradaComponent {
-  recursoEntradaControl: UntypedFormControl;
+  @Input() recursoEntrada!: IEntrada;
+  @Output() recursoEntradaReady = new EventEmitter<string>();
+
+  recursoEntradaForm!: UntypedFormGroup;
 
   constructor(private fb: UntypedFormBuilder) {
-    this.recursoEntradaControl = this.fb.control('', [Validators.required]);
+    this.recursoEntradaForm = this.fb.group({
+      entradaEmail: ['', [Validators.required, Validators.email]],
+    });
   }
 
-  onClickRegisterValue() {}
+  onClickRegisterValue() {
+    const email = this.recursoEntradaForm.get('entradaEmail')?.value;
+    console.log(email);
+    this.recursoEntradaReady.emit(email);
+  }
 }
