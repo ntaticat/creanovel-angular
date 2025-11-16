@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpResponse,
+} from '@angular/common/http';
 import { catchError, map, retry, tap } from 'rxjs/operators';
 import { INovela, INovelaPost } from '../models/novela.interfaces';
 import { Observable, throwError } from 'rxjs';
@@ -56,14 +61,29 @@ export class NovelasService {
     return this.http.get<INovela>(method);
   }
 
-  postNovela(novelaInfo: INovelaPost): Observable<{}> {
+  postNovela(novelaInfo: INovelaPost): Observable<string> {
     const method = `${this.url}/novelas`;
 
     const request = {
       ...novelaInfo,
     };
 
-    return this.http.post(method, request);
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    return this.http
+      .post(method, request, { observe: 'response', headers: headers })
+      .pipe(
+        map(response => {
+          console.log(response);
+          const locationUrl = response.headers.get('Location');
+          if (!locationUrl) {
+            throw new Error('No se recibió Location en la respuesta');
+          }
+
+          const id = locationUrl.split('/').pop();
+          return id || '';
+        })
+      );
   }
 
   patchNovela(novelaId: string, novelaInfo: Partial<INovela>): Observable<{}> {

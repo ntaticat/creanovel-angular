@@ -7,6 +7,8 @@ import { NovelaCreatorPageComponent } from './novela-creator-page/novela-creator
 import { NovelasCreatorPageComponent } from './novelas-creator-page/novelas-creator-page.component';
 import { userDataResolver } from 'src/app/core/resolvers/user-data.resolver';
 import { NovelasCreatorDetailPageComponent } from './novelas-creator-detail-page/novelas-creator-detail-page.component';
+import { NovelaCreatorVersionesPageComponent } from './novela-creator-versiones-page/novela-creator-versiones-page.component';
+import { NovelaCreatorVersionPageComponent } from './novela-creator-version-page/novela-creator-version-page.component';
 
 const routes: Routes = [
   {
@@ -16,14 +18,17 @@ const routes: Routes = [
     resolve: { usuarioData: userDataResolver },
   },
   {
-    path: 'edit/:id',
-    component: NovelasCreatorDetailPageComponent,
+    path: ':novelaId',
+    component: NovelaCreatorPageComponent,
     canActivate: [AuthGuard],
   },
   {
-    path: ':id',
-    component: NovelaCreatorPageComponent,
+    path: ':novelaId/versiones',
     canActivate: [AuthGuard],
+    children: [
+      { path: '', component: NovelaCreatorVersionesPageComponent },
+      { path: ':versionId', component: NovelaCreatorVersionPageComponent },
+    ],
   },
   {
     path: 'create',
