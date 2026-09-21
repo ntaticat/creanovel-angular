@@ -1,0 +1,20 @@
+@if (recurso && esAutomatico) {
+  <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm text-gray-700">
+    <p class="font-semibold mb-1">{{ tipoAutomatico }} <span class="font-normal text-gray-500">— {{ subtituloAutomatico }}</span></p>
+    <p class="break-words">{{ resumenAutomatico }}</p>
+  </div>
+} @else if (recurso) {
+  <app-novela-stage
+    [arte]="arte"
+    [autor]="autor"
+    [mensaje]="mensaje"
+    [esDecision]="esDecision"
+    [esEntrada]="esEntrada"
+    [esExplora]="esExplora"
+    [zonas]="zonas"
+    [resaltarZonasInicial]="true"
+    [placeholderEntrada]="placeholderEntrada"
+    [opciones]="opciones"></app-novela-stage>
+} @else {
+  <app-empty-state [icon]="faEye" title="Selecciona un recurso para previsualizar" />
+}

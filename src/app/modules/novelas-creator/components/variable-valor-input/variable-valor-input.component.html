@@ -1,0 +1,40 @@
+@switch (def?.tipo) {
+  @case ('numero') {
+    <input
+      type="number"
+      class="input"
+      [attr.aria-label]="etiqueta"
+      [attr.min]="def?.min ?? null"
+      [attr.max]="def?.max ?? null"
+      [value]="valor ?? 0"
+      (change)="cambioNumero($any($event.target).value)" />
+  }
+  @case ('booleano') {
+    <select
+      class="input"
+      [attr.aria-label]="etiqueta"
+      (change)="valorChange.emit($any($event.target).value === 'true')">
+      <option value="true" [selected]="valor === true">Verdadero</option>
+      <option value="false" [selected]="valor === false">Falso</option>
+    </select>
+  }
+  @default {
+    @if (def?.valores?.length) {
+      <select
+        class="input"
+        [attr.aria-label]="etiqueta"
+        (change)="valorChange.emit($any($event.target).value)">
+        @for (v of def!.valores; track v) {
+          <option [value]="v" [selected]="valor === v">{{ v }}</option>
+        }
+      </select>
+    } @else {
+      <input
+        type="text"
+        class="input"
+        [attr.aria-label]="etiqueta"
+        [value]="valor ?? ''"
+        (change)="valorChange.emit($any($event.target).value)" />
+    }
+  }
+}

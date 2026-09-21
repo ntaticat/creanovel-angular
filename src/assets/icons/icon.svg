@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="fondo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#312e81"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#fondo)"/>
+  <!-- escenario: sol y montañas -->
+  <circle cx="336" cy="176" r="46" fill="#fde68a"/>
+  <path d="M76 330 L184 190 L254 276 L316 226 L436 330 Z" fill="#1e1b4b" fill-opacity=".55"/>
+  <!-- cuadro de diálogo con la etiqueta del nombre -->
+  <rect x="76" y="296" width="360" height="140" rx="28" fill="#ffffff"/>
+  <rect x="76" y="262" width="128" height="44" rx="22" fill="#fbbf24"/>
+  <rect x="108" y="342" width="296" height="16" rx="8" fill="#c7d2fe"/>
+  <rect x="108" y="376" width="196" height="16" rx="8" fill="#c7d2fe"/>
+</svg>

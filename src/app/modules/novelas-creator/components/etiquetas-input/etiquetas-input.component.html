@@ -1,0 +1,36 @@
+<div class="flex flex-wrap items-center gap-1.5 rounded-lg border border-gray-300 px-2 py-1.5 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/30">
+  @for (etiqueta of etiquetas; track etiqueta) {
+    <span class="badge-neutral">
+      {{ etiqueta }}
+      <button
+        type="button"
+        class="rounded-full text-gray-400 hover:text-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
+        [attr.aria-label]="'Quitar la etiqueta ' + etiqueta"
+        (click)="quitar(etiqueta)">
+        <fa-icon [icon]="faXmark"></fa-icon>
+      </button>
+    </span>
+  }
+  <input
+    type="text"
+    class="min-w-[8rem] flex-1 border-0 bg-transparent p-1 text-sm text-gray-900 placeholder-gray-400 outline-none disabled:cursor-not-allowed"
+    [placeholder]="lleno ? 'Máximo de etiquetas alcanzado' : 'Escribe y pulsa Enter'"
+    [maxlength]="maxLongitud"
+    [disabled]="lleno"
+    [attr.list]="listaId"
+    aria-label="Añadir etiqueta"
+    name="nuevaEtiqueta"
+    autocomplete="off"
+    [(ngModel)]="texto"
+    [ngModelOptions]="{ standalone: true }"
+    (keydown)="onKeydown($event)"
+    (blur)="confirmar()" />
+  <datalist [id]="listaId">
+    @for (sugerencia of sugerenciasLibres; track sugerencia) {
+      <option [value]="sugerencia"></option>
+    }
+  </datalist>
+</div>
+<p class="mt-1 text-xs text-gray-400">
+  Sirven para agrupar y filtrar escenas en el editor. Hasta {{ maximo }}, de {{ maxLongitud }} caracteres como máximo.
+</p>

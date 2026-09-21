@@ -1,0 +1,93 @@
+<section class="bg-gray-900 text-white text-sm p-3 border-t border-white/10" aria-label="Depurador del motor">
+  <div class="flex items-center justify-between gap-2 mb-2">
+    <h3 class="font-semibold">Estado de la partida (solo vista previa)</h3>
+    <span class="flex gap-2">
+      <button type="button" class="btn-secondary" (click)="irAlInicio.emit()">Ir al inicio (conservar variables)</button>
+      <button type="button" class="btn-secondary" (click)="reiniciar.emit()">Reiniciar</button>
+    </span>
+  </div>
+
+  @if (recursoActualId) {
+    <p class="text-white/50 text-xs mb-2">Nodo actual: {{ recursoActualId }}</p>
+  }
+
+  <div class="grid gap-2 sm:grid-cols-2">
+    @for (def of definiciones.variables; track def.clave) {
+      <label class="flex items-center justify-between gap-2 bg-white/5 rounded px-2 py-1">
+        <span>{{ def.etiqueta || def.clave }} <code class="text-white/40">{{ def.clave }}</code></span>
+        @switch (def.tipo) {
+          @case ('numero') {
+            <input
+              type="number"
+              class="input w-24 !bg-white !text-gray-900"
+              [value]="estado.vars[def.clave]"
+              [attr.min]="def.min ?? null"
+              [attr.max]="def.max ?? null"
+              (change)="cambiar(def, $any($event.target).valueAsNumber)" />
+          }
+          @case ('booleano') {
+            <input
+              type="checkbox"
+              [checked]="estado.vars[def.clave] === true"
+              (change)="cambiar(def, $any($event.target).checked)" />
+          }
+          @default {
+            @if (def.valores.length) {
+              <select
+                class="input w-32 !bg-white !text-gray-900"
+                (change)="cambiar(def, $any($event.target).value)">
+                @for (valor of def.valores; track valor) {
+                  <option [value]="valor" [selected]="estado.vars[def.clave] === valor">{{ valor }}</option>
+                }
+              </select>
+            } @else {
+              <input
+                type="text"
+                class="input w-32 !bg-white !text-gray-900"
+                [value]="estado.vars[def.clave]"
+                (change)="cambiar(def, $any($event.target).value)" />
+            }
+          }
+        }
+      </label>
+    } @empty {
+      @if (!definiciones.objetos?.length && !definiciones.ubicaciones?.length) {
+        <p class="text-white/50">Esta versión no define variables.</p>
+      }
+    }
+  </div>
+
+  @if (definiciones.ubicaciones?.length) {
+    <label class="flex items-center justify-between gap-2 bg-white/5 rounded px-2 py-1 mt-2">
+      <span>Ubicación</span>
+      <select
+        class="input w-40 !bg-white !text-gray-900"
+        aria-label="Ubicación actual"
+        (change)="cambiarUbicacion($any($event.target).value)">
+        <option value="" [selected]="!estado.ubicacion">(ninguna)</option>
+        @for (ubicacion of definiciones.ubicaciones; track ubicacion.id) {
+          <option [value]="ubicacion.id" [selected]="estado.ubicacion === ubicacion.id">{{ ubicacion.nombre }}</option>
+        }
+      </select>
+    </label>
+  }
+
+  @if (definiciones.objetos?.length) {
+    <p class="text-white/70 mt-2 mb-1">Objetos</p>
+    <div class="grid gap-2 sm:grid-cols-2">
+      @for (objeto of definiciones.objetos; track objeto.id) {
+        <label class="flex items-center justify-between gap-2 bg-white/5 rounded px-2 py-1">
+          <span>{{ objeto.nombre || objeto.id }} <code class="text-white/40">{{ objeto.id }}</code></span>
+          <input
+            type="number"
+            class="input w-20 !bg-white !text-gray-900"
+            min="0"
+            [attr.max]="tope(objeto)"
+            [attr.aria-label]="'Cantidad de ' + (objeto.nombre || objeto.id)"
+            [value]="cantidad(objeto)"
+            (change)="cambiarCantidad(objeto, $any($event.target).valueAsNumber)" />
+        </label>
+      }
+    </div>
+  }
+</section>

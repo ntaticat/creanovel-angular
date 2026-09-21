@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpHeaders,
-  HttpResponse,
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { catchError, map, retry, tap } from 'rxjs/operators';
-import { INovela, INovelaPost } from '../models/novela.interfaces';
+import {
+  INovela,
+  INovelaBackgroundPost,
+  INovelaPatch,
+  INovelaPersonajePost,
+  INovelaPost,
+} from '../models/novela.interfaces';
 import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -55,10 +56,16 @@ export class NovelasService {
     return this.http.get<INovela>(method);
   }
 
-  getNovelaEscenas(novelaId: string): Observable<INovela> {
-    const method = `${this.url}/novelas/${novelaId}/escenas`;
+  postNovelaPersonaje(data: INovelaPersonajePost): Observable<{}> {
+    const method = `${this.url}/novelas/${data.novelaId}/personajes`;
 
-    return this.http.get<INovela>(method);
+    return this.http.post(method, { personajeId: data.personajeId });
+  }
+
+  postNovelaBackground(data: INovelaBackgroundPost): Observable<{}> {
+    const method = `${this.url}/novelas/${data.novelaId}/backgrounds`;
+
+    return this.http.post(method, { backgroundId: data.backgroundId });
   }
 
   postNovela(novelaInfo: INovelaPost): Observable<string> {
@@ -86,7 +93,7 @@ export class NovelasService {
       );
   }
 
-  patchNovela(novelaId: string, novelaInfo: Partial<INovela>): Observable<{}> {
+  patchNovela(novelaId: string, novelaInfo: INovelaPatch): Observable<{}> {
     const method = `${this.url}/novelas/${novelaId}`;
 
     const request = {

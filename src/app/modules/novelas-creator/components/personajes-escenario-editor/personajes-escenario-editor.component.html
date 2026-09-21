@@ -1,0 +1,137 @@
+<div>
+  <!-- Escenario 16:9: es el mismo dibujo que verá el lector (ver estiloSpriteEscenario) -->
+  <div
+    #escenario
+    class="relative w-full aspect-video bg-gray-700 bg-cover bg-center rounded-lg overflow-hidden touch-none select-none"
+    role="group"
+    aria-label="Escenario: arrastra un personaje para moverlo y usa la rueda del ratón para cambiar su tamaño"
+    [style.background-image]="fondoUrl ? 'url(' + fondoUrl + ')' : null"
+    (pointerdown)="seleccionar(-1)"
+    (pointermove)="arrastrar($event)"
+    (pointerup)="soltar()"
+    (pointercancel)="soltar()">
+    @if (!fondoUrl && colocados.length === 0) {
+      <p class="absolute inset-0 flex items-center justify-center text-white/60 text-sm text-center px-4 pointer-events-none">
+        Añade un personaje para colocarlo en el escenario
+      </p>
+    }
+
+    @for (colocado of colocados; track $index) {
+      @if (sprite(colocado); as s) {
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none" [ngStyle]="estilo(colocado)">
+          <img
+            class="object-contain pointer-events-auto cursor-move outline-none"
+            [class]="caja(s) ? '' : 'h-full w-auto max-w-full'"
+            [style.width.%]="caja(s)?.ancho"
+            [style.height.%]="caja(s)?.alto"
+            [style.filter]="seleccionado === $index ? 'drop-shadow(0 0 2px #fde047) drop-shadow(0 0 5px #fde047)' : null"
+            [src]="s.url"
+            [alt]="s.personajeNombre + ' — ' + s.nombre"
+            draggable="false"
+            tabindex="0"
+            (load)="registrarAspecto(s.url, $any($event.target))"
+            [attr.aria-label]="s.personajeNombre + ' (' + s.nombre + '). Flechas para mover, + y − para cambiar el tamaño, Supr para quitar'"
+            (pointerdown)="iniciarMover($event, $index)"
+            (focus)="seleccionar($index)"
+            (wheel)="rueda($event, $index)"
+            (keydown)="teclado($event, $index)" />
+        </div>
+      }
+    }
+  </div>
+  <p class="text-xs text-gray-500 mt-1">
+    Arrastra un personaje para moverlo; la rueda del ratón lo agranda o lo achica. Se ve entero, sin recortes.
+  </p>
+
+  <!-- Lo que hay en el escenario -->
+  @if (colocados.length) {
+    <ul class="mt-2 space-y-1.5" aria-label="Personajes del escenario">
+      @for (colocado of colocados; track $index) {
+        <li
+          class="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border px-2 py-1.5"
+          [class]="seleccionado === $index ? 'border-primary-600 bg-primary-50' : 'border-gray-200'">
+          <button type="button" class="flex items-center gap-2 text-left min-w-0 flex-1 basis-40" (click)="seleccionar($index)">
+            @if (sprite(colocado); as s) {
+              <img class="w-8 h-8 object-contain rounded bg-gray-900 shrink-0" [src]="s.url" alt="" />
+            } @else {
+              <span class="w-8 h-8 rounded bg-gray-200 shrink-0"></span>
+            }
+            <span class="text-sm text-gray-700 truncate">{{ etiqueta(colocado) }}</span>
+          </button>
+
+          <label class="flex items-center gap-1.5 text-xs text-gray-600">
+            Tamaño
+            <input
+              type="range"
+              class="w-28"
+              [min]="escalaMinima"
+              [max]="escalaMaxima"
+              step="0.05"
+              [value]="colocado.escala"
+              [attr.aria-label]="'Tamaño de ' + etiqueta(colocado)"
+              (input)="cambiarEscala($index, $any($event.target).value)" />
+            <span class="w-9 tabular-nums">{{ colocado.escala }}×</span>
+          </label>
+
+          <label class="flex items-center gap-1 text-xs text-gray-600">
+            <input type="checkbox" [checked]="colocado.espejo" (change)="cambiarEspejo($index, $any($event.target).checked)" />
+            Voltear
+          </label>
+
+          <span class="flex gap-1">
+            <button
+              type="button"
+              class="btn-secondary !px-2 !py-1"
+              title="Traer al frente"
+              aria-label="Traer al frente"
+              [disabled]="$index === colocados.length - 1"
+              (click)="apilar($index, 1)">
+              <fa-icon [icon]="faArriba"></fa-icon>
+            </button>
+            <button
+              type="button"
+              class="btn-secondary !px-2 !py-1"
+              title="Enviar atrás"
+              aria-label="Enviar atrás"
+              [disabled]="$index === 0"
+              (click)="apilar($index, -1)">
+              <fa-icon [icon]="faAbajo"></fa-icon>
+            </button>
+            <button
+              type="button"
+              class="btn-danger !px-2 !py-1"
+              title="Quitar del escenario"
+              aria-label="Quitar del escenario"
+              (click)="quitar($index)">
+              <fa-icon [icon]="faQuitar"></fa-icon>
+            </button>
+          </span>
+        </li>
+      }
+    </ul>
+  }
+
+  <!-- Añadir otro personaje -->
+  <p class="text-sm font-medium text-gray-600 mt-3 mb-1">
+    Añadir personaje al escenario
+    <span class="font-normal text-gray-400">({{ colocados.length }} de {{ maximo }})</span>
+  </p>
+  <div class="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
+    @for (s of disponibles; track s.personajeSpriteId) {
+      <button
+        type="button"
+        class="flex flex-col items-center w-[70px] p-1 rounded-lg border-2 border-transparent hover:border-primary-300 disabled:opacity-50"
+        [disabled]="!puedeAgregar"
+        [attr.aria-label]="'Añadir ' + s.personajeNombre + ' — ' + s.nombre"
+        (click)="agregar(s)">
+        <div class="thumbnail-box mb-0.5">
+          <img [src]="s.url" alt="" />
+        </div>
+        <span class="text-xs text-gray-600">{{ s.personajeNombre }} — {{ s.nombre }}</span>
+      </button>
+    }
+    @if (disponibles.length === 0) {
+      <p class="text-sm text-gray-400">Esta novela todavía no tiene personajes con sprites.</p>
+    }
+  </div>
+</div>

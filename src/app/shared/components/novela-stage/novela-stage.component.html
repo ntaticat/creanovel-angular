@@ -1,0 +1,390 @@
+<div #raiz [class]="claseRaiz">
+  <!-- Un Explora, o un nodo con personajes colocados, fija la proporción 16:9: zonas y personajes están en % del escenario y solo se ven como en el editor si el escenario tiene la misma forma. -->
+  <div [class]="claseMarco">
+  <div class="relative overflow-hidden" [class]="anchoEscenario + ' ' + claseEscenario">
+    <!-- Fondo -->
+    <div
+      class="absolute inset-0 bg-cover bg-center bg-gray-900"
+      [style.background-image]="
+        arte.backgroundUrl ? 'url(' + arte.backgroundUrl + ')' : null
+      "></div>
+
+    <!-- Personajes: cada sprite entero (sin recorte), colocado y escalado como lo dejó el autor; el último queda encima -->
+    @for (personaje of arte.personajes ?? []; track $index) {
+      <div class="absolute inset-0 flex items-center justify-center pointer-events-none" [ngStyle]="estiloPersonaje(personaje)">
+        <img class="h-full w-auto max-w-full object-contain" [src]="personaje.url" [alt]="personaje.nombre || 'personaje'" />
+      </div>
+    }
+
+    <!-- HUD: ubicación y variables visibles del estado de juego. Se puede ocultar para ver el escenario completo. -->
+    @if (hayHud && hudVisible) {
+      <div
+        class="absolute top-2 left-2 z-30 flex flex-wrap gap-2 pointer-events-none"
+        [class]="permitirPantallaCompleta ? 'right-24' : 'right-12'">
+        @if (ubicacionNombre) {
+          <div class="bg-black/60 text-white rounded-md px-2 py-1 text-xs">
+            <fa-icon [icon]="faLocationDot"></fa-icon> {{ ubicacionNombre }}
+          </div>
+        }
+        @for (item of hud; track item.clave) {
+          @if (item.tipo === 'barra') {
+            <div
+              class="min-w-28 bg-black/60 text-white rounded-md px-2 py-1 text-xs"
+              [attr.aria-label]="item.etiqueta + ': ' + item.valor">
+              <div class="flex justify-between gap-2">
+                <span>{{ item.etiqueta }}</span>
+                <span>{{ item.valor }}</span>
+              </div>
+              <div class="h-1.5 mt-1 rounded bg-white/20 overflow-hidden">
+                <div
+                  class="h-full bg-emerald-400"
+                  [style.width.%]="porcentaje(item)"></div>
+              </div>
+            </div>
+          } @else {
+            <div class="bg-black/60 text-white rounded-md px-2 py-1 text-xs">
+              {{ item.etiqueta }}: <strong>{{ item.valor }}</strong>
+            </div>
+          }
+        }
+      </div>
+    }
+    @if (hayHud || permitirPantallaCompleta) {
+      <div class="absolute top-2 right-2 z-30 flex gap-1">
+        @if (hayHud) {
+          <button
+            type="button"
+            class="w-8 h-8 flex items-center justify-center rounded-md bg-black/50 text-white/90 hover:bg-black/70 focus-visible:ring-2 focus-visible:ring-white"
+            [attr.aria-pressed]="!hudVisible"
+            [attr.aria-label]="hudVisible ? 'Ocultar ubicación y estadísticas' : 'Mostrar ubicación y estadísticas'"
+            [title]="hudVisible ? 'Ocultar ubicación y estadísticas' : 'Mostrar ubicación y estadísticas'"
+            (click)="alternarHud()">
+            <fa-icon [icon]="hudVisible ? faEyeSlash : faEye"></fa-icon>
+          </button>
+        }
+        @if (permitirPantallaCompleta) {
+          <button
+            type="button"
+            class="w-8 h-8 flex items-center justify-center rounded-md bg-black/50 text-white/90 hover:bg-black/70 focus-visible:ring-2 focus-visible:ring-white"
+            [attr.aria-pressed]="pantallaCompleta"
+            [attr.aria-label]="pantallaCompleta ? 'Salir de pantalla completa' : 'Pantalla completa'"
+            [title]="pantallaCompleta ? 'Salir de pantalla completa' : 'Pantalla completa'"
+            (click)="alternarPantallaCompleta()">
+            <fa-icon [icon]="pantallaCompleta ? faCompress : faExpand"></fa-icon>
+          </button>
+        }
+      </div>
+    }
+
+    <!-- En un móvil en vertical sin bloqueo de orientación: la pantalla completa se pensó en horizontal -->
+    @if (sugerirGirar) {
+      <p
+        class="hidden portrait:block absolute top-12 left-2 right-2 z-30 rounded-md bg-black/70 text-white text-xs text-center px-2 py-1 pointer-events-none"
+        role="status">
+        Gira el teléfono para ver el escenario más grande.
+      </p>
+    }
+
+    <!-- Explora: zonas clicables -->
+    @if (esExplora) {
+      <div class="absolute inset-0 z-20">
+        @for (zona of zonas; track zona.id) {
+          <button
+            type="button"
+            class="absolute rounded border-2 transition-colors text-left focus-visible:border-yellow-300"
+            [class]="claseZona(zona)"
+            [style.left.%]="zona.region.x"
+            [style.top.%]="zona.region.y"
+            [style.width.%]="zona.region.ancho"
+            [style.height.%]="zona.region.alto"
+            [disabled]="!zona.habilitada"
+            [attr.aria-label]="zona.etiqueta"
+            [title]="zona.etiqueta"
+            (click)="opcionSeleccionada.emit(zona.id)">
+            @if (resaltarZonas) {
+              <span class="absolute top-0 left-0 bg-black/70 text-white text-[10px] leading-tight px-1 rounded-br">
+                {{ zona.etiqueta }}
+              </span>
+            }
+          </button>
+        }
+      </div>
+    }
+
+    <!-- Aviso de logro -->
+    @if (toastLogro) {
+      <div
+        class="absolute top-12 right-2 z-40 max-w-[70%] rounded-lg bg-amber-400 text-gray-900 px-3 py-2 text-sm shadow-lg"
+        role="status"
+        aria-live="polite">
+        <fa-icon [icon]="faTrophy"></fa-icon> {{ toastLogro }}
+      </div>
+    }
+
+    <!-- Final -->
+    @if (final; as f) {
+      <div class="absolute inset-0 z-40 bg-black/85 text-white flex flex-col items-center justify-center gap-3 p-6 text-center overflow-y-auto">
+        <p class="text-xs uppercase tracking-widest text-white/60">Final</p>
+        <h3 class="text-2xl font-bold">{{ f.titulo }}</h3>
+        @if (f.mensaje) {
+          <p class="max-w-xl text-white/90">{{ f.mensaje }}</p>
+        }
+        @if (f.total > 0) {
+          <p class="text-sm text-white/70">Has descubierto {{ f.descubiertos }} de {{ f.total }} finales.</p>
+        }
+        <button
+          type="button"
+          class="mt-2 px-6 py-2 rounded-lg bg-white/15 border border-white/30 font-semibold hover:bg-white/25"
+          (click)="empezarDeNuevo.emit()">
+          Empezar de nuevo
+        </button>
+      </div>
+    }
+
+    <!-- Logros -->
+    @if (logrosAbierto) {
+      <div class="absolute inset-0 z-40 bg-black/85 text-white p-4 overflow-y-auto" role="dialog" aria-label="Logros">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="font-semibold">Logros ({{ logrosDesbloqueados }} de {{ logros.length }})</h3>
+          <button
+            type="button"
+            class="px-2 py-1 rounded bg-white/10 hover:bg-white/20"
+            aria-label="Cerrar los logros"
+            (click)="logrosAbierto = false">
+            <fa-icon [icon]="faXmark"></fa-icon>
+          </button>
+        </div>
+        <ul class="grid gap-2 sm:grid-cols-2">
+          @for (logro of logros; track logro.id) {
+            <li class="rounded-lg p-2" [class.bg-amber-400/20]="logro.desbloqueado" [class.bg-white/10]="!logro.desbloqueado">
+              <p class="font-medium" [class.text-white/50]="!logro.desbloqueado">
+                <fa-icon [icon]="faTrophy" [class.text-amber-300]="logro.desbloqueado"></fa-icon>
+                {{ logro.desbloqueado ? logro.nombre : 'Logro por descubrir' }}
+              </p>
+              @if (logro.desbloqueado && logro.descripcion) {
+                <p class="text-xs text-white/70">{{ logro.descripcion }}</p>
+              }
+            </li>
+          }
+        </ul>
+      </div>
+    }
+
+    <!-- Minijuego -->
+    @if (minijuego) {
+      @for (clave of [minijuegoClave]; track clave) {
+        <div class="absolute inset-0 z-50 bg-black/90">
+          <app-minijuego
+            [config]="minijuego"
+            [mensaje]="mensaje"
+            (terminado)="minijuegoTerminado.emit($event)"></app-minijuego>
+        </div>
+      }
+    }
+
+    <!-- Mochila -->
+    @if (mochilaAbierta) {
+      <div
+        class="absolute inset-0 z-40 bg-black/85 text-white p-4 overflow-y-auto"
+        role="dialog"
+        aria-label="Mochila">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="font-semibold">Mochila</h3>
+          <button
+            type="button"
+            class="px-2 py-1 rounded bg-white/10 hover:bg-white/20"
+            aria-label="Cerrar la mochila"
+            (click)="mochilaAbierta = false">
+            <fa-icon [icon]="faXmark"></fa-icon>
+          </button>
+        </div>
+        @if (mochila.length === 0) {
+          <p class="text-white/60 text-sm">No llevas nada todavía.</p>
+        }
+        <ul class="grid gap-2 sm:grid-cols-2">
+          @for (item of mochila; track item.id) {
+            <li class="flex gap-3 bg-white/10 rounded-lg p-2">
+              @if (item.imagenUrl) {
+                <img class="w-12 h-12 object-contain rounded bg-black/30" [src]="item.imagenUrl" alt="" />
+              }
+              <div>
+                <p class="font-medium">
+                  {{ item.nombre }}
+                  @if (item.apilable) {
+                    <span class="text-white/70">×{{ item.cantidad }}</span>
+                  }
+                </p>
+                @if (item.descripcion) {
+                  <p class="text-xs text-white/70">{{ item.descripcion }}</p>
+                }
+                @if (item.uso) {
+                  <button
+                    type="button"
+                    class="mt-1 px-3 py-1 rounded bg-white/20 text-sm hover:bg-white/30 disabled:opacity-40 disabled:hover:bg-white/20"
+                    [disabled]="!item.uso.habilitado"
+                    [attr.aria-label]="item.uso.etiqueta + ' ' + item.nombre"
+                    (click)="usarObjeto(item)">
+                    {{ item.uso.etiqueta }}
+                  </button>
+                }
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+
+    <!-- Decisiones -->
+    @if (esDecision) {
+      <div
+        class="absolute inset-0 bg-black/70 flex flex-col justify-center gap-2 p-4 sm:p-8 z-20 overflow-y-auto">
+        @if (mensaje) {
+          <p class="text-white/80 text-sm mb-1">{{ mensaje }}</p>
+        }
+        @for (opcion of opciones; track opcion.id) {
+          <button
+            type="button"
+            (click)="opcionSeleccionada.emit(opcion.id)"
+            [disabled]="!opcion.habilitada"
+            class="w-full text-left px-4 py-3 rounded-lg bg-white/10 text-white border border-white/20 hover:bg-white/20 transition-colors disabled:opacity-40">
+            {{ opcion.mensaje }}
+          </button>
+        }
+      </div>
+    }
+
+    <!-- Pide: campo de texto -->
+    @if (esEntrada) {
+      <div
+        class="absolute inset-0 bg-black/70 flex flex-col justify-center gap-3 p-4 sm:p-8 z-20">
+        <label class="text-white text-sm" for="stage-entrada">{{ mensaje }}</label>
+        <div class="flex gap-2">
+          <input
+            #campo
+            id="stage-entrada"
+            [type]="tipoEntrada"
+            maxlength="200"
+            [value]="valorEntradaInicial"
+            [attr.autocomplete]="autocompletarEntrada"
+            [attr.autocapitalize]="tipoEntrada === 'text' ? null : 'off'"
+            [attr.spellcheck]="tipoEntrada === 'text' ? null : 'false'"
+            [placeholder]="placeholderEntrada"
+            (keyup.enter)="entradaEnviada.emit(campo.value)"
+            class="flex-1 px-3 py-2 rounded-lg bg-white/10 text-white border border-white/20 placeholder-white/40" />
+          <button
+            type="button"
+            (click)="entradaEnviada.emit(campo.value)"
+            class="px-4 py-2 rounded-lg bg-white/20 text-white hover:bg-white/30 transition-colors">
+            Aceptar
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- Cuadro de dialogo -->
+    @if (mensaje && !esDecision && !esEntrada && !minijuego && !final) {
+      <div
+        class="absolute left-0 right-0 bottom-0 bg-black/80 text-white p-4 z-10">
+        @if (nombrePersonaje) {
+          <p class="font-bold text-sm mb-1 text-primary-300">
+            {{ nombrePersonaje }}
+          </p>
+        }
+        <p class="text-sm leading-relaxed max-h-24 overflow-y-auto">
+          {{ mensaje }}
+        </p>
+      </div>
+    }
+  </div>
+  </div>
+
+  <!-- Herramientas del jugador: la mochila siempre a la vista (sin taparse el escenario) y los accesos a zonas, logros y detalle -->
+  @if (esExplora || mostrarMochila || mostrarLogros) {
+    <div class="w-full py-2 px-3 bg-gray-900 flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-white/10">
+      @if (mostrarMochila) {
+        <div class="basis-full sm:basis-0 sm:flex-1 sm:min-w-48 min-w-0 flex items-center gap-2" role="group" aria-label="Objetos que llevas">
+          <span class="shrink-0 text-white/60 text-xs uppercase tracking-wide">
+            <fa-icon [icon]="faBagShopping"></fa-icon> Mochila
+          </span>
+          @if (mochila.length === 0) {
+            <span class="text-white/40 text-sm">vacía</span>
+          } @else {
+            <ul class="flex gap-2 overflow-x-auto py-1.5 px-1.5">
+              @for (item of mochila; track item.id) {
+                <li class="shrink-0">
+                  <button
+                    type="button"
+                    class="relative w-16 flex flex-col items-center gap-0.5 rounded-lg bg-white/10 p-1.5 hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-white"
+                    [title]="descripcionCorta(item)"
+                    [attr.aria-label]="descripcionCorta(item)"
+                    (click)="mochilaAbierta = true">
+                    <span class="w-11 h-11 rounded-md bg-black/40 flex items-center justify-center overflow-hidden">
+                      @if (item.imagenUrl) {
+                        <img class="w-full h-full object-contain" [src]="item.imagenUrl" alt="" />
+                      } @else {
+                        <span class="text-lg font-semibold text-white/80" aria-hidden="true">{{ inicial(item) }}</span>
+                      }
+                    </span>
+                    <span class="w-full truncate text-center text-[10px] leading-tight text-white/80">{{ item.nombre }}</span>
+                    @if (item.apilable) {
+                      <span
+                        class="absolute -top-1 -right-1 min-w-5 h-5 px-1 flex items-center justify-center rounded-full bg-amber-400 text-gray-900 text-[10px] font-bold">
+                        {{ item.cantidad }}
+                      </span>
+                    }
+                    @if (item.uso?.habilitado) {
+                      <span class="absolute top-1 left-1 w-2 h-2 rounded-full bg-emerald-400" title="Se puede usar"></span>
+                    }
+                  </button>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      }
+      <div class="ml-auto flex flex-wrap gap-2 justify-end">
+        @if (esExplora) {
+          <button
+            type="button"
+            class="px-3 py-1 rounded bg-white/10 text-white text-sm hover:bg-white/20"
+            [attr.aria-pressed]="resaltarZonas"
+            (click)="resaltarZonas = !resaltarZonas">
+            {{ resaltarZonas ? 'Ocultar zonas' : 'Resaltar zonas' }}
+          </button>
+        }
+        @if (mostrarLogros) {
+          <button
+            type="button"
+            class="px-3 py-1 rounded bg-white/10 text-white text-sm hover:bg-white/20"
+            (click)="logrosAbierto = !logrosAbierto">
+            <fa-icon [icon]="faTrophy"></fa-icon> Logros ({{ logrosDesbloqueados }}/{{ logros.length }})
+          </button>
+        }
+        @if (mostrarMochila) {
+          <button
+            type="button"
+            class="px-3 py-1 rounded bg-white/10 text-white text-sm hover:bg-white/20"
+            [attr.aria-expanded]="mochilaAbierta"
+            (click)="mochilaAbierta = !mochilaAbierta">
+            <fa-icon [icon]="faBagShopping"></fa-icon> Mochila ({{ totalObjetos }})
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Acciones -->
+  @if (mostrarSiguiente) {
+    <button
+      type="button"
+      (click)="siguiente.emit()"
+      class="w-full py-3 bg-gray-900 text-white flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors">
+      {{ etiquetaSiguiente }} <fa-icon [icon]="faArrowRight"></fa-icon>
+    </button>
+  }
+  @if (finDeNovela && !final) {
+    <div class="w-full py-3 bg-gray-900 text-white/60 text-center text-sm">
+      Fin de la novela (por ahora).
+    </div>
+  }
+</div>

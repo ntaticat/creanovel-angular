@@ -9,6 +9,7 @@ export interface IEscenaPost {
   novelaVersionId: string;
   primerEscena: boolean;
   ultimaEscena: boolean;
+  etiquetas?: string[];
 }
 
 export interface IEscena {
@@ -17,5 +18,7 @@ export interface IEscena {
   identificador: string;
   primerEscena: boolean;
   ultimaEscena: boolean;
+  /** Etiquetas del autor para agrupar/filtrar escenas en el editor (el motor no las usa). */
+  etiquetas: string[];
   recursos: MixRecursosType[];
 }

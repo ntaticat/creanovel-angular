@@ -1,46 +1,70 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { INovela, INovelaPost } from '@models/novela.interfaces';
-import * as faIcons from '@fortawesome/free-solid-svg-icons';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  faArrowLeft,
+  faUserGroup,
+  faPlus,
+  faBook,
+  faEdit,
+  faCheck,
+} from '@fortawesome/free-solid-svg-icons';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IUsuario } from '@models/usuario.interfaces';
 import { NovelasService } from '@services/novelas.service';
+import { UploadsService } from '@services/uploads.service';
+import { firstValueFrom } from 'rxjs';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { ModalActionsComponent } from '../components/modal-actions/modal-actions.component';
+import { SpinnerComponent } from 'src/app/shared/components/spinner/spinner.component';
+import { EmptyStateComponent } from 'src/app/shared/components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-novelas-creator-page',
   templateUrl: './novelas-creator-page.component.html',
-  styleUrls: ['./novelas-creator-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [
+    RouterLink,
+    FaIconComponent,
+    ModalActionsComponent,
+    SpinnerComponent,
+    EmptyStateComponent,
+  ],
 })
 export class NovelasCreatorPageComponent implements OnInit {
   usuarioData: IUsuario = this.route.snapshot.data['usuarioData'];
 
-  faIcons = faIcons;
+  faArrowLeft = faArrowLeft;
+  faUserGroup = faUserGroup;
+  faPlus = faPlus;
+  faBook = faBook;
+  faEdit = faEdit;
+  faCheck = faCheck;
 
   showModalCreandoNovela = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private api: NovelasService
-  ) {
-    console.log(this.usuarioData);
-  }
+    private api: NovelasService,
+    private uploadsService: UploadsService
+  ) {}
 
   ngOnInit(): void {}
 
   async onClickButtonCrearNovela() {
     this.showModalCreandoNovela = true;
     const novelaId = await this.createNovela();
-    console.log('NOV ID:', novelaId);
     const novela = await this.getNovelaInfo(novelaId);
-    console.log('NOV ID:', novela);
     const novelaVersionId = this.getNovelaVersionId(novela);
+
+    this.showModalCreandoNovela = false;
 
     if (!novelaVersionId) {
       console.error('No se creó la versión de la novela');
       return;
     }
 
-    this.sendToNovelaVersionPage(novelaId, novelaVersionId);
+    this.sendToEditor(novelaVersionId);
   }
 
   async createNovela() {
@@ -51,14 +75,14 @@ export class NovelasCreatorPageComponent implements OnInit {
       usuarioCreadorId: this.usuarioData.id,
     };
 
-    const novelaId = await this.api.postNovela(data).toPromise();
+    const novelaId = await firstValueFrom(this.api.postNovela(data));
     return novelaId;
   }
 
   async getNovelaInfo(novelaId: string) {
-    const novelaWithVersions = await this.api
-      .getNovela(novelaId, 'True')
-      .toPromise();
+    const novelaWithVersions = await firstValueFrom(
+      this.api.getNovela(novelaId, 'True')
+    );
     return novelaWithVersions;
   }
 
@@ -70,13 +94,11 @@ export class NovelasCreatorPageComponent implements OnInit {
     return novela.versiones[0].novelaVersionId;
   }
 
-  sendToNovelaVersionPage(novelaId: string, novelaVersionId: string) {
-    this.router.navigate([
-      '/',
-      'novelas-creator',
-      novelaId,
-      'versiones',
-      novelaVersionId,
-    ]);
+  sendToEditor(novelaVersionId: string) {
+    this.router.navigate(['/', 'novelas-creator', 'editor', novelaVersionId]);
+  }
+
+  resolverUrl(url?: string): string {
+    return this.uploadsService.resolveUrl(url);
   }
 }

@@ -1,257 +1,195 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { IEstadoJuego } from '@models/motor.interfaces';
 import {
-  faArrowRight,
-  faArrowLeft,
-  faCog,
-} from '@fortawesome/free-solid-svg-icons';
-import {
-  MixRecursosType,
+  IConversacion,
+  IDecision,
+  IEntrada,
   instanceOfIConversacion,
   instanceOfIDecision,
   instanceOfIEntrada,
+  MixRecursosType,
 } from '@models/recurso.interfaces';
-import { SignupService } from '@services/signup.service';
+import { UsuariosService } from '@services/usuarios.service';
+import { NovelaStageComponent } from 'src/app/shared/components/novela-stage/novela-stage.component';
+import { NovelaMotor, IOpcionJuego } from 'src/app/shared/engine/motor';
+import { IRecursoArte } from 'src/app/shared/services/novela-player.service';
+import {
+  arteDeRegistro,
+  CAMPOS,
+  ClaveEntrada,
+  datosDeRegistro,
+  DEFINICIONES_REGISTRO,
+  NODO,
+  RECURSOS_REGISTRO,
+  validarEntrada,
+} from './novela-registro';
 
+/**
+ * Crear una cuenta es jugar una novela (`novela-registro.ts`) con el mismo motor y el mismo escenario que las novelas de los autores.
+ * Este componente hace lo único que el motor no sabe hacer: comprobar lo que el jugador escribe, llamar al servidor y pasar a la
+ * pantalla de inicio de sesión al terminar. Cuando lo escrito no vale, se lo dice a la historia con variables (`aviso`, `retorno`) y es
+ * ella la que reacciona.
+ */
 @Component({
   selector: 'app-signup-page',
   templateUrl: './signup-page.component.html',
-  styleUrls: ['./signup-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [NovelaStageComponent, RouterLink],
 })
 export class SignupPageComponent implements OnInit {
-  instanceOfIConversacion = instanceOfIConversacion;
-  instanceOfIDecision = instanceOfIDecision;
-  instanceOfIEntrada = instanceOfIEntrada;
+  private readonly motor = new NovelaMotor(new Map(RECURSOS_REGISTRO.map(r => [r.recursoId, r])), DEFINICIONES_REGISTRO);
 
-  faArrowRight = faArrowRight;
-  faArrowLeft = faArrowLeft;
-  faCog = faCog;
+  estado: IEstadoJuego = this.motor.estadoInicial();
+  recursoActual?: MixRecursosType;
+  arte: IRecursoArte = {};
+  mensaje = '';
+  opciones: IOpcionJuego[] = [];
+  errorMotor = '';
+  registrando = false;
 
-  currentRecursoId: string = '1';
+  /** Lo último que el jugador escribió y no valió, para que lo corrija en vez de volver a escribirlo. */
+  private intento = '';
+  valorEntrada = '';
 
-  lecturaRecursos: string[] = [];
-
-  loginRecursos: MixRecursosType[] = [
-    {
-      mensaje:
-        '¡Hola! Soy el Dr. Cerebro, tu asistente virtual. Vamos a crear tu cuenta.',
-      siguienteRecursoId: '2',
-      recursoId: '1',
-      escenaId: '1',
-      primerRecurso: true,
-      ultimoRecurso: false,
-      tipoRecurso: 'recurso_conversacion',
-      personajeNombre: 'Dr. Cerebro',
-      personajeUrl:
-        'https://static.wikia.nocookie.net/danganronpa/images/0/04/Chihiro_Fujisaki_Halfbody_Sprite_%2813%29.png',
-      backgroundUrl:
-        'https://cdnb.artstation.com/p/assets/images/images/033/279/501/large/saito-ryou-nj9tmksdq1c.jpg?1609047375',
-    },
-    {
-      mensaje: '¿Cómo te llamas?',
-      siguienteRecursoId: '3',
-      recursoId: '2',
-      escenaId: '1',
-      primerRecurso: false,
-      ultimoRecurso: false,
-      tipoRecurso: 'recurso_conversacion',
-      personajeNombre: 'Dr. Cerebro',
-      personajeUrl:
-        'https://static.wikia.nocookie.net/danganronpa/images/b/b9/Danganronpa_V3_Shuichi_Saihara_Halfbody_Sprite_%28Hat%29_%281%29.png',
-      backgroundUrl:
-        'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d142f6cf-ca18-4aba-a6a8-acfa8ef8e53a/ddco6hf-2bd791d8-e5bb-4852-bee5-a895a35d682e.jpg',
-    },
-    {
-      etiqueta: 'Ingresa tu nombre completo',
-      clave: 'nombre',
-      valor: '',
-      placeholder: 'Ej: Juan Pérez',
-      siguienteRecursoId: '4',
-      recursoId: '3',
-      escenaId: '1',
-      primerRecurso: false,
-      ultimoRecurso: false,
-      tipoRecurso: 'recurso_entrada',
-      personajeNombre: 'Dr. Cerebro',
-      personajeUrl:
-        'https://static.wikia.nocookie.net/danganronpa/images/5/53/Danganronpa_V3_Tsumugi_Shirogane_Halfbody_Sprite_%28Aoi_Asahina%29_%281%29.png',
-      backgroundUrl:
-        'https://cdna.artstation.com/p/assets/images/images/024/507/728/large/saito-ryou-1.jpg',
-    },
-    {
-      mensaje:
-        '¿Cuál es tu nombre de usuario? (Este será tu identificador único)',
-      siguienteRecursoId: '5',
-      recursoId: '4',
-      escenaId: '1',
-      primerRecurso: false,
-      ultimoRecurso: false,
-      tipoRecurso: 'recurso_conversacion',
-      personajeNombre: 'Dr. Cerebro',
-      personajeUrl:
-        'https://static.wikia.nocookie.net/danganronpa/images/6/6b/Danganronpa_V3_Kaede_Akamatsu_Halfbody_Sprite_%281%29.png',
-      backgroundUrl: 'https://i.imgur.com/7UjYhjq.png',
-    },
-    {
-      etiqueta: 'Ingresa tu nombre de usuario',
-      clave: 'userName',
-      valor: '',
-      placeholder: 'Ej: juanperez123',
-      siguienteRecursoId: '6',
-      recursoId: '5',
-      escenaId: '1',
-      primerRecurso: false,
-      ultimoRecurso: false,
-      tipoRecurso: 'recurso_entrada',
-      personajeNombre: 'Dr. Cerebro',
-      personajeUrl:
-        'https://static.wikia.nocookie.net/danganronpa/images/6/6b/Danganronpa_V3_Kaede_Akamatsu_Halfbody_Sprite_%281%29.png',
-      backgroundUrl: 'https://i.imgur.com/7UjYhjq.png',
-    },
-    {
-      mensaje: '¿Cuál es tu correo electrónico? (Lo usaremos para contactarte)',
-      siguienteRecursoId: '7',
-      recursoId: '6',
-      escenaId: '1',
-      primerRecurso: false,
-      ultimoRecurso: false,
-      tipoRecurso: 'recurso_conversacion',
-      personajeNombre: 'Dr. Cerebro',
-      personajeUrl:
-        'https://static.wikia.nocookie.net/danganronpa/images/6/6b/Danganronpa_V3_Kaede_Akamatsu_Halfbody_Sprite_%281%29.png',
-      backgroundUrl: 'https://i.imgur.com/7UjYhjq.png',
-    },
-    {
-      etiqueta: 'Ingresa tu correo electrónico',
-      clave: 'email',
-      valor: '',
-      placeholder: 'Ej: juan.perez@example.com',
-      siguienteRecursoId: '8',
-      recursoId: '7',
-      escenaId: '1',
-      primerRecurso: false,
-      ultimoRecurso: false,
-      tipoRecurso: 'recurso_entrada',
-      personajeNombre: 'Dr. Cerebro',
-      personajeUrl:
-        'https://static.wikia.nocookie.net/danganronpa/images/6/6b/Danganronpa_V3_Kaede_Akamatsu_Halfbody_Sprite_%281%29.png',
-      backgroundUrl: 'https://i.imgur.com/7UjYhjq.png',
-    },
-    {
-      mensaje: 'Por último, crea una contraseña segura.',
-      siguienteRecursoId: '9',
-      recursoId: '8',
-      escenaId: '1',
-      primerRecurso: false,
-      ultimoRecurso: false,
-      tipoRecurso: 'recurso_conversacion',
-      personajeNombre: 'Dr. Cerebro',
-      personajeUrl:
-        'https://static.wikia.nocookie.net/danganronpa/images/6/6b/Danganronpa_V3_Kaede_Akamatsu_Halfbody_Sprite_%281%29.png',
-      backgroundUrl: 'https://i.imgur.com/7UjYhjq.png',
-    },
-    {
-      etiqueta: 'Ingresa tu contraseña',
-      clave: 'password',
-      valor: '',
-      placeholder: 'Mínimo 8 caracteres',
-      siguienteRecursoId: '10',
-      recursoId: '9',
-      escenaId: '1',
-      primerRecurso: false,
-      ultimoRecurso: false,
-      tipoRecurso: 'recurso_entrada',
-      personajeNombre: 'Dr. Cerebro',
-      personajeUrl:
-        'https://static.wikia.nocookie.net/danganronpa/images/6/6b/Danganronpa_V3_Kaede_Akamatsu_Halfbody_Sprite_%281%29.png',
-      backgroundUrl: 'https://i.imgur.com/7UjYhjq.png',
-    },
-    {
-      mensaje: '¡Listo! Tu cuenta ha sido creada. Bienvenido/a.',
-      siguienteRecursoId: undefined,
-      recursoId: '10',
-      escenaId: '1',
-      primerRecurso: false,
-      ultimoRecurso: true,
-      tipoRecurso: 'recurso_conversacion',
-      personajeNombre: 'Dr. Cerebro',
-      personajeUrl: 'https://i.redd.it/1leqbt052gj41.png',
-      backgroundUrl:
-        'https://cdna.artstation.com/p/assets/images/images/040/915/304/large/alexander-sord-night-get.jpg?1630252220',
-    },
-  ];
-
-  emptyRecurso: MixRecursosType = {
-    mensaje: '',
-    siguienteRecursoId: undefined,
-    recursoId: '',
-    escenaId: '',
-    primerRecurso: false,
-    ultimoRecurso: false,
-    tipoRecurso: '',
-    personajeNombre: '',
-    personajeUrl: '',
-    backgroundUrl: '',
-  };
-
-  currentRecurso: MixRecursosType = {
-    ...this.emptyRecurso,
-  };
-
-  constructor(private signupService: SignupService) {}
+  constructor(
+    private usuariosService: UsuariosService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.changeRecurso(this.currentRecursoId);
-    this.addLecturaRecurso(this.currentRecursoId);
+    this.avanzarA(NODO.inicio);
   }
 
-  addLecturaRecurso(recursoId: string): void {
-    this.lecturaRecursos.push(recursoId);
+  get esConversacion(): boolean {
+    return !!this.recursoActual && instanceOfIConversacion(this.recursoActual);
   }
 
-  removeLecturaRecurso(): string | undefined {
-    this.lecturaRecursos.pop();
-    return this.lecturaRecursos[this.lecturaRecursos.length - 1];
+  get esDecision(): boolean {
+    return !!this.recursoActual && instanceOfIDecision(this.recursoActual);
   }
 
-  changeRecurso(recursoId: string): void {
-    const nuevoRecurso = this.loginRecursos.find(
-      recurso => recurso.recursoId === recursoId
-    );
-
-    console.log('changeRecurso', nuevoRecurso);
-
-    this.currentRecurso = nuevoRecurso || { ...this.emptyRecurso };
-    this.currentRecursoId = this.currentRecurso.recursoId;
+  get esEntrada(): boolean {
+    return !!this.recursoActual && instanceOfIEntrada(this.recursoActual);
   }
 
-  onClickNextRecurso(): void {
-    if (instanceOfIConversacion(this.currentRecurso)) {
-      const siguienteRecursoId = this.currentRecurso.siguienteRecursoId || '';
+  get esFinal(): boolean {
+    return this.recursoActual?.recursoId === NODO.listo;
+  }
 
-      if (siguienteRecursoId) {
-        this.changeRecurso(siguienteRecursoId);
-        this.addLecturaRecurso(this.currentRecursoId);
-      }
+  /** Qué dato pide el nodo actual, si es un Pide. */
+  get campo(): (typeof CAMPOS)[ClaveEntrada] | undefined {
+    return this.esEntrada ? CAMPOS[(this.recursoActual as IEntrada).clave as ClaveEntrada] : undefined;
+  }
+
+  get placeholderEntrada(): string {
+    return this.esEntrada ? (this.recursoActual as IEntrada).placeholder : '';
+  }
+
+  /** El botón de avanzar sale en los Habla que tienen a dónde ir (y en el último, que lleva a iniciar sesión). */
+  get mostrarSiguiente(): boolean {
+    return this.esConversacion && (!!(this.recursoActual as IConversacion).siguienteRecursoId || this.esFinal);
+  }
+
+  siguiente(): void {
+    if (!this.recursoActual || !instanceOfIConversacion(this.recursoActual)) {
+      return;
+    }
+    if (this.esFinal) {
+      void this.router.navigate(['/auth/login']);
+      return;
+    }
+    this.avanzarA(this.recursoActual.siguienteRecursoId);
+  }
+
+  elegirOpcion(opcionId: string): void {
+    if (!this.recursoActual || !instanceOfIDecision(this.recursoActual)) {
+      return;
+    }
+    const eleccion = this.motor.elegirOpcion(this.recursoActual as IDecision, opcionId, this.estado);
+    if (eleccion) {
+      this.estado = eleccion.estado;
+      this.avanzarA(eleccion.destinoId);
     }
   }
 
-  onClickPreviousRecurso(): void {
-    if (this.lecturaRecursos.length > 1) {
-      const previousRecursoId = this.removeLecturaRecurso();
-      if (previousRecursoId) {
-        this.changeRecurso(previousRecursoId);
-        this.currentRecursoId = previousRecursoId;
-      }
+  enviarEntrada(valor: string): void {
+    if (!this.recursoActual || !instanceOfIEntrada(this.recursoActual)) {
+      return;
+    }
+    const entrada = this.recursoActual as IEntrada;
+    const problema = validarEntrada(entrada.clave, valor);
+
+    if (problema) {
+      // La historia reacciona: Dr. Cerebro dice qué falla y luego se vuelve a la misma pregunta.
+      this.intento = entrada.clave === 'password' ? '' : valor;
+      this.estado = this.conVariables({ aviso: problema, retorno: entrada.clave });
+      this.avanzarA(NODO.aviso);
+      return;
     }
 
-    console.log('LECTURAS', this.lecturaRecursos);
+    this.estado = this.motor.aplicarEntrada(entrada, valor, this.estado);
+    this.avanzarA(entrada.siguienteRecursoId);
   }
 
-  handleEntradaEmit(email: string) {
-    if (instanceOfIEntrada(this.currentRecurso)) {
-      this.currentRecurso.valor = email;
-      const siguienteRecursoId = this.currentRecurso.siguienteRecursoId || '';
-      this.changeRecurso(siguienteRecursoId);
+  /** Único punto por el que avanza la historia. */
+  private avanzarA(recursoId?: string): void {
+    const resolucion = this.motor.resolver(recursoId, this.estado);
+
+    if (!resolucion.recurso) {
+      this.errorMotor = 'No se pudo continuar con el registro. Recarga la página e inténtalo de nuevo.';
+      return;
     }
+
+    const recurso = resolucion.recurso;
+    this.errorMotor = '';
+    this.estado = resolucion.estado;
+    this.recursoActual = recurso;
+    this.arte = arteDeRegistro(recurso.recursoId);
+    this.opciones = instanceOfIDecision(recurso) ? this.motor.opcionesDe(recurso as IDecision, this.estado) : [];
+    this.mensaje = this.motor.texto(this.mensajeDe(recurso), this.estado);
+
+    // Un dato ya escrito se muestra al volver a pedirlo (salvo la contraseña, que se escribe de nuevo). Lo que no valió se guarda
+    // mientras la historia pasa por el aviso y solo se gasta al llegar de nuevo al campo.
+    if (instanceOfIEntrada(recurso)) {
+      const clave = (recurso as IEntrada).clave;
+      this.valorEntrada = clave === 'password' ? '' : this.intento || String(this.estado.vars[clave] ?? '');
+      this.intento = '';
+    }
+
+    if (recurso.recursoId === NODO.creando) {
+      this.registrar();
+    }
+  }
+
+  private registrar(): void {
+    if (this.registrando) {
+      return;
+    }
+    this.registrando = true;
+
+    this.usuariosService.postUsuario(datosDeRegistro(this.estado)).subscribe({
+      next: () => {
+        this.registrando = false;
+        // La contraseña ya no hace falta: no se queda en memoria.
+        this.estado = this.conVariables({ password: '' });
+        this.avanzarA(NODO.listo);
+      },
+      error: () => {
+        this.registrando = false;
+        this.avanzarA('fallo');
+      },
+    });
+  }
+
+  private conVariables(cambios: Record<string, string>): IEstadoJuego {
+    return { ...this.estado, vars: { ...this.estado.vars, ...cambios } };
+  }
+
+  private mensajeDe(recurso: MixRecursosType): string {
+    if (instanceOfIConversacion(recurso)) return (recurso as IConversacion).mensaje;
+    if (instanceOfIDecision(recurso)) return (recurso as IDecision).decisionMensaje;
+    if (instanceOfIEntrada(recurso)) return (recurso as IEntrada).etiqueta;
+    return '';
   }
 }

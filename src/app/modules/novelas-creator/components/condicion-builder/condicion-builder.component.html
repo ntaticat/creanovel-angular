@@ -1,0 +1,144 @@
+<div class="rounded-lg border border-gray-200 bg-gray-50 p-2" role="group" [attr.aria-label]="etiqueta">
+  <div class="flex justify-end mb-1">
+    <button
+      type="button"
+      class="text-xs text-primary-700 underline disabled:text-gray-400 disabled:no-underline"
+      [attr.aria-pressed]="verComoTexto"
+      [disabled]="avanzada"
+      [title]="avanzada ? 'Esta condición usa grupos anidados: solo se puede editar como texto' : ''"
+      (click)="cambiarModoTexto(!modoTexto)">
+      {{ verComoTexto ? 'Editor visual' : 'Escribir como texto' }}
+    </button>
+  </div>
+
+  @if (verComoTexto) {
+    <app-sintaxis-campo
+      modo="condicion"
+      [etiqueta]="etiqueta"
+      [condicion]="condicion"
+      [definiciones]="definiciones"
+      (condicionChange)="condicionChange.emit($event)"></app-sintaxis-campo>
+  } @else {
+    @if (modelo.filas.length === 0) {
+      <p class="text-xs text-gray-500 mb-1">Sin condición: siempre se cumple.</p>
+    } @else if (modelo.filas.length > 1) {
+      <p class="text-xs text-gray-600 mb-1 flex items-center gap-1">
+        Se cumple si
+        <select
+          class="input !w-auto !py-0.5 text-xs"
+          aria-label="Cuántas reglas deben cumplirse"
+          (change)="cambiarModo($any($event.target).value)">
+          <option value="y" [selected]="modelo.modo === 'y'">todas</option>
+          <option value="o" [selected]="modelo.modo === 'o'">alguna</option>
+        </select>
+        de estas reglas:
+      </p>
+    }
+
+    @for (fila of modelo.filas; track $index) {
+      <div class="flex flex-wrap items-center gap-1 mb-1">
+        <label class="flex items-center gap-1 text-xs text-gray-600">
+          <input
+            type="checkbox"
+            [checked]="fila.negar"
+            (change)="cambiarNegar($index, $any($event.target).checked)" />
+          no
+        </label>
+
+        <select
+          class="input !w-auto text-xs"
+          aria-label="Qué se comprueba"
+          (change)="cambiarQue($index, $any($event.target).value)">
+          @if (!existe(fila)) {
+            <option [value]="codigo(fila)" selected>⚠ {{ fila.ref }} (no existe)</option>
+          }
+          @if (definiciones.variables.length) {
+            <optgroup label="Variables">
+              @for (v of definiciones.variables; track v.clave) {
+                <option [value]="'var:' + v.clave" [selected]="codigo(fila) === 'var:' + v.clave">{{ v.etiqueta || v.clave }}</option>
+              }
+            </optgroup>
+          }
+          @if (definiciones.objetos?.length) {
+            <optgroup label="Objetos">
+              @for (o of definiciones.objetos; track o.id) {
+                <option [value]="'objeto:' + o.id" [selected]="codigo(fila) === 'objeto:' + o.id">Tengo: {{ o.nombre || o.id }}</option>
+              }
+            </optgroup>
+          }
+          @if (definiciones.ubicaciones?.length) {
+            <optgroup label="Ubicación">
+              @for (u of definiciones.ubicaciones; track u.id) {
+                <option [value]="'en:' + u.id" [selected]="codigo(fila) === 'en:' + u.id">Estoy en: {{ u.nombre || u.id }}</option>
+              }
+            </optgroup>
+          }
+          @if (definiciones.logros?.length) {
+            <optgroup label="Logros">
+              @for (l of definiciones.logros; track l.id) {
+                <option [value]="'logro:' + l.id" [selected]="codigo(fila) === 'logro:' + l.id">Tengo el logro: {{ l.nombre || l.id }}</option>
+              }
+            </optgroup>
+          }
+          @if (definiciones.finales?.length) {
+            <optgroup label="Finales">
+              @for (f of definiciones.finales; track f.id) {
+                <option [value]="'final:' + f.id" [selected]="codigo(fila) === 'final:' + f.id">Ya vi el final: {{ f.nombre || f.id }}</option>
+              }
+            </optgroup>
+          }
+        </select>
+
+        @if (fila.tipo === 'var' || fila.tipo === 'objeto') {
+          <select
+            class="input !w-auto text-xs"
+            aria-label="Operador"
+            (change)="cambiarOperador($index, $any($event.target).value)">
+            @for (op of operadores(fila); track op) {
+              <option [value]="op" [selected]="op === fila.op">{{ ETIQUETAS_OPERADOR[op] }}</option>
+            }
+          </select>
+        }
+
+        @if (fila.tipo === 'var') {
+          <div class="w-32">
+            <app-variable-valor-input
+              [def]="def(fila.ref)"
+              [valor]="fila.valor"
+              (valorChange)="cambiarValor($index, $event)"></app-variable-valor-input>
+          </div>
+        } @else if (fila.tipo === 'objeto') {
+          <input
+            type="number"
+            min="0"
+            step="1"
+            class="input !w-20 text-xs"
+            aria-label="Cantidad"
+            [value]="fila.valor"
+            (change)="cambiarCantidad($index, $any($event.target).value)" />
+          <span class="text-xs text-gray-500">unidades</span>
+        }
+
+        <button
+          type="button"
+          class="btn-ghost text-xs px-2 py-1"
+          aria-label="Quitar regla"
+          (click)="quitar($index)">
+          <fa-icon [icon]="faTrash"></fa-icon>
+        </button>
+      </div>
+    }
+
+    <button
+      type="button"
+      class="btn-secondary text-xs px-2 py-1"
+      [disabled]="!hayReglas"
+      [title]="hayReglas ? '' : 'Define variables, objetos o ubicaciones primero'"
+      (click)="agregar()">
+      <fa-icon [icon]="faPlus"></fa-icon> Añadir regla
+    </button>
+    @if (!hayReglas) {
+      <span class="text-xs text-gray-400 ml-1">Define variables, objetos o ubicaciones primero (botón «Mundo»).</span>
+    }
+  }
+</div>

@@ -1,8 +1,20 @@
-<main class="main">
-  <div class="novel-title">Titulo</div>
-  <app-playing-novela [novelaId]="novelaId"></app-playing-novela>
-  <div class="novel-info">
-    <h3>Descripción</h3>
-    Descripcion
-  </div>
+<!-- El "!" de !flex y !text-sm: normalize.css (sin capa) fija main{display:block} y h1{font-size:2em}, y gana a las utilidades de Tailwind. -->
+<main
+  class="min-h-screen !flex flex-col items-center gap-2 px-2 sm:px-6 py-2 sm:py-3 bg-linear-to-b from-indigo-950 via-gray-950 to-black text-white">
+  <!-- Barra mínima: el protagonista es el escenario, no el título ni la descripción. -->
+  <header class="w-full max-w-5xl flex items-center gap-2">
+    <a
+      class="btn-ghost !text-white/70 hover:!bg-white/10 shrink-0 !px-2"
+      title="Volver a la novela"
+      aria-label="Volver a la novela"
+      [routerLink]="['/novelas', novelaId]">
+      <fa-icon [icon]="faArrowLeft"></fa-icon>
+    </a>
+    <h1 class="!m-0 !text-sm font-medium text-white/60 truncate">{{ novelaInfo?.titulo }}</h1>
+  </header>
+
+  <!-- El ancho se limita para que el escenario 16:9 quepa entera en la altura de la ventana. -->
+  <app-playing-novela
+    class="w-full max-w-5xl sm:max-w-[min(64rem,max(32rem,calc((100dvh-14rem)*16/9)))] rounded-xl overflow-hidden shadow-2xl shadow-black/60 ring-1 ring-white/10"
+    [novelaId]="novelaId"></app-playing-novela>
 </main>

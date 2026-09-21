@@ -1,5 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ILectura } from 'src/app/data/models/lectura.interfaces';
 import { INovela } from '@models/novela.interfaces';
@@ -8,11 +13,14 @@ import * as faIcons from '@fortawesome/free-solid-svg-icons';
 import { skip } from 'rxjs/operators';
 import { NovelasService } from '@services/novelas.service';
 import { IUsuario } from '@models/usuario.interfaces';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-novelas',
   templateUrl: './novelas.component.html',
   styleUrls: ['./novelas.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [RouterLink, FaIconComponent],
 })
 export class NovelasComponent implements OnInit, OnDestroy {
   usuarioData: IUsuario = this.route.snapshot.data['usuarioData'];

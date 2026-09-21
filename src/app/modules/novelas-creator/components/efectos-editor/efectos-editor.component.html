@@ -1,0 +1,121 @@
+<div class="rounded-lg border border-gray-200 bg-gray-50 p-2" role="group" [attr.aria-label]="etiqueta">
+  <div class="flex justify-end mb-1">
+    <button
+      type="button"
+      class="text-xs text-primary-700 underline"
+      [attr.aria-pressed]="modoTexto"
+      (click)="cambiarModo(!modoTexto)">
+      {{ modoTexto ? 'Editor visual' : 'Escribir como texto' }}
+    </button>
+  </div>
+
+  @if (modoTexto) {
+    <app-sintaxis-campo
+      modo="efectos"
+      [etiqueta]="etiqueta"
+      [efectos]="efectos"
+      [definiciones]="definiciones"
+      (efectosChange)="efectosChange.emit($event)"></app-sintaxis-campo>
+  } @else {
+  @if (filas.length === 0) {
+    <p class="text-xs text-gray-500 mb-1">Sin efectos.</p>
+  }
+
+  @for (efecto of filas; track $index) {
+    <div class="flex flex-wrap items-center gap-1 mb-1">
+      <select
+        class="input !w-auto text-xs"
+        aria-label="Qué cambia"
+        (change)="cambiarQue($index, $any($event.target).value)">
+        @if (!existe(efecto)) {
+          <option [value]="codigo(efecto)" selected>⚠ {{ referencia(efecto) }} (no existe)</option>
+        }
+        @if (definiciones.variables.length) {
+          <optgroup label="Variables">
+            @for (v of definiciones.variables; track v.clave) {
+              <option [value]="'var:' + v.clave" [selected]="codigo(efecto) === 'var:' + v.clave">{{ v.etiqueta || v.clave }}</option>
+            }
+          </optgroup>
+        }
+        @if (definiciones.objetos?.length) {
+          <optgroup label="Objetos">
+            @for (o of definiciones.objetos; track o.id) {
+              <option [value]="'objeto:' + o.id" [selected]="codigo(efecto) === 'objeto:' + o.id">Objeto: {{ o.nombre || o.id }}</option>
+            }
+          </optgroup>
+        }
+        @if (definiciones.ubicaciones?.length) {
+          <optgroup label="Ubicación">
+            @for (u of definiciones.ubicaciones; track u.id) {
+              <option [value]="'ir:' + u.id" [selected]="codigo(efecto) === 'ir:' + u.id">Ir a: {{ u.nombre || u.id }}</option>
+            }
+          </optgroup>
+        }
+        @if (definiciones.logros?.length) {
+          <optgroup label="Logros">
+            @for (l of definiciones.logros; track l.id) {
+              <option [value]="'logro:' + l.id" [selected]="codigo(efecto) === 'logro:' + l.id">Desbloquear: {{ l.nombre || l.id }}</option>
+            }
+          </optgroup>
+        }
+      </select>
+
+      @if (variable(efecto); as ef) {
+        <select
+          class="input !w-auto text-xs"
+          aria-label="Operación"
+          (change)="cambiarOperacion($index, $any($event.target).value)">
+          @for (op of operaciones(ef); track op) {
+            <option [value]="op" [selected]="op === ef.op">{{ ETIQUETAS_EFECTO[op] }}</option>
+          }
+        </select>
+
+        @if (ef.op !== 'alternar' && ef.op !== 'avanzar') {
+          <div class="w-32">
+            <app-variable-valor-input
+              [def]="def(ef.var)"
+              [valor]="ef.valor"
+              (valorChange)="cambiarValor($index, $event)"></app-variable-valor-input>
+          </div>
+        }
+      } @else if (esObjeto(efecto)) {
+        <select
+          class="input !w-auto text-xs"
+          aria-label="Dar o quitar"
+          (change)="cambiarOperacionObjeto($index, $any($event.target).value)">
+          <option value="dar" [selected]="$any(efecto).op === 'dar'">Dar</option>
+          <option value="quitar" [selected]="$any(efecto).op === 'quitar'">Quitar</option>
+        </select>
+        <input
+          type="number"
+          min="1"
+          step="1"
+          class="input !w-20 text-xs"
+          aria-label="Cantidad"
+          [value]="$any(efecto).cantidad ?? 1"
+          (change)="cambiarCantidad($index, $any($event.target).value)" />
+      }
+
+      <button
+        type="button"
+        class="btn-ghost text-xs px-2 py-1"
+        aria-label="Quitar efecto"
+        (click)="quitar($index)">
+        <fa-icon [icon]="faTrash"></fa-icon>
+      </button>
+    </div>
+  }
+
+  <button
+    type="button"
+    class="btn-secondary text-xs px-2 py-1"
+    [disabled]="!hayEfectos"
+    [title]="hayEfectos ? '' : 'Define variables, objetos o ubicaciones primero'"
+    (click)="agregar()">
+    <fa-icon [icon]="faPlus"></fa-icon> Añadir efecto
+  </button>
+  @if (!hayEfectos) {
+    <span class="text-xs text-gray-400 ml-1">Define variables, objetos o ubicaciones primero (botón «Mundo»).</span>
+  }
+  }
+</div>

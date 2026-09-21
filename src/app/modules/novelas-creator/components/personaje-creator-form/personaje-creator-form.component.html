@@ -1,1 +1,114 @@
-<p>personaje-creator-form works!</p>
+<div class="w-full">
+  <div class="flex gap-2 mb-4">
+    <button
+      type="button"
+      [class]="modo === 'crear' ? 'btn-primary' : 'btn-secondary'"
+      (click)="modo = 'crear'">
+      Crear nuevo
+    </button>
+    <button
+      type="button"
+      [class]="modo === 'existente' ? 'btn-primary' : 'btn-secondary'"
+      (click)="modo = 'existente'">
+      Usar existente
+    </button>
+  </div>
+
+  @if (modo === 'crear') {
+    <form [formGroup]="personajeForm" (ngSubmit)="onSubmitCrear()">
+      <label class="w-full block text-sm font-medium text-gray-600 mb-1" for="personajeNombre">Nombre</label>
+      <input
+        id="personajeNombre"
+        type="text"
+        class="input mb-3"
+        placeholder="Nombre del personaje"
+        formControlName="nombre" />
+
+      <label class="w-full block text-sm font-medium text-gray-600 mb-1" for="personajeSprite">Sprite (imagen)</label>
+      <input
+        id="personajeSprite"
+        type="file"
+        accept="image/*"
+        class="w-full mb-3 text-sm text-gray-600"
+        (change)="onFileSelected($event)" />
+
+      @if (subiendoImagen) {
+        <p class="flex items-center gap-2 text-sm text-gray-500 mb-3">
+          <app-spinner size="sm" /> Subiendo imagen...
+        </p>
+      }
+
+      @if (imagenPreviaUrl) {
+        <div class="mb-3">
+          <div class="thumbnail-box w-40">
+            <img [src]="imagenPreviaUrl" alt="Vista previa del sprite" />
+          </div>
+          <p class="text-xs text-gray-500 mt-1">
+            El sprite se guarda tal cual, sin recortes. Su tamaño y posición se ajustan después en cada nodo.
+          </p>
+        </div>
+      }
+
+      <button
+        type="submit"
+        [disabled]="guardando || !imagenRaw"
+        class="btn-primary mt-3">
+        @if (guardando) {
+          <app-spinner size="sm" />
+        }
+        {{ guardando ? 'Guardando...' : 'Crear y agregar a la novela' }}
+      </button>
+
+      <a
+        class="block mt-3 text-sm text-primary-600 hover:underline"
+        [routerLink]="['/', 'novelas-creator', 'personajes']">
+        Administrar todos mis personajes →
+      </a>
+    </form>
+  } @else {
+    <input
+      type="text"
+      class="input mb-3"
+      placeholder="Buscar personaje..."
+      [(ngModel)]="filtro" />
+
+    <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-72 overflow-y-auto mb-3">
+      @for (personaje of personajesFiltrados; track personaje.personajeId) {
+        <button
+          type="button"
+          (click)="onSubmitExistente(personaje)"
+          [disabled]="guardando || yaAsociado(personaje)"
+          class="flex flex-col items-center p-2 rounded-lg border-2 disabled:opacity-60"
+          [class.border-success-500]="yaAsociado(personaje)"
+          [class.border-gray-200]="!yaAsociado(personaje)">
+          <div class="thumbnail-box">
+            @if (personaje.sprites[0]) {
+              <img
+                [src]="resolverUrl(personaje.sprites[0].direccionImagen)"
+                alt="" />
+            }
+          </div>
+          <span class="text-xs mt-1 text-center text-gray-700">{{ personaje.nombre }}</span>
+          @if (yaAsociado(personaje)) {
+            <span class="badge-success mt-1">
+              <fa-icon [icon]="faCheck"></fa-icon> En la novela
+            </span>
+          }
+        </button>
+      }
+      @if (personajesFiltrados.length === 0) {
+        <app-empty-state
+          class="col-span-full"
+          [icon]="faUserGroup"
+          title="No hay personajes que coincidan"
+          description="Prueba con otro nombre o crea uno nuevo." />
+      }
+    </div>
+
+    <a
+      class="block text-sm text-primary-600 hover:underline"
+      [routerLink]="['/', 'novelas-creator', 'personajes']">
+      Administrar todos mis personajes →
+    </a>
+  }
+</div>

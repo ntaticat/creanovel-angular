@@ -1,108 +1,81 @@
-<div class="w-full">
+<div class="w-full min-h-screen bg-gray-50">
   @if (showModalCreandoNovela) {
-    <!-- Modal overlay -->
-    <div
-      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <!-- Modal content -->
-      <div
-        class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md border border-gray-200">
-        <!-- Step 1 -->
-        <div
-          class="flex items-center justify-between border rounded-xl p-4 mb-4">
-          <span class="text-gray-800 font-medium"
-            >Asignando un identificador a la novela</span
-          >
-          <svg
-            class="w-6 h-6 text-green-600"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="3"
-            viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
-
-        <!-- Step 2 -->
-        <div
-          class="flex items-center justify-between border rounded-xl p-4 mb-6">
-          <span class="text-gray-800 font-medium"
-            >Asignando una versión a la novela</span
-          >
-          <svg
-            class="animate-spin h-6 w-6 text-gray-400"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24">
-            <circle
-              class="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              stroke-width="4"></circle>
-            <path
-              class="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-          </svg>
-        </div>
-
-        <!-- Status text -->
-        <div class="text-center text-gray-500 text-sm space-y-1">
-          <p>Creando novela...</p>
-          <p>Versionando...</p>
-          <p>Preparando para crear...</p>
-        </div>
+    <app-modal-actions size="sm" (closeModal)="showModalCreandoNovela = false">
+      <div class="flex items-center justify-between border border-gray-200 rounded-xl p-4 mb-4">
+        <span class="text-gray-800 font-medium">Asignando un identificador a la novela</span>
+        <fa-icon [icon]="faCheck" class="text-success-600"></fa-icon>
       </div>
-    </div>
+
+      <div class="flex items-center justify-between border border-gray-200 rounded-xl p-4 mb-6">
+        <span class="text-gray-800 font-medium">Asignando una versión a la novela</span>
+        <app-spinner size="sm" class="text-gray-400" />
+      </div>
+
+      <div class="text-center text-gray-500 text-sm space-y-1">
+        <p>Creando novela...</p>
+        <p>Versionando...</p>
+        <p>Preparando para crear...</p>
+      </div>
+    </app-modal-actions>
   }
 
   <!-- Header -->
-  <div class="p-3 w-full text-center border-b-2 border-solid border-gray-700">
-    <h1>Creanovel NovelMaker</h1>
-    <a
-      class="px-3 py-2 text-sm bg-gray-700 text-white"
-      [routerLink]="['/', 'novelas']"
-      >Regresar</a
-    >
+  <div class="bg-white border-b border-gray-200 p-4 flex flex-wrap items-center justify-center gap-3">
+    <h1 class="text-lg font-semibold text-gray-800">Creanovel · Novel Maker</h1>
+    <a class="btn-secondary" [routerLink]="['/', 'novelas']">
+      <fa-icon [icon]="faArrowLeft"></fa-icon> Regresar
+    </a>
+    <a class="btn-secondary" [routerLink]="['/', 'novelas-creator', 'personajes']">
+      <fa-icon [icon]="faUserGroup"></fa-icon> Personajes y sprites
+    </a>
   </div>
 
-  <!-- Buscador de novelas -->
-  <!-- <div class="p-3 w-full flex justify-center"></div> -->
-
   <!-- Lista de novelas creadas -->
-  <div class="pt-3 w-full flex justify-evenly">
-    <div class="w-6/12 flex flex-wrap justify-center">
-      <div class="w-full">
-        <button
-          (click)="onClickButtonCrearNovela()"
-          class="w-full px-4 py-2 mx-2 my-2 rounded-lg bg-blue-500 text-white">
-          Crear una novela
-        </button>
-      </div>
+  <div class="max-w-3xl mx-auto p-4">
+    <button (click)="onClickButtonCrearNovela()" class="btn-primary w-full mb-4">
+      <fa-icon [icon]="faPlus"></fa-icon> Crear una novela
+    </button>
 
+    @if (!usuarioData.novelasCreadas?.length) {
+      <app-empty-state
+        [icon]="faBook"
+        title="Todavía no has creado ninguna novela"
+        description="Usa el botón de arriba para empezar." />
+    }
+
+    <div class="flex flex-col gap-3">
       @for (novela of usuarioData.novelasCreadas; track $index) {
-        <div class="my-3 w-full shadow-lg">
-          <div
-            class="relative h-40 border-2 border-solid border-gray-500 rounded-lg overflow-hidden flex flex-nowrap">
-            <div class="p-3 overflow-y-auto w-full">
-              <h5>{{ novela.titulo }}</h5>
-              <p>{{ novela.descripcion }}</p>
-              <p>Idiomas: <span>Español</span>, <span>Inglés</span></p>
-            </div>
-            <img
-              class="h-40 w-40 object-cover object-center"
-              src="https://yt3.ggpht.com/LR1e69SSkXgAZLxBEQfvoAq4TbjTBRf5wYs43fpWJcHOf8mcHu2mRq9ldgmXqQ8U1Mg=w1080-rw"
-              alt="novela test" />
-            <a
-              [routerLink]="['edit/', novela.novelaId]"
-              class="absolute bottom-0 w-10 h-10 right-0 p-2 rounded-full bg-blue-600 text-white m-2">
-              <fa-icon [icon]="faIcons['faEdit']"></fa-icon>
-            </a>
+        <div class="card p-0 overflow-hidden flex">
+          <div class="thumbnail-box w-32 shrink-0 rounded-none flex items-center justify-center">
+            @if (novela.portadaImagenUrl) {
+              <img
+                [src]="resolverUrl(novela.portadaImagenUrl)"
+                class="w-full h-full object-cover"
+                alt="" />
+            } @else {
+              <fa-icon [icon]="faBook" class="text-2xl text-gray-500"></fa-icon>
+            }
           </div>
+          <div class="p-3 flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h5 class="font-semibold text-gray-800">{{ novela.titulo }}</h5>
+              @if (novela.disponible) {
+                <span class="badge-success">Publicada</span>
+              } @else {
+                <span class="badge-warning">Borrador</span>
+              }
+            </div>
+            <p class="text-sm text-gray-500 line-clamp-2">{{ novela.descripcion }}</p>
+            <p class="text-xs text-gray-400 mt-1">
+              {{ novela.versionesCount || 0 }} {{ (novela.versionesCount || 0) === 1 ? 'versión' : 'versiones' }}
+            </p>
+          </div>
+          <a
+            [routerLink]="['/', 'novelas-creator', novela.novelaId]"
+            class="btn-ghost self-center mr-3"
+            aria-label="Editar novela">
+            <fa-icon [icon]="faEdit"></fa-icon>
+          </a>
         </div>
       }
     </div>

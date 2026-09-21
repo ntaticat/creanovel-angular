@@ -1,0 +1,23 @@
+@if (issues.length) {
+  <div
+    class="rounded-lg p-2 mb-2 text-sm"
+    [class.bg-red-50]="tipo === 'error'"
+    [class.text-red-800]="tipo === 'error'"
+    [class.bg-amber-50]="tipo === 'advertencia'"
+    [class.text-amber-800]="tipo === 'advertencia'"
+    [attr.role]="tipo === 'error' ? 'alert' : null">
+    <p class="font-medium mb-1">{{ titulo }} ({{ issues.length }})</p>
+    <ul class="list-disc list-inside">
+      @for (issue of issues; track $index) {
+        <li>
+          {{ issue.mensaje }}
+          @if (enlazable && issue.recursoId) {
+            <button type="button" class="underline ml-1" (click)="irARecurso.emit(issue.recursoId!)">
+              Ir al nodo
+            </button>
+          }
+        </li>
+      }
+    </ul>
+  </div>
+}

@@ -8,11 +8,14 @@ export interface INovela {
   titulo: string;
   descripcion: string;
   disponible: boolean;
+  portadaImagenUrl?: string;
   usuarioCreadorId: string;
+  usuarioCreadorNombre?: string;
   escenas?: IEscena[];
   personajes?: IPersonaje[];
   backgrounds?: IBackground[];
   versiones?: INovelaVersion[];
+  versionesCount?: number;
 }
 
 export interface INovelaBackgroundPost {
@@ -29,5 +32,12 @@ export interface INovelaPost {
   titulo: string;
   descripcion: string;
   disponible: boolean;
-  usuarioCreadorId: string;
+  usuarioCreadorId?: string;
+}
+
+export interface INovelaPatch {
+  titulo?: string;
+  descripcion?: string;
+  disponible?: boolean;
+  portadaImagenUrl?: string;
 }

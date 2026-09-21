@@ -5,6 +5,7 @@ import { map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
   ILectura,
+  ILecturaEstadoPut,
   ILecturaPost,
   ILecturaRecursoPost,
 } from '../models/lectura.interfaces';
@@ -17,14 +18,21 @@ export class LecturasService {
 
   constructor(private http: HttpClient) {}
 
-  postLectura(lecturaPost: ILecturaPost): Observable<{}> {
+  postLectura(lecturaPost: ILecturaPost): Observable<string> {
     const method = `${this.url}/lecturas`;
 
     const request = {
       ...lecturaPost,
     };
 
-    return this.http.post(method, request);
+    return this.http.post<string>(method, request);
+  }
+
+  /** Guarda la partida: estado del motor y recurso donde quedó el jugador. */
+  putEstado(lecturaId: string, data: ILecturaEstadoPut): Observable<{}> {
+    const method = `${this.url}/lecturas/${lecturaId}/estado`;
+
+    return this.http.put(method, data);
   }
 
   deleteLectura(lecturaId: string): Observable<{}> {

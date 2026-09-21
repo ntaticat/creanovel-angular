@@ -9,3 +9,13 @@ export interface IBackgroundSprite {
   nombre: string;
   direccionImagen: string;
 }
+
+export interface IBackgroundPost {
+  descripcion: string;
+}
+
+export interface IBackgroundSpritePost {
+  nombre: string;
+  direccionImagen: string;
+  backgroundId: string;
+}

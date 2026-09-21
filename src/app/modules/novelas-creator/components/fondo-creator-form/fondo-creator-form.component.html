@@ -1,1 +1,79 @@
-<p>fondo-creator-form works!</p>
+<div class="w-full">
+  <div class="flex gap-2 mb-4">
+    <button
+      type="button"
+      [class]="modo === 'crear' ? 'btn-primary' : 'btn-secondary'"
+      (click)="modo = 'crear'">
+      Crear nuevo
+    </button>
+    <button
+      type="button"
+      [class]="modo === 'existente' ? 'btn-primary' : 'btn-secondary'"
+      (click)="modo = 'existente'">
+      Usar existente
+    </button>
+  </div>
+
+  @if (modo === 'crear') {
+    <form [formGroup]="backgroundForm" (ngSubmit)="onSubmitCrear()">
+      <label class="w-full block text-sm font-medium text-gray-600 mb-1" for="backgroundDescripcion">Descripción</label>
+      <input
+        id="backgroundDescripcion"
+        type="text"
+        class="input mb-3"
+        placeholder="Descripción del fondo"
+        formControlName="descripcion" />
+
+      <label class="w-full block text-sm font-medium text-gray-600 mb-1" for="backgroundSprite">Imagen</label>
+      <input
+        id="backgroundSprite"
+        type="file"
+        accept="image/*"
+        class="w-full mb-3 text-sm text-gray-600"
+        (change)="onFileSelected($event)" />
+
+      <button type="submit" [disabled]="guardando" class="btn-primary">
+        @if (guardando) {
+          <app-spinner size="sm" />
+        }
+        {{ guardando ? 'Guardando...' : 'Crear y agregar a la novela' }}
+      </button>
+    </form>
+  } @else {
+    <input
+      type="text"
+      class="input mb-3"
+      placeholder="Buscar fondo..."
+      [(ngModel)]="filtro" />
+
+    <div class="max-h-40 overflow-y-auto mb-3">
+      @for (background of backgroundsFiltrados; track background.backgroundId) {
+        <label class="flex items-center w-full mb-1 text-sm text-gray-700">
+          <input
+            type="radio"
+            name="backgroundExistente"
+            [value]="background.backgroundId"
+            [(ngModel)]="backgroundExistenteId" />
+          <span class="ml-2">{{ background.descripcion }}</span>
+        </label>
+      }
+      @if (backgroundsFiltrados.length === 0) {
+        <app-empty-state
+          [icon]="faImage"
+          title="No hay fondos que coincidan"
+          description="Prueba con otra descripción o crea uno nuevo." />
+      }
+    </div>
+
+    <button
+      type="button"
+      [disabled]="!backgroundExistenteId || guardando"
+      (click)="onSubmitExistente()"
+      class="btn-primary">
+      @if (guardando) {
+        <app-spinner size="sm" />
+      }
+      {{ guardando ? 'Guardando...' : 'Agregar a la novela' }}
+    </button>
+  }
+</div>

@@ -1,37 +1,131 @@
-<div class="w-full">
-  <!-- Informacion de la novela -->
-  <div class="p-3 w-full text-center border-b-2 border-solid border-gray-700">
-    <h1>Novel Creator</h1>
+<div class="w-full min-h-screen bg-gray-50">
+  @if (showModalPersonajes) {
+    <app-modal-actions (closeModal)="showModalPersonajes = false">
+      <h3 class="font-semibold text-gray-800 mb-3">Personajes de la novela</h3>
+      <app-personaje-creator-form
+        [novelaId]="novelaId"
+        [novela]="novelaInfo"
+        (personajeAsociado)="onAssetAsociado()"></app-personaje-creator-form>
+    </app-modal-actions>
+  }
+
+  @if (showModalFondos) {
+    <app-modal-actions (closeModal)="showModalFondos = false">
+      <h3 class="font-semibold text-gray-800 mb-3">Fondos de la novela</h3>
+      <app-fondo-creator-form
+        [novelaId]="novelaId"
+        (backgroundAsociado)="onAssetAsociado()"></app-fondo-creator-form>
+    </app-modal-actions>
+  }
+
+  <!-- Header -->
+  <div class="bg-white border-b border-gray-200 p-4 flex items-center gap-3">
+    <a
+      class="btn-ghost !px-2"
+      [routerLink]="['/', 'novelas-creator']"
+      aria-label="Regresar">
+      <fa-icon [icon]="faArrowLeft"></fa-icon>
+    </a>
+    <h1 class="text-lg font-semibold text-gray-800">Novel Creator</h1>
   </div>
 
-  <!-- Buscador de novelas -->
-  <!-- <div class="p-3 w-full flex justify-center"></div> -->
+  <div class="max-w-3xl mx-auto p-4 flex flex-col gap-4">
+    @if (novelaInfo?.portadaImagenUrl) {
+      <img
+        class="w-full max-h-60 object-cover rounded-xl"
+        [src]="$safeNavigationMigration(novelaInfo?.portadaImagenUrl)"
+        alt="portada" />
+    }
 
-  <!-- Contenido de la novela -->
-  <div class="">
-    <p>{{ novelaInfo?.titulo }}</p>
-    <p>{{ novelaInfo?.descripcion }}</p>
-    <div class="w-full flex flex-wrap">
-      <div class="w-1/2">
-        @for (novelaVersion of novelaInfo?.versiones; track $index) {
-          <a
-            [routerLink]="['/novelas-creator', novelaVersion.novelaVersionId]"
-            class="mr-2 inline-block px-3 py-1 rounded-lg bg-gray-700 text-white">
-            {{ novelaVersion.numeroVersion }}
-          </a>
-        }
-      </div>
-      <div class="w-1/2">
-        <button class="px-2 py-1 bg-red-500 text-white rounded-xl">
-          Editar landing page
+    <!-- Contenido de la novela -->
+    <div class="card p-4">
+      <p class="text-xl font-semibold text-gray-800">{{ novelaInfo?.titulo }}</p>
+      <p class="text-gray-500 mt-1">{{ novelaInfo?.descripcion }}</p>
+
+      <div class="w-full flex flex-wrap gap-2 mt-4">
+        <button (click)="showModalPersonajes = true" class="btn-secondary">
+          <fa-icon [icon]="faUserGroup"></fa-icon>
+          Personajes ({{ novelaInfo?.personajes?.length || 0 }})
+        </button>
+        <button (click)="showModalFondos = true" class="btn-secondary">
+          <fa-icon [icon]="faImage"></fa-icon>
+          Fondos ({{ novelaInfo?.backgrounds?.length || 0 }})
         </button>
       </div>
     </div>
+
+    <!-- Versiones -->
+    <div class="card p-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <h2 class="font-semibold text-gray-800">Versiones</h2>
+        <button
+          [disabled]="creandoBorrador || tieneBorrador || !tienePublicada"
+          (click)="onClickCrearBorrador()"
+          class="btn-primary">
+          @if (creandoBorrador) {
+            <app-spinner size="sm" />
+          }
+          {{ creandoBorrador ? 'Creando borrador...' : 'Crear nueva versión' }}
+        </button>
+      </div>
+
+      @if (!tienePublicada && versiones.length > 0) {
+        <p class="text-sm text-gray-500 mb-3">
+          Esta novela todavía no tiene una versión publicada; termina y publica el borrador actual antes de crear uno nuevo.
+        </p>
+      }
+      @if (tieneBorrador && tienePublicada) {
+        <p class="text-sm text-gray-500 mb-3">Ya existe un borrador activo.</p>
+      }
+
+      @if (erroresPublicacion.length) {
+        <div class="mb-3 rounded-lg bg-red-50 p-3 text-sm text-red-800" role="alert">
+          <p class="font-medium mb-1">No se pudo publicar:</p>
+          <ul class="list-disc list-inside">
+            @for (error of erroresPublicacion; track $index) {
+              <li>{{ error }}</li>
+            }
+          </ul>
+          <p class="mt-1 text-red-700">
+            Abre el editor y usa «Revisar» para ir directo a cada nodo con problemas.
+          </p>
+        </div>
+      }
+
+      <div class="flex flex-col gap-2">
+        @for (version of versiones; track version.novelaVersionId) {
+          <div
+            class="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-gray-200 px-3 py-2">
+            <div class="flex items-center gap-2">
+              <span class="font-medium text-gray-800">{{ version.numeroVersion }}</span>
+              <span [class]="versionStatusBadgeClass(version)">{{ versionStatusLabel(version) }}</span>
+            </div>
+            @if (version.esBorrador) {
+              <div class="flex gap-2">
+                <button (click)="onClickEditarVersion(version)" class="btn-secondary">
+                  <fa-icon [icon]="faPen"></fa-icon> Editar
+                </button>
+                <button
+                  [disabled]="!!publicandoVersionId"
+                  (click)="onClickPublicarVersion(version)"
+                  class="btn-primary">
+                  @if (publicandoVersionId === version.novelaVersionId) {
+                    <app-spinner size="sm" />
+                  }
+                  {{ publicandoVersionId === version.novelaVersionId ? 'Publicando...' : 'Publicar' }}
+                </button>
+              </div>
+            }
+          </div>
+        } @empty {
+          <p class="text-sm text-gray-400">Esta novela todavía no tiene versiones.</p>
+        }
+      </div>
+    </div>
+
+    <!-- Formulario para editar info esencial de la novela -->
+    <app-novela-creator-form
+      [novela]="novelaInfo"
+      (guardado)="onNovelaActualizada()"></app-novela-creator-form>
   </div>
-
-  <!-- Formulario para editar info esencial de la novela -->
-  <div class=""></div>
-
-  <!-- Acciones importantes (habilitar/eliminar) -->
-  <div class=""></div>
 </div>

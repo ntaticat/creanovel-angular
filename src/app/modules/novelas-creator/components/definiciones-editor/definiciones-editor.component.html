@@ -1,0 +1,465 @@
+<div class="w-full">
+  <p class="font-semibold text-gray-800 mb-1">Mundo de la historia</p>
+  <p class="text-xs text-gray-500 mb-3">
+    Lo que la partida recuerda: variables (salud, afecto...), objetos del inventario y ubicaciones. Las condiciones y
+    los efectos los usan para cambiar la ruta. Los identificadores no se pueden cambiar una vez guardados.
+  </p>
+
+  <div class="flex gap-1 mb-3 border-b border-gray-200 overflow-x-auto" role="tablist">
+    @for (p of [['variables', 'Variables'], ['objetos', 'Objetos'], ['ubicaciones', 'Ubicaciones'], ['metas', 'Logros y finales']]; track p[0]) {
+      <button
+        type="button"
+        role="tab"
+        class="px-3 py-1.5 text-sm rounded-t-lg border-b-2 whitespace-nowrap"
+        [class.border-primary-600]="pestana === p[0]"
+        [class.text-primary-700]="pestana === p[0]"
+        [class.font-medium]="pestana === p[0]"
+        [class.border-transparent]="pestana !== p[0]"
+        [class.text-gray-500]="pestana !== p[0]"
+        [attr.aria-selected]="pestana === p[0]"
+        (click)="cambiarPestana($any(p[0]))">
+        {{ p[1] }}
+      </button>
+    }
+  </div>
+
+  @if (pestana === 'variables') {
+  @for (fila of filas; track $index) {
+    <app-tarjeta-plegable
+      [titulo]="tituloVariable(fila)"
+      [resumen]="resumirVariable(fila)"
+      [advertencia]="fila.clave ? '' : 'Falta la clave'"
+      [abierta]="acordeon.esta('variables', $index)"
+      (abiertaChange)="acordeon.fijar('variables', $index, $event)">
+      <div class="grid gap-2 sm:grid-cols-3">
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1" [for]="'var-clave-' + $index">Clave</label>
+          <input
+            [id]="'var-clave-' + $index"
+            type="text"
+            class="input"
+            placeholder="ej. salud"
+            maxlength="40"
+            [disabled]="!fila.nueva"
+            [value]="fila.clave"
+            (input)="cambiar($index, { clave: $any($event.target).value })" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1" [for]="'var-etiqueta-' + $index">Nombre visible</label>
+          <input
+            [id]="'var-etiqueta-' + $index"
+            type="text"
+            class="input"
+            placeholder="ej. Salud"
+            maxlength="60"
+            [value]="fila.etiqueta"
+            (input)="cambiar($index, { etiqueta: $any($event.target).value })" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1" [for]="'var-tipo-' + $index">Tipo</label>
+          <select
+            [id]="'var-tipo-' + $index"
+            class="input"
+            [disabled]="!fila.nueva"
+            (change)="cambiar($index, { tipo: $any($event.target).value })">
+            @for (tipo of tipos; track tipo.valor) {
+              <option [value]="tipo.valor" [selected]="tipo.valor === fila.tipo">{{ tipo.etiqueta }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="grid gap-2 sm:grid-cols-4 mt-2">
+        <div>
+          <span class="block text-xs font-medium text-gray-600 mb-1">Valor inicial</span>
+          <app-variable-valor-input
+            etiqueta="Valor inicial"
+            [def]="fila"
+            [valor]="fila.inicial"
+            (valorChange)="cambiarInicial($index, $event)"></app-variable-valor-input>
+        </div>
+
+        @if (fila.tipo === 'numero') {
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1" [for]="'var-min-' + $index">Mínimo</label>
+            <input
+              [id]="'var-min-' + $index"
+              type="number"
+              class="input"
+              placeholder="sin límite"
+              [value]="fila.min ?? ''"
+              (change)="cambiarNumero($index, 'min', $any($event.target).value)" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1" [for]="'var-max-' + $index">Máximo</label>
+            <input
+              [id]="'var-max-' + $index"
+              type="number"
+              class="input"
+              placeholder="sin límite"
+              [value]="fila.max ?? ''"
+              (change)="cambiarNumero($index, 'max', $any($event.target).value)" />
+          </div>
+        }
+        @if (fila.tipo === 'texto') {
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-medium text-gray-600 mb-1" [for]="'var-valores-' + $index">
+              Valores permitidos (separados por coma; vacío = libre)
+            </label>
+            <input
+              [id]="'var-valores-' + $index"
+              type="text"
+              class="input"
+              placeholder="mañana, tarde, noche"
+              [value]="fila.valoresTexto"
+              (change)="cambiarValores($index, $any($event.target).value)" />
+          </div>
+        }
+
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1" [for]="'var-hud-' + $index">En pantalla</label>
+          <select
+            [id]="'var-hud-' + $index"
+            class="input"
+            (change)="cambiar($index, { hud: $any($event.target).value })">
+            @for (hud of huds; track hud.valor) {
+              <option [value]="hud.valor" [selected]="hud.valor === fila.hud">{{ hud.etiqueta }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <button type="button" class="btn-danger text-xs px-2 py-1 mt-2" (click)="quitar($index)">
+        <fa-icon [icon]="faTrash"></fa-icon> Quitar variable
+      </button>
+    </app-tarjeta-plegable>
+  } @empty {
+    <p class="text-sm text-gray-400 mb-2">Todavía no hay variables.</p>
+  }
+
+  <button type="button" class="btn-secondary mb-3" (click)="agregar()">
+    <fa-icon [icon]="faPlus"></fa-icon> Añadir variable
+  </button>
+  }
+
+  @if (pestana === 'objetos') {
+    @for (objeto of objetos; track $index) {
+      <app-tarjeta-plegable
+        [titulo]="tituloObjeto(objeto)"
+        [resumen]="resumirObjeto(objeto)"
+        [advertencia]="objeto.id ? '' : 'Falta el identificador'"
+        [abierta]="acordeon.esta('objetos', $index)"
+        (abiertaChange)="acordeon.fijar('objetos', $index, $event)">
+        <div class="grid gap-2 sm:grid-cols-3">
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1" [for]="'obj-nombre-' + $index">Nombre</label>
+            <input
+              [id]="'obj-nombre-' + $index"
+              type="text"
+              class="input"
+              placeholder="ej. Llave de la biblioteca"
+              maxlength="60"
+              [value]="objeto.nombre"
+              (input)="cambiarObjeto($index, { nombre: $any($event.target).value })" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1" [for]="'obj-id-' + $index">Identificador</label>
+            <input
+              [id]="'obj-id-' + $index"
+              type="text"
+              class="input"
+              placeholder="ej. llave_biblioteca"
+              maxlength="40"
+              [disabled]="!objeto.nueva"
+              [value]="objeto.id"
+              (input)="cambiarIdObjeto($index, $any($event.target).value)" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1" [for]="'obj-inicial-' + $index">Cantidad al empezar</label>
+            <input
+              [id]="'obj-inicial-' + $index"
+              type="number"
+              min="0"
+              step="1"
+              class="input"
+              [value]="objeto.inicial"
+              (change)="cambiarEnteroObjeto($index, 'inicial', $any($event.target).value)" />
+          </div>
+        </div>
+
+        <div class="grid gap-2 sm:grid-cols-3 mt-2">
+          <div class="sm:col-span-3">
+            <label class="block text-xs font-medium text-gray-600 mb-1" [for]="'obj-desc-' + $index">Descripción (se ve en la mochila)</label>
+            <input
+              [id]="'obj-desc-' + $index"
+              type="text"
+              class="input"
+              maxlength="300"
+              [value]="objeto.descripcion"
+              (input)="cambiarObjeto($index, { descripcion: $any($event.target).value })" />
+          </div>
+          <label class="flex items-center gap-2 text-sm text-gray-600">
+            <input
+              type="checkbox"
+              [checked]="objeto.apilable"
+              (change)="cambiarObjeto($index, { apilable: $any($event.target).checked, max: null })" />
+            Se puede tener más de uno
+          </label>
+          @if (objeto.apilable) {
+            <div>
+              <label class="block text-xs font-medium text-gray-600 mb-1" [for]="'obj-max-' + $index">Máximo</label>
+              <input
+                [id]="'obj-max-' + $index"
+                type="number"
+                min="1"
+                step="1"
+                class="input"
+                placeholder="sin límite"
+                [value]="objeto.max ?? ''"
+                (change)="cambiarEnteroObjeto($index, 'max', $any($event.target).value)" />
+            </div>
+          }
+          <div class="flex items-center gap-2 sm:col-span-3">
+            @if (objeto.imagenUrl) {
+              <img class="w-12 h-12 object-contain rounded border border-gray-200 bg-white" [src]="resolverUrl(objeto.imagenUrl)" alt="" />
+            }
+            <label class="btn-secondary text-xs px-2 py-1 cursor-pointer">
+              {{ objeto.subiendo ? 'Subiendo...' : objeto.imagenUrl ? 'Cambiar imagen' : 'Subir imagen' }}
+              <input
+                type="file"
+                accept="image/*"
+                class="sr-only"
+                [attr.aria-label]="'Imagen de ' + (objeto.nombre || 'objeto')"
+                (change)="subirImagen($index, $event)" />
+            </label>
+            @if (objeto.imagenUrl) {
+              <button type="button" class="btn-ghost text-xs px-2 py-1" (click)="cambiarObjeto($index, { imagenUrl: null })">Quitar imagen</button>
+            }
+          </div>
+        </div>
+
+        <div class="mt-3 pt-2 border-t border-gray-200">
+          <label class="flex items-center gap-2 text-sm text-gray-600">
+            <input
+              type="checkbox"
+              [checked]="!!objeto.uso"
+              (change)="alternarUso($index, $any($event.target).checked)" />
+            Se puede usar desde la mochila
+          </label>
+          @if (objeto.uso; as uso) {
+            <div class="mt-2 pl-3 border-l-2 border-gray-200">
+              <div class="grid gap-2 sm:grid-cols-2 mb-2">
+                <div>
+                  <label class="block text-xs font-medium text-gray-600 mb-1" [for]="'obj-uso-etiqueta-' + $index">Texto del botón</label>
+                  <input
+                    [id]="'obj-uso-etiqueta-' + $index"
+                    type="text"
+                    class="input"
+                    placeholder="Usar"
+                    maxlength="30"
+                    [value]="uso.etiqueta"
+                    (input)="cambiarUso($index, { etiqueta: $any($event.target).value })" />
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-gray-600 mb-1" [for]="'obj-uso-destino-' + $index">Al usarlo, ir a</label>
+                  <select
+                    [id]="'obj-uso-destino-' + $index"
+                    class="input"
+                    [value]="uso.destinoRecursoId ?? ''"
+                    (change)="cambiarDestinoUso($index, $any($event.target).value)">
+                    <option value="">Ningún nodo (se queda donde está)</option>
+                    @for (destino of destinosUso; track destino.id) {
+                      <option [value]="destino.id" [selected]="destino.id === uso.destinoRecursoId">{{ destino.etiqueta }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+
+              <p class="text-sm font-medium text-gray-600 mb-1">Se puede usar si</p>
+              <app-condicion-builder
+                class="block mb-2"
+                etiqueta="Condición para poder usar el objeto"
+                [condicion]="uso.condicion"
+                [definiciones]="definicionesEnEdicion"
+                (condicionChange)="cambiarCondicionUso($index, $event)"></app-condicion-builder>
+
+              <p class="text-sm font-medium text-gray-600 mb-1">Efectos al usarlo</p>
+              <app-efectos-editor
+                class="block mb-2"
+                etiqueta="Efectos al usar el objeto"
+                [efectos]="uso.efectos"
+                [definiciones]="definicionesEnEdicion"
+                (efectosChange)="cambiarEfectosUso($index, $event)"></app-efectos-editor>
+
+              <label class="flex items-center gap-2 text-sm text-gray-600 mb-1">
+                <input
+                  type="checkbox"
+                  [checked]="uso.consumir"
+                  (change)="cambiarUso($index, { consumir: $any($event.target).checked })" />
+                Se gasta una unidad al usarlo
+              </label>
+            </div>
+          }
+        </div>
+
+        <button type="button" class="btn-danger text-xs px-2 py-1 mt-2" (click)="quitarObjeto($index)">
+          <fa-icon [icon]="faTrash"></fa-icon> Quitar objeto
+        </button>
+      </app-tarjeta-plegable>
+    } @empty {
+      <p class="text-sm text-gray-400 mb-2">Todavía no hay objetos.</p>
+    }
+
+    <button type="button" class="btn-secondary mb-3" (click)="agregarObjeto()">
+      <fa-icon [icon]="faPlus"></fa-icon> Añadir objeto
+    </button>
+  }
+
+  @if (pestana === 'ubicaciones') {
+    @for (ubicacion of ubicaciones; track $index) {
+      <app-tarjeta-plegable
+        [titulo]="tituloUbicacion(ubicacion)"
+        [resumen]="resumirUbicacion(ubicacion, !!ubicacion.id && ubicacion.id === ubicacionInicial)"
+        [advertencia]="ubicacion.id ? '' : 'Falta el identificador'"
+        [abierta]="acordeon.esta('ubicaciones', $index)"
+        (abiertaChange)="acordeon.fijar('ubicaciones', $index, $event)">
+        <div class="grid gap-2 sm:grid-cols-3">
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1" [for]="'ubi-nombre-' + $index">Nombre</label>
+            <input
+              [id]="'ubi-nombre-' + $index"
+              type="text"
+              class="input"
+              placeholder="ej. Biblioteca"
+              maxlength="60"
+              [value]="ubicacion.nombre"
+              (input)="cambiarUbicacion($index, { nombre: $any($event.target).value })" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1" [for]="'ubi-id-' + $index">Identificador</label>
+            <input
+              [id]="'ubi-id-' + $index"
+              type="text"
+              class="input"
+              placeholder="ej. biblioteca"
+              maxlength="40"
+              [disabled]="!ubicacion.nueva"
+              [value]="ubicacion.id"
+              (input)="cambiarIdUbicacion($index, $any($event.target).value)" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1" [for]="'ubi-fondo-' + $index">Fondo por defecto</label>
+            <select
+              [id]="'ubi-fondo-' + $index"
+              class="input"
+              (change)="cambiarUbicacion($index, { backgroundSpriteId: $any($event.target).value || null })">
+              <option value="" [selected]="!ubicacion.backgroundSpriteId">Sin fondo</option>
+              @for (fondo of fondosDisponibles; track fondo.id) {
+                <option [value]="fondo.id" [selected]="fondo.id === ubicacion.backgroundSpriteId">{{ fondo.etiqueta }}</option>
+              }
+            </select>
+          </div>
+        </div>
+        <button type="button" class="btn-danger text-xs px-2 py-1 mt-2" (click)="quitarUbicacion($index)">
+          <fa-icon [icon]="faTrash"></fa-icon> Quitar ubicación
+        </button>
+      </app-tarjeta-plegable>
+    } @empty {
+      <p class="text-sm text-gray-400 mb-2">Todavía no hay ubicaciones.</p>
+    }
+
+    <button type="button" class="btn-secondary mb-3" (click)="agregarUbicacion()">
+      <fa-icon [icon]="faPlus"></fa-icon> Añadir ubicación
+    </button>
+
+    @if (ubicaciones.length) {
+      <div class="mb-3">
+        <label class="block text-xs font-medium text-gray-600 mb-1" for="ubi-inicial">Empieza en</label>
+        <select id="ubi-inicial" class="input" (change)="ubicacionInicial = $any($event.target).value">
+          <option value="" [selected]="!ubicacionInicial">(ninguna)</option>
+          @for (ubicacion of ubicaciones; track ubicacion.id) {
+            @if (ubicacion.id) {
+              <option [value]="ubicacion.id" [selected]="ubicacion.id === ubicacionInicial">{{ ubicacion.nombre || ubicacion.id }}</option>
+            }
+          }
+        </select>
+        <p class="text-xs text-gray-500 mt-1">
+          Un nodo sin fondo propio usa el de la ubicación donde está el jugador. Un mapa del mundo es un nodo
+          «Explora» sobre la imagen del mapa, con una zona por lugar que lleve a él.
+        </p>
+      </div>
+    }
+  }
+
+  @if (pestana === 'metas') {
+    @for (bloque of [['logros', 'Logros', 'Se desbloquean con un efecto («Desbloquear logro») y se conservan al empezar de nuevo.'], ['finales', 'Finales', 'Cada nodo «Termina» lleva a uno; el jugador ve cuántos ha descubierto y se conservan al empezar de nuevo.']]; track bloque[0]) {
+      <p class="text-sm font-semibold text-gray-700 mt-2">{{ bloque[1] }}</p>
+      <p class="text-xs text-gray-500 mb-2">{{ bloque[2] }}</p>
+      @for (meta of $any(bloque[0] === 'logros' ? logros : finales); track $index) {
+        <app-tarjeta-plegable
+          [titulo]="tituloMeta(meta, bloque[0] === 'logros' ? 'logro' : 'final')"
+          [resumen]="resumirMeta(meta)"
+          [advertencia]="meta.id ? '' : 'Falta el identificador'"
+          [abierta]="acordeon.esta($any(bloque[0]), $index)"
+          (abiertaChange)="acordeon.fijar($any(bloque[0]), $index, $event)">
+          <div class="grid gap-2 sm:grid-cols-3">
+            <div>
+              <label class="block text-xs font-medium text-gray-600 mb-1" [for]="bloque[0] + '-nombre-' + $index">Nombre</label>
+              <input
+                [id]="bloque[0] + '-nombre-' + $index"
+                type="text"
+                class="input"
+                maxlength="60"
+                [value]="meta.nombre"
+                (input)="cambiarMeta($any(bloque[0]), $index, { nombre: $any($event.target).value })" />
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-600 mb-1" [for]="bloque[0] + '-id-' + $index">Identificador</label>
+              <input
+                [id]="bloque[0] + '-id-' + $index"
+                type="text"
+                class="input"
+                maxlength="40"
+                [disabled]="!meta.nueva"
+                [value]="meta.id"
+                (input)="cambiarIdMeta($any(bloque[0]), $index, $any($event.target).value)" />
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-600 mb-1" [for]="bloque[0] + '-desc-' + $index">Descripción</label>
+              <input
+                [id]="bloque[0] + '-desc-' + $index"
+                type="text"
+                class="input"
+                maxlength="300"
+                [value]="meta.descripcion"
+                (input)="cambiarMeta($any(bloque[0]), $index, { descripcion: $any($event.target).value })" />
+            </div>
+          </div>
+          <button type="button" class="btn-danger text-xs px-2 py-1 mt-2" (click)="quitarMeta($any(bloque[0]), $index)">
+            <fa-icon [icon]="faTrash"></fa-icon> Quitar
+          </button>
+        </app-tarjeta-plegable>
+      } @empty {
+        <p class="text-sm text-gray-400 mb-2">Todavía no hay {{ bloque[0] }}.</p>
+      }
+      <button type="button" class="btn-secondary mb-3" (click)="agregarMeta($any(bloque[0]))">
+        <fa-icon [icon]="faPlus"></fa-icon> Añadir {{ bloque[0] === 'logros' ? 'logro' : 'final' }}
+      </button>
+    }
+  }
+
+  @if (errores.length) {
+    <ul class="mb-3 text-sm text-red-700 bg-red-50 rounded-lg p-2 list-disc list-inside" role="alert">
+      @for (error of errores; track $index) {
+        <li>{{ error }}</li>
+      }
+    </ul>
+  }
+
+  <button type="button" class="btn-primary w-full" [disabled]="guardando" (click)="guardar()">
+    @if (guardando) {
+      <app-spinner size="sm" />
+    }
+    {{ guardando ? 'Guardando...' : 'Guardar' }}
+  </button>
+</div>

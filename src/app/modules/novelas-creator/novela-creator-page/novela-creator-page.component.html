@@ -1,89 +1,309 @@
-<div class="relative w-full h-full creator-container">
+<div
+  class="relative w-full h-dvh grid grid-cols-1 grid-rows-[auto_auto_minmax(0,1fr)_auto] md:grid-cols-[16rem_minmax(0,1fr)] md:grid-rows-[auto_minmax(0,1fr)_auto]">
   @if (showModalActions) {
-    <app-modal-actions (click)="onClickCloseModalActions()">
+    <app-modal-actions
+      [size]="showModalRecursoForm || showModalRecursoInfo || showModalVariables ? 'lg' : showModalValidacion ? 'md' : 'sm'"
+      (closeModal)="onClickCloseModalActions()">
       @if (showModalRecursoInfo) {
-        <div class="bg-white rounded-lg p-3 min-h-full overflow-y-auto">
-          <img
-            src="https://electrastreet.net/wp-content/uploads/2019/11/ES-carrera-visual-novel-01.jpg"
-            alt="screenshot of recurso" />
-          <button
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
-            Editar recurso
+        <h3 class="font-semibold text-gray-800 mb-1">Recurso</h3>
+        <app-recurso-preview
+          class="block rounded-xl overflow-hidden my-2"
+          [recurso]="recursoPreview"
+          [personajes]="novela?.personajes || []"
+          [backgrounds]="novela?.backgrounds || []"
+          [definiciones]="novelaInfo?.definiciones"></app-recurso-preview>
+        <div class="flex flex-wrap gap-2 mt-3">
+          <button (click)="onClickEditarRecurso()" class="btn-secondary">
+            <fa-icon [icon]="faPen"></fa-icon> Editar recurso
           </button>
-          <button
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
-            Registrar recurso hijo
-          </button>
-          <button
-            (click)="onClickShowDeleteModal()"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
-            Eliminar
-          </button>
-          <button
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
-            Actualizar imagen
+          <button (click)="onClickShowDeleteModal()" class="btn-danger">
+            <fa-icon [icon]="faTrash"></fa-icon> Eliminar
           </button>
         </div>
       }
       @if (showModalRecursoDelete) {
-        <div class="bg-white rounded-lg p-3 min-h-full overflow-y-auto">
-          <p>Desea eliminar el recurso?</p>
-          <button
-            (click)="onClickDeleteRecurso()"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
-            Eliminar
+        <h3 class="font-semibold text-gray-800 mb-2">¿Eliminar este recurso?</h3>
+        <p class="text-sm text-gray-500 mb-4">Esta acción no se puede deshacer.</p>
+        <div class="flex gap-2">
+          <button (click)="onClickDeleteRecurso()" class="btn-danger">
+            <fa-icon [icon]="faTrash"></fa-icon> Eliminar
           </button>
-          <button
-            (click)="showSpecificModalAction('INFO')"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
+          <button (click)="showSpecificModalAction('INFO')" class="btn-secondary">
             Cancelar
           </button>
         </div>
       }
       @if (showModalEscena) {
-        <app-escena-creator-form></app-escena-creator-form>
+        <app-escena-creator-form
+          [novelaVersionId]="novelaVersionId"
+          [etiquetasExistentes]="etiquetasDisponibles"
+          (escenaCreada)="onEscenaCreada()"></app-escena-creator-form>
       }
+      @if (showModalEscenaEditar && escenaInfo) {
+        <app-escena-creator-form
+          [novelaVersionId]="novelaVersionId"
+          [escena]="escenaInfo"
+          [etiquetasExistentes]="etiquetasDisponibles"
+          (escenaEditada)="onEscenaEditada()"></app-escena-creator-form>
+      }
+      @if (showModalRecursoForm && escenaInfo) {
+        <app-recurso-creator-form
+          [escenaId]="escenaInfo.escenaId"
+          [escenas]="novelaInfo?.escenas || []"
+          [personajes]="novela?.personajes || []"
+          [backgrounds]="novela?.backgrounds || []"
+          [definiciones]="novelaInfo?.definiciones"
+          [recursoEditar]="recursoEditar"
+          (guardado)="onRecursoGuardado()"></app-recurso-creator-form>
+      }
+      @if (showModalVariables) {
+        <app-definiciones-editor
+          [novelaVersionId]="novelaVersionId"
+          [definiciones]="novelaInfo?.definiciones"
+          [backgrounds]="novela?.backgrounds || []"
+          [escenas]="novelaInfo?.escenas || []"
+          (guardado)="onDefinicionesGuardadas($event)"></app-definiciones-editor>
+      }
+      @if (showModalValidacion) {
+        <h3 class="font-semibold text-gray-800 mb-2">Revisión de la versión</h3>
+        @if (validando) {
+          <app-spinner size="md" />
+        } @else if (validacion) {
+          @if (validacion.valida && validacion.advertencias.length === 0) {
+            <p class="text-sm text-emerald-700 bg-emerald-50 rounded-lg p-2">
+              Todo en orden: la versión se puede publicar.
+            </p>
+          } @else if (validacion.valida) {
+            <p class="text-sm text-emerald-700 bg-emerald-50 rounded-lg p-2 mb-2">
+              Se puede publicar, pero hay avisos.
+            </p>
+          }
+          <app-validacion-issues
+            titulo="Errores (impiden publicar)"
+            tipo="error"
+            [issues]="validacion.errores"
+            [enlazable]="true"
+            (irARecurso)="irARecurso($event)"></app-validacion-issues>
+          <app-validacion-issues
+            titulo="Avisos"
+            tipo="advertencia"
+            [issues]="validacion.advertencias"
+            [enlazable]="true"
+            (irARecurso)="irARecurso($event)"></app-validacion-issues>
+        } @else {
+          <p class="text-sm text-red-700">No se pudo revisar la versión.</p>
+        }
+      }
+    </app-modal-actions>
+  }
+
+  @if (showModalAssets) {
+    <app-modal-actions size="lg" (closeModal)="showModalAssets = false">
+      <div class="flex gap-1 mb-4 border-b border-gray-200" role="tablist" aria-label="Personajes y fondos">
+        <button
+          type="button"
+          role="tab"
+          id="tab-assets-personajes"
+          aria-controls="panel-assets-personajes"
+          class="flex items-center gap-2 px-4 py-2 text-sm rounded-t-lg border-b-2 whitespace-nowrap"
+          [class.border-primary-600]="pestanaAssets === 'personajes'"
+          [class.text-primary-700]="pestanaAssets === 'personajes'"
+          [class.font-medium]="pestanaAssets === 'personajes'"
+          [class.border-transparent]="pestanaAssets !== 'personajes'"
+          [class.text-gray-500]="pestanaAssets !== 'personajes'"
+          [attr.aria-selected]="pestanaAssets === 'personajes'"
+          (click)="pestanaAssets = 'personajes'">
+          <fa-icon [icon]="faUserGroup"></fa-icon>
+          Personajes
+        </button>
+        <button
+          type="button"
+          role="tab"
+          id="tab-assets-fondos"
+          aria-controls="panel-assets-fondos"
+          class="flex items-center gap-2 px-4 py-2 text-sm rounded-t-lg border-b-2 whitespace-nowrap"
+          [class.border-primary-600]="pestanaAssets === 'fondos'"
+          [class.text-primary-700]="pestanaAssets === 'fondos'"
+          [class.font-medium]="pestanaAssets === 'fondos'"
+          [class.border-transparent]="pestanaAssets !== 'fondos'"
+          [class.text-gray-500]="pestanaAssets !== 'fondos'"
+          [attr.aria-selected]="pestanaAssets === 'fondos'"
+          (click)="pestanaAssets = 'fondos'">
+          <fa-icon [icon]="faImage"></fa-icon>
+          Fondos
+        </button>
+      </div>
+
+      <div
+        id="panel-assets-personajes"
+        role="tabpanel"
+        aria-labelledby="tab-assets-personajes"
+        [hidden]="pestanaAssets !== 'personajes'">
+        <p class="text-xs text-gray-500 mb-3">Los sprites que aparecen en escena.</p>
+        <app-personaje-creator-form
+          [novelaId]="novelaInfo?.novelaId || ''"
+          [novela]="novela"
+          (personajeAsociado)="onAssetAsociado()"></app-personaje-creator-form>
+      </div>
+
+      <div
+        id="panel-assets-fondos"
+        role="tabpanel"
+        aria-labelledby="tab-assets-fondos"
+        [hidden]="pestanaAssets !== 'fondos'">
+        <p class="text-xs text-gray-500 mb-3">Las imágenes de fondo de los escenarios.</p>
+        <app-fondo-creator-form
+          [novelaId]="novelaInfo?.novelaId || ''"
+          (backgroundAsociado)="onAssetAsociado()"></app-fondo-creator-form>
+      </div>
     </app-modal-actions>
   }
 
   <!-- Header -->
   <div
-    class="creator-navbar bg-gray-800 text-white flex flex-wrap justify-center items-center">
-    <p class="text-xl">CreaNovel - Novel Creator</p>
-    <a class="mx-3 px-3 py-2 text-white" routerLink="../">Regresar</a>
-  </div>
-  <!-- Escenas -->
-  <div
-    class="creator-escenas relative bg-gray-200 flex flex-col justify-between flex-nowrap overflow-y-auto">
-    <!-- Barra de escenas para cambiar de tamanio a la columna -->
-    <div
-      class="w-1 absolute top-0 right-0 cursor-col-resize h-full bg-gray-900"></div>
-
-    <div class="h-auto bg-gray-200 p-3">
-      <div class="text-left w-full px-3 py-2 bg-gray-500 text-white mb-3">
-        Escenas
-      </div>
-      @for (escena of novelaInfo?.escenas; track $index) {
-        <button
-          type="button"
-          (click)="onClickEscena(escena.escenaId)"
-          class="text-left w-full px-3 py-2 bg-gray-600 text-white last:mb-0 mb-3">
-          {{ escena.identificador }}
-        </button>
-      }
-    </div>
-
-    <div class="sticky bottom-0 h-auto px-3">
+    class="col-span-full bg-gray-900 text-white flex items-center justify-between gap-2 px-3 py-2">
+    <a
+      class="btn-ghost !text-white hover:!bg-white/10 shrink-0"
+      title="Regresar"
+      aria-label="Regresar"
+      [routerLink]="[
+        '/novelas-creator',
+        $safeNavigationMigration(novelaInfo?.novelaId)
+      ]">
+      <fa-icon [icon]="faArrowLeft"></fa-icon>
+      <span class="hidden sm:inline">Regresar</span>
+    </a>
+    <p class="text-base sm:text-lg font-semibold truncate">CreaNovel · Editor</p>
+    <div class="flex items-center gap-1 shrink-0">
+      <a
+        class="btn-ghost !text-white hover:!bg-white/10"
+        title="Vista previa del borrador"
+        aria-label="Vista previa del borrador"
+        [routerLink]="['/preview', $safeNavigationMigration(novelaInfo?.novelaId)]">
+        <fa-icon [icon]="faEye"></fa-icon>
+        <span class="hidden sm:inline">Vista previa</span>
+      </a>
       <button
-        (click)="onSelectNodeShowModalActions('ESCENA')"
-        class="w-full py-1 px-3 bg-gray-800 text-white align-middle border-b-2 border-solid border-gray-900">
-        Añadir Escena
+        class="btn-ghost !text-white hover:!bg-white/10"
+        title="Variables, objetos y ubicaciones"
+        aria-label="Variables, objetos y ubicaciones"
+        (click)="onClickVariables()">
+        <fa-icon [icon]="faSliders"></fa-icon>
+        <span class="hidden sm:inline">Mundo</span>
+      </button>
+      <button
+        class="btn-ghost !text-white hover:!bg-white/10"
+        title="Revisar la versión"
+        aria-label="Revisar la versión"
+        (click)="onClickRevisar()">
+        <fa-icon [icon]="faClipboardCheck"></fa-icon>
+        <span class="hidden sm:inline">Revisar</span>
+      </button>
+      <button
+        class="btn-ghost !text-white hover:!bg-white/10"
+        title="Personajes y Fondos"
+        aria-label="Personajes y Fondos"
+        (click)="showModalAssets = true">
+        <fa-icon [icon]="faUserGroup"></fa-icon>
+        <span class="hidden sm:inline">Personajes y Fondos</span>
       </button>
     </div>
   </div>
 
+  <!-- Escenas: dos filas con scroll horizontal en mobile (filtros y escenas), columna lateral en md+ -->
+  <nav
+    aria-label="Escenas"
+    class="bg-white border-b border-gray-200 md:border-b-0 md:border-r flex flex-col gap-1 p-2 md:p-3 min-w-0 md:overflow-x-hidden md:overflow-y-auto md:col-start-1 md:row-start-2">
+    <div class="flex shrink-0 items-center gap-1 overflow-x-auto md:flex-col md:items-stretch md:overflow-visible">
+      <div class="flex shrink-0 items-center justify-between gap-1 md:px-2 md:py-1">
+        <span class="hidden md:block text-xs font-semibold uppercase tracking-wide text-gray-400">Escenas</span>
+        @if (etiquetasDisponibles.length > 0) {
+          <button
+            type="button"
+            class="btn-ghost !px-2 !py-1 text-xs"
+            [class.!bg-primary-50]="agruparPorEtiquetas"
+            [class.!text-primary-700]="agruparPorEtiquetas"
+            [attr.aria-pressed]="agruparPorEtiquetas"
+            title="Agrupar las escenas por etiqueta"
+            (click)="onToggleAgrupar()">
+            <fa-icon [icon]="faObjectGroup"></fa-icon> Agrupar
+          </button>
+        }
+      </div>
+      @if (etiquetasDisponibles.length > 0) {
+        <div
+          role="group"
+          aria-label="Filtrar escenas por etiqueta"
+          class="flex shrink-0 items-center gap-1 md:flex-wrap md:px-1 md:pb-2">
+          <fa-icon class="text-gray-400 text-xs px-1" [icon]="faTags" title="Etiquetas"></fa-icon>
+          @for (etiqueta of etiquetasDisponibles; track etiqueta) {
+            <button
+              type="button"
+              [class]="etiquetaChipClass(etiqueta)"
+              [attr.aria-pressed]="etiquetaSeleccionada(etiqueta)"
+              (click)="onToggleEtiqueta(etiqueta)">
+              {{ etiqueta }}
+            </button>
+          }
+          @if (etiquetasSeleccionadas.length > 0) {
+            <button
+              type="button"
+              class="shrink-0 whitespace-nowrap rounded-full px-2 py-0.5 text-xs text-gray-500 hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
+              (click)="onLimpiarEtiquetas()">
+              <fa-icon [icon]="faXmark"></fa-icon> Quitar filtro
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <ng-template #botonEscena let-escena>
+      <button
+        type="button"
+        (click)="onClickEscena(escena.escenaId)"
+        [class]="escenaButtonClass(escena.escenaId)">
+        {{ escena.identificador }}
+        @if (!agruparPorEtiquetas && escena.etiquetas?.length) {
+          <span class="hidden md:block text-xs font-normal text-gray-400 truncate">
+            {{ escena.etiquetas.join(' · ') }}
+          </span>
+        }
+      </button>
+    </ng-template>
+
+    <div class="flex items-center gap-1 overflow-x-auto md:flex-col md:items-stretch md:overflow-visible">
+      @if (agruparPorEtiquetas) {
+        @for (grupo of gruposEscenas; track grupo.etiqueta) {
+          <div class="flex shrink-0 items-center gap-1 md:flex-col md:items-stretch">
+            <div class="whitespace-nowrap px-2 pt-1 text-xs font-semibold text-gray-500 md:pt-2">
+              {{ grupo.etiqueta ?? 'Sin etiqueta' }}
+              <span class="font-normal text-gray-400">({{ grupo.escenas.length }})</span>
+            </div>
+            @for (escena of grupo.escenas; track escena.escenaId) {
+              <ng-container [ngTemplateOutlet]="botonEscena" [ngTemplateOutletContext]="{ $implicit: escena }" />
+            }
+          </div>
+        }
+      } @else {
+        @for (escena of escenasVisibles; track escena.escenaId) {
+          <ng-container [ngTemplateOutlet]="botonEscena" [ngTemplateOutletContext]="{ $implicit: escena }" />
+        }
+      }
+      @if (!novelaInfo?.escenas || novelaInfo!.escenas!.length === 0) {
+        <span class="md:hidden text-sm text-gray-400 px-2 whitespace-nowrap">
+          Sin escenas todavía
+        </span>
+        <app-empty-state
+          class="hidden md:block"
+          [icon]="faLayerGroup"
+          title="Sin escenas todavía"
+          description="Crea la primera para empezar." />
+      }
+    </div>
+  </nav>
+
   <!-- Mapa -->
-  <div class="creator-mapa w-full h-full bg-gray-100">
+  <div class="min-h-0 min-w-0 overflow-hidden bg-gray-50 md:col-start-2 md:row-start-2 md:row-span-2">
     @if (this.escenaInfo !== undefined) {
       @if (
         this.escenaInfo.recursos !== undefined &&
@@ -97,15 +317,41 @@
             onSelectNodeShowModalActions($event)
           "></app-mapa-recursos>
       } @else {
-        <div>
-          <button>Registrar primer recurso</button>
-        </div>
+        <app-empty-state
+          [icon]="faDiagramProject"
+          title="Esta escena todavía no tiene recursos"
+          description="Registra el primer nodo de diálogo o decisión.">
+          <button (click)="onClickAgregarRecurso()" class="btn-primary mt-3">
+            <fa-icon [icon]="faPlus"></fa-icon> Registrar primer recurso
+          </button>
+        </app-empty-state>
       }
     }
     @if (this.escenaInfo === undefined) {
-      <div>
-        <p>Aqui se mostrara informacion general de como crear una novela</p>
-      </div>
+      <app-empty-state
+        [icon]="faLayerGroup"
+        title="Selecciona o crea una escena"
+        description="Así podrás empezar a editar sus recursos." />
     }
+  </div>
+
+  <!-- Acciones: barra inferior en mobile, pie de la columna lateral en md+ -->
+  <div
+    class="bg-white border-t border-gray-200 md:border-r flex md:flex-col gap-2 p-2 md:p-3 md:col-start-1 md:row-start-3">
+    @if (escenaInfo) {
+      <button (click)="onClickAgregarRecurso()" class="btn-primary flex-1 md:w-full">
+        <fa-icon [icon]="faPlus"></fa-icon> Añadir Recurso
+      </button>
+      <button
+        (click)="showSpecificModalAction('ESCENA_EDITAR')"
+        class="btn-secondary md:w-full"
+        title="Editar la escena y sus etiquetas"
+        aria-label="Editar la escena y sus etiquetas">
+        <fa-icon [icon]="faTags"></fa-icon> <span class="hidden md:inline">Editar Escena</span>
+      </button>
+    }
+    <button (click)="showSpecificModalAction('ESCENA')" class="btn-secondary flex-1 md:w-full">
+      <fa-icon [icon]="faPlus"></fa-icon> Añadir Escena
+    </button>
   </div>
 </div>

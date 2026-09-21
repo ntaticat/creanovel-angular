@@ -1,0 +1,47 @@
+@if (hayQueInsertar || texto.includes('{')) {
+  <div class="mt-1 mb-2 text-xs">
+    <div class="flex flex-wrap items-center gap-2">
+      <select
+        class="input !w-auto !py-0.5 text-xs"
+        aria-label="Insertar una variable en el texto"
+        (change)="insertar($any($event.target))">
+        <option value="">Insertar variable…</option>
+        @if (defs.variables.length) {
+          <optgroup label="Variables">
+            @for (v of defs.variables; track v.clave) {
+              <option [value]="'{' + v.clave + '}'">{{ v.etiqueta || v.clave }}</option>
+            }
+          </optgroup>
+        }
+        @if (defs.objetos?.length) {
+          <optgroup label="Objetos (cantidad)">
+            @for (o of defs.objetos; track o.id) {
+              <option [value]="'{objeto:' + o.id + '}'">{{ o.nombre || o.id }}</option>
+            }
+          </optgroup>
+        }
+        @if (defs.ubicaciones?.length) {
+          <optgroup label="Lugar">
+            <option value="{ubicacion}">Ubicación actual</option>
+          </optgroup>
+        }
+        <optgroup label="Según una condición">
+          <option value="{si condición: texto | otro texto}">Texto condicional</option>
+        </optgroup>
+      </select>
+      <span class="text-gray-500">Escribe {{ '{' }}nombre{{ '}' }} para mostrar una variable.</span>
+    </div>
+
+    @if (vista) {
+      <p class="mt-1 text-gray-600">Al empezar se lee: <em>{{ vista }}</em></p>
+    }
+
+    @if (errores.length) {
+      <ul class="mt-1 text-red-700 list-disc list-inside" role="alert">
+        @for (error of errores; track $index) {
+          <li>{{ error.mensaje }}</li>
+        }
+      </ul>
+    }
+  </div>
+}

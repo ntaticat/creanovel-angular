@@ -1,75 +1,426 @@
-<div class="w-full h-auto p-3 border-2 border-solid border-gray-700">
-  <!-- Recurso Decision -->
-  <p>Registrar Recurso</p>
+<div class="w-full">
+  <p class="font-semibold text-gray-800 mb-3">
+    {{ modoEdicion ? 'Editar recurso' : 'Registrar recurso' }}
+  </p>
 
-  <!-- <form class="max-w-sm mx-auto">
-    <div class="mb-5">
-      <label for="email" class="block mb-2 text-sm font-medium text-gray-900"
-        >Your email</label
-      >
-      <input
-        type="email"
-        id="email"
-        class="bg-gray-50 border border-gray-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="name@flowbite.com"
-        required />
-    </div>
-    <div class="mb-5">
-      <label for="password" class="block mb-2 text-sm font-medium text-gray-900"
-        >Your password</label
-      >
-      <input
-        type="password"
-        id="password"
-        class="bg-gray-50 border border-gray-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="Your personal and private password here"
-        required />
-    </div>
-    <div class="flex items-start mb-5">
-      <div class="flex items-center h-5">
-        <input
-          id="remember"
-          type="checkbox"
-          value=""
-          class="w-4 h-4 border border-gray-700 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300"
-          required />
+  <form [formGroup]="recursoForm" (ngSubmit)="onSubmit()">
+    @if (!modoEdicion) {
+      <fieldset class="mb-3">
+        <legend class="sr-only">Tipo de recurso</legend>
+        <div class="flex flex-wrap gap-2">
+          @for (tipo of tiposRecurso; track tipo.valor) {
+            <label
+              class="flex flex-col rounded-lg border-2 px-3 py-2 cursor-pointer text-sm"
+              [class.border-primary-600]="recursoForm.value.tipoRecurso === tipo.valor"
+              [class.bg-primary-50]="recursoForm.value.tipoRecurso === tipo.valor"
+              [class.border-gray-200]="recursoForm.value.tipoRecurso !== tipo.valor">
+              <span class="flex items-center gap-2 font-medium text-gray-800">
+                <input
+                  type="radio"
+                  name="tipoRecurso"
+                  [value]="tipo.valor"
+                  formControlName="tipoRecurso" />
+                {{ tipo.etiqueta }}
+              </span>
+              <span class="text-xs text-gray-500">{{ tipo.descripcion }}</span>
+            </label>
+          }
+        </div>
+      </fieldset>
+    } @else {
+      <p class="mb-3 text-sm text-gray-500">
+        Tipo: <strong class="text-gray-700">{{ tipoActual?.etiqueta }}</strong> — {{ tipoActual?.descripcion }}
+      </p>
+    }
+
+    @if (esPresentable || esExplora || esJuega || esTermina) {
+      <label class="w-full block text-sm font-medium text-gray-600 mb-1" for="recursoMensaje">
+        {{ esDecision ? 'Mensaje de la decisión' : esEntrada ? 'Pregunta al jugador' : esExplora ? 'Texto sobre el escenario (opcional)' : esJuega ? 'Texto del minijuego (opcional)' : esTermina ? 'Texto del final (opcional)' : 'Mensaje' }}
+      </label>
+      <textarea #campoMensaje id="recursoMensaje" class="input" formControlName="mensaje"></textarea>
+      <app-ayuda-variables
+        [campo]="campoMensaje"
+        [control]="recursoForm.get('mensaje')"
+        [definiciones]="definiciones"></app-ayuda-variables>
+      <div class="mb-3"></div>
+    }
+
+    @if (esTermina) {
+      <div class="mb-3">
+        <label class="w-full block text-sm font-medium text-gray-600 mb-1" for="recursoFinal">Final que registra este nodo</label>
+        <select id="recursoFinal" class="input" formControlName="final">
+          <option value="">Elige un final</option>
+          @for (final of finalesDefinidos; track final.id) {
+            <option [value]="final.id">{{ final.nombre || final.id }}</option>
+          }
+        </select>
+        @if (!finalesDefinidos.length) {
+          <p class="text-xs text-amber-700 mt-1">Crea antes un final en «Mundo» → «Logros y finales».</p>
+        }
+        <p class="text-xs text-gray-500 mt-1">La historia se detiene aquí; el jugador ve cuántos finales ha descubierto y puede empezar de nuevo.</p>
       </div>
-      <label for="remember" class="ms-2 text-sm font-medium text-gray-900"
-        >Remember me</label
-      >
+    }
+
+    @if (esEntrada) {
+      <div class="grid gap-3 sm:grid-cols-2 mb-3">
+        <div>
+          <label class="w-full block text-sm font-medium text-gray-600 mb-1" for="recursoClave">
+            Guardar lo escrito en la variable
+          </label>
+          <select id="recursoClave" class="input" formControlName="clave">
+            <option value="">Elige una variable</option>
+            @for (variable of variablesEntrada; track variable.clave) {
+              <option [value]="variable.clave">{{ variable.etiqueta || variable.clave }} ({{ variable.tipo }})</option>
+            }
+            @if (recursoForm.value.clave && !variablesEntrada.length) {
+              <option [value]="recursoForm.value.clave">{{ recursoForm.value.clave }}</option>
+            }
+          </select>
+          @if (!variablesEntrada.length) {
+            <p class="text-xs text-amber-700 mt-1">
+              Crea antes una variable de texto o número (botón «Mundo»).
+            </p>
+          }
+        </div>
+        <div>
+          <label class="w-full block text-sm font-medium text-gray-600 mb-1" for="recursoPlaceholder">
+            Texto de ayuda del campo
+          </label>
+          <input id="recursoPlaceholder" type="text" class="input" formControlName="placeholder" />
+        </div>
+      </div>
+    }
+
+    @if (esConversacion || esDecision) {
+      <label class="w-full block text-sm font-medium text-gray-600 mb-1" for="recursoAutor">Autor</label>
+      <input
+        id="recursoAutor"
+        type="text"
+        class="input mb-3"
+        placeholder="Selecciona un personaje o escribe otro nombre"
+        autocomplete="off"
+        list="recursoAutorOpciones"
+        formControlName="autor" />
+      <datalist id="recursoAutorOpciones">
+        @for (nombre of autoresSugeridos; track $index) {
+          <option [value]="nombre"></option>
+        }
+      </datalist>
+    }
+
+    @if (tieneEscenario) {
+      <div class="mb-3">
+        <label class="w-full block text-sm font-medium text-gray-600 mb-1" for="recursoFondo">Fondo</label>
+        <select id="recursoFondo" class="input sm:w-5/12 mb-3" formControlName="backgroundSpriteId">
+          <option value="">Sin fondo</option>
+          @for (opcion of backgroundSpriteOptions; track opcion.id) {
+            <option [value]="opcion.id">{{ opcion.label }}</option>
+          }
+        </select>
+
+        <!-- El escenario de personajes es lo más alto del formulario: plegado por defecto, con quién sale en el resumen -->
+        <app-tarjeta-plegable
+          titulo="Personajes en el escenario"
+          [resumen]="resumenPersonajes"
+          [abierta]="personajesAbiertos"
+          (abiertaChange)="personajesAbiertos = $event">
+          <app-personajes-escenario-editor
+            [personajes]="personajes"
+            [fondoUrl]="fondoUrl"
+            [colocados]="recursoForm.value.personajes"
+            (colocadosChange)="cambiarPersonajes($event)"></app-personajes-escenario-editor>
+        </app-tarjeta-plegable>
+      </div>
+    }
+
+    @if (esJuega) {
+      <div class="mb-3" formGroupName="minijuego">
+        <label class="w-full block text-sm font-medium text-gray-600 mb-1" for="minijuegoTipo">Minijuego</label>
+        <select id="minijuegoTipo" class="input mb-2" [formControl]="$any(recursoForm.get('minijuegoTipo'))">
+          @for (tipo of tiposMinijuego; track tipo.valor) {
+            <option [value]="tipo.valor">{{ tipo.etiqueta }}</option>
+          }
+        </select>
+
+        <div class="grid gap-2 sm:grid-cols-3 mb-2">
+          @for (campo of camposMinijuego; track campo.control) {
+            <label class="text-xs text-gray-600">
+              {{ campo.etiqueta }}
+              <input
+                type="number"
+                class="input"
+                [min]="campo.min"
+                [max]="campo.max"
+                [step]="campo.paso"
+                [formControlName]="campo.control" />
+              @if (recursoForm.get('minijuego')?.get(campo.control)?.invalid) {
+                <span class="text-red-600" role="alert">Entre {{ campo.min }} y {{ campo.max }}</span>
+              }
+            </label>
+          }
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <button type="button" class="btn-secondary text-xs px-2 py-1" (click)="probarMinijuego()" [disabled]="probandoMinijuego || recursoForm.get('minijuego')?.invalid">
+            Probar minijuego
+          </button>
+          <span class="text-xs text-gray-500">{{ descripcionMinijuego }}</span>
+          @if (resultadoPrueba; as r) {
+            <span class="text-xs font-medium" [class.text-emerald-700]="r.exito" [class.text-red-700]="!r.exito">
+              Prueba: {{ r.exito ? 'éxito' : 'fallo' }} (puntaje {{ r.puntaje }})
+            </span>
+          }
+        </div>
+        @if (probandoMinijuego) {
+          <div class="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-900 mb-2">
+            <app-minijuego
+              [config]="configMinijuego"
+              [mensaje]="recursoForm.value.mensaje"
+              textoContinuar="Cerrar prueba"
+              (terminado)="terminarPrueba($event)"></app-minijuego>
+          </div>
+        }
+
+        <label class="w-full block text-sm font-medium text-gray-600 mb-1" for="variableResultado">
+          Guardar el puntaje en la variable (opcional)
+        </label>
+        <select id="variableResultado" class="input" [formControl]="$any(recursoForm.get('variableResultado'))">
+          <option value="">No guardar</option>
+          @for (variable of variablesNumericas; track variable.clave) {
+            <option [value]="variable.clave">{{ variable.etiqueta || variable.clave }}</option>
+          }
+        </select>
+        @if (!variablesNumericas.length) {
+          <p class="text-xs text-gray-500 mt-1">Crea una variable numérica (botón «Mundo») para poder usar el puntaje después.</p>
+        }
+      </div>
+    }
+
+    @if (esAsigna) {
+      <div class="mb-3">
+        <p class="text-sm font-medium text-gray-600 mb-1">Efectos</p>
+        <p class="text-xs text-gray-500 mb-1">
+          Se aplican en orden, sin que el jugador vea este nodo, y la historia continúa.
+        </p>
+        <app-efectos-editor
+          etiqueta="Efectos del nodo"
+          [efectos]="recursoForm.value.efectos"
+          [definiciones]="definicionesActuales"
+          (efectosChange)="cambiarEfectos($event)"></app-efectos-editor>
+      </div>
+    }
+
+    @if (!esDecision && !esExplora && !esJuega && !esTermina) {
+      <label class="w-full block text-sm font-medium text-gray-600 mb-1" for="recursoSiguiente">
+        {{ esEvalua ? 'Si ninguna rama se cumple, ir a (sino)' : 'Siguiente recurso' }}
+      </label>
+      <select id="recursoSiguiente" class="input mb-3" formControlName="siguienteRecursoId">
+        <option value="">{{ esEvalua ? 'Ninguno (la historia termina)' : 'Ninguno (fin de rama)' }}</option>
+        @for (opcion of recursosParaSiguiente; track opcion.recurso.recursoId) {
+          <option [value]="opcion.recurso.recursoId">{{ labelRecurso(opcion) }}</option>
+        }
+      </select>
+    }
+
+    @if (esExplora) {
+      <div class="mb-3">
+        <p class="text-sm font-medium text-gray-600 mb-1">Zonas clicables</p>
+        <app-zona-editor
+          [fondoUrl]="fondoUrl"
+          [personajes]="personajesVista"
+          [zonas]="zonasVista"
+          [seleccionada]="opcionAbierta"
+          (zonaCreada)="agregarZona($event)"
+          (regionCambiada)="cambiarRegionZona($event.indice, $event.region)"
+          (seleccionar)="seleccionarZona($event)"></app-zona-editor>
+      </div>
+    }
+
+    @if (esJuega) {
+      <div class="mb-3" formArrayName="opciones">
+        @for (salida of opciones.controls; track salida) {
+          <app-tarjeta-plegable
+            [formGroupName]="$index"
+            [titulo]="nombreSalida(salida)"
+            [resumen]="resumenOpcion(salida)"
+            [abierta]="opcionAbierta === $index"
+            (abiertaChange)="fijarOpcion($index, $event)">
+            <label class="w-full block text-sm font-medium text-gray-600 mb-1">Ir a</label>
+            <select class="input mb-2" formControlName="siguienteRecursoId">
+              <option value="">Ninguno (la historia termina)</option>
+              @for (opcion of recursosDisponibles; track opcion.recurso.recursoId) {
+                <option [value]="opcion.recurso.recursoId">{{ labelRecurso(opcion) }}</option>
+              }
+            </select>
+            @if (salida.get('tipo')?.value === 'fallo') {
+              <p class="text-xs text-gray-500 mb-2">Para dejar reintentar, edita el nodo una vez creado y elige este mismo minijuego.</p>
+            }
+
+            <p class="text-sm font-medium text-gray-600 mb-1">Efectos</p>
+            <app-efectos-editor
+              [etiqueta]="'Efectos de la salida (' + nombreSalida(salida) + ')'"
+              [efectos]="salida.get('efectos')?.value"
+              [definiciones]="definicionesActuales"
+              (efectosChange)="cambiarEfectosOpcion(salida, $event)"></app-efectos-editor>
+          </app-tarjeta-plegable>
+        }
+      </div>
+    }
+
+    @if (tieneOpciones) {
+      <div class="mb-3">
+        <div class="flex justify-between items-center mb-2">
+          <p class="text-sm font-medium text-gray-600">
+            {{ esEvalua ? 'Ramas (gana la primera que se cumple)' : esExplora ? 'Detalle de las zonas' : 'Opciones' }}
+          </p>
+          @if (!esExplora) {
+            <button type="button" (click)="agregarOpcion()" class="btn-secondary text-xs px-2 py-1">
+              <fa-icon [icon]="faPlus"></fa-icon> {{ esEvalua ? 'Añadir rama' : 'Añadir opción' }}
+            </button>
+          }
+        </div>
+        @if (esExplora && opciones.controls.length === 0) {
+          <p class="text-sm text-gray-400 mb-2">Dibuja una zona sobre el escenario para empezar.</p>
+        }
+
+        <div formArrayName="opciones">
+          @for (opcionGroup of opciones.controls; track opcionGroup) {
+            <app-tarjeta-plegable
+              [formGroupName]="$index"
+              [titulo]="tituloOpcion(opcionGroup, $index)"
+              [resumen]="resumenOpcion(opcionGroup)"
+              [advertencia]="advertenciaOpcion(opcionGroup)"
+              [resaltada]="esExplora && opcionAbierta === $index"
+              [abierta]="opcionAbierta === $index"
+              (abiertaChange)="fijarOpcion($index, $event)"
+              (focusin)="esExplora && seleccionarZona($index)">
+              <!-- El orden importa: es el que ve el jugador en Selecciona y el de evaluación en Evalúa. Se puede cambiar sin abrir la opción. -->
+              <span acciones class="flex gap-1">
+                <button
+                  type="button"
+                  class="btn-ghost text-xs px-2 py-1"
+                  aria-label="Subir"
+                  [disabled]="$first"
+                  (click)="moverOpcion($index, -1)">
+                  <fa-icon [icon]="faArrowUp"></fa-icon>
+                </button>
+                <button
+                  type="button"
+                  class="btn-ghost text-xs px-2 py-1"
+                  aria-label="Bajar"
+                  [disabled]="$last"
+                  (click)="moverOpcion($index, 1)">
+                  <fa-icon [icon]="faArrowDown"></fa-icon>
+                </button>
+              </span>
+
+              @if (esDecision) {
+                <label class="w-full block text-sm font-medium text-gray-600 mb-1">Mensaje de la opción</label>
+                <input #campoOpcion type="text" class="input" formControlName="opcionMensaje" />
+                <app-ayuda-variables
+                  [campo]="campoOpcion"
+                  [control]="opcionGroup.get('opcionMensaje')"
+                  [definiciones]="definiciones"></app-ayuda-variables>
+                <div class="mb-2"></div>
+              }
+
+              @if (esExplora) {
+                <label class="w-full block text-sm font-medium text-gray-600 mb-1">Nombre de la zona (lo lee el lector de pantalla)</label>
+                <input type="text" class="input mb-2" maxlength="60" formControlName="opcionMensaje" />
+                @if (opcionGroup.get('region')?.value; as region) {
+                  <div class="grid grid-cols-4 gap-2 mb-2">
+                    @for (campo of [['x', 'X %'], ['y', 'Y %'], ['ancho', 'Ancho %'], ['alto', 'Alto %']]; track campo[0]) {
+                      <label class="text-xs text-gray-600">
+                        {{ campo[1] }}
+                        <input
+                          type="number"
+                          step="0.5"
+                          min="0"
+                          max="100"
+                          class="input"
+                          [attr.aria-label]="campo[1] + ' de la zona ' + ($index + 1)"
+                          [value]="region[campo[0]]"
+                          (change)="cambiarCampoRegion(opcionGroup, $any(campo[0]), $any($event.target).value)" />
+                      </label>
+                    }
+                  </div>
+                }
+              }
+
+              <p class="text-sm font-medium text-gray-600 mb-1">
+                {{ esEvalua ? 'Se toma si' : esExplora ? 'Visible si' : 'Condición para que aparezca' }}
+              </p>
+              <app-condicion-builder
+                class="block mb-2"
+                [etiqueta]="esEvalua ? 'Condición de la rama' : 'Condición de la opción'"
+                [condicion]="opcionGroup.get('condicion')?.value"
+                [definiciones]="definicionesActuales"
+                (condicionChange)="cambiarCondicion(opcionGroup, $event)"></app-condicion-builder>
+              @if (esEvalua && opcionGroup.get('condicion')?.touched && opcionGroup.get('condicion')?.invalid) {
+                <p class="text-xs text-red-600 mb-2" role="alert">Una rama necesita una condición.</p>
+              }
+
+              @if ((esDecision || esExplora) && opcionGroup.get('condicion')?.value) {
+                <label class="w-full block text-sm font-medium text-gray-600 mb-1">Si no se cumple</label>
+                <select class="input mb-2" formControlName="condicionModo">
+                  <option value="ocultar">{{ esExplora ? 'Ocultar la zona' : 'Ocultar la opción' }}</option>
+                  <option value="deshabilitar">{{ esExplora ? 'Mostrarla inactiva' : 'Mostrarla deshabilitada' }}</option>
+                </select>
+              }
+
+              <label class="w-full block text-sm font-medium text-gray-600 mb-1">
+                {{ esEvalua ? 'Si se cumple, ir a' : esExplora ? 'Al pulsarla, ir a' : 'Siguiente recurso' }}
+              </label>
+              <select class="input mb-2" formControlName="siguienteRecursoId">
+                <option value="">{{ esExplora ? 'Ninguno (solo aplica los efectos)' : 'Ninguno (fin de rama)' }}</option>
+                @for (opcion of recursosDisponibles; track opcion.recurso.recursoId) {
+                  <option [value]="opcion.recurso.recursoId">{{ labelRecurso(opcion) }}</option>
+                }
+              </select>
+
+              <p class="text-sm font-medium text-gray-600 mb-1">
+                {{ esEvalua ? 'Efectos al tomar la rama' : esExplora ? 'Efectos al pulsarla (recoger un objeto, ir a otro lugar...)' : 'Efectos al elegirla' }}
+              </p>
+              <app-efectos-editor
+                class="block mb-2"
+                [etiqueta]="'Efectos de la ' + (esEvalua ? 'rama' : esExplora ? 'zona' : 'opción')"
+                [efectos]="opcionGroup.get('efectos')?.value"
+                [definiciones]="definicionesActuales"
+                (efectosChange)="cambiarEfectosOpcion(opcionGroup, $event)"></app-efectos-editor>
+
+              <button type="button" (click)="quitarOpcion($index)" class="btn-danger text-xs px-2 py-1">
+                <fa-icon [icon]="faTrash"></fa-icon> Quitar {{ esEvalua ? 'rama' : esExplora ? 'zona' : 'opción' }}
+              </button>
+            </app-tarjeta-plegable>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="mb-4 flex gap-4 text-sm text-gray-600">
+      <label class="flex items-center gap-2">
+        <input type="checkbox" formControlName="primerRecurso" />
+        Primer recurso de la escena
+      </label>
+      <label class="flex items-center gap-2">
+        <input type="checkbox" formControlName="ultimoRecurso" />
+        Último recurso de la escena
+      </label>
     </div>
-    <button
-      type="submit"
-      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-      Submit
+
+    @if (errores.length) {
+      <ul class="mb-3 text-sm text-red-700 bg-red-50 rounded-lg p-2 list-disc list-inside" role="alert">
+        @for (error of errores; track $index) {
+          <li>{{ error }}</li>
+        }
+      </ul>
+    }
+
+    <button type="submit" [disabled]="guardando" class="btn-primary w-full">
+      @if (guardando) {
+        <app-spinner size="sm" />
+      }
+      {{ guardando ? 'Guardando...' : (modoEdicion ? 'Guardar cambios' : 'Crear') }}
     </button>
-  </form> -->
-
-  <form>
-    <input
-      id="rbtn_conversacion"
-      type="radio"
-      name="tipo_recurso"
-      value="recurso_conversacion" />
-    <label for="rbtn_conversacion">Conversacion</label>
-    <input
-      id="rbtn_decision"
-      type="radio"
-      name="tipo_recurso"
-      value="recurso_decision" />
-    <label for="rbtn_decision">Decision</label>
-
-    <label for="mensaje">Mensaje</label>
-    <input
-      type="text"
-      name="mensaje"
-      placeholder="Mensaje de la conversacion" />
-
-    <input type="checkbox" name="primerRecurso" id="check_primer" />
-    <label for="check_primer">Primer Recurso</label>
-    <input type="checkbox" name="ultimoRecurso" id="check_ultimo" />
-    <label for="check_ultimo">Ultimo Recurso</label>
-
-    <input type="submit" value="Enviar" />
   </form>
 </div>

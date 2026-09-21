@@ -1,1 +1,35 @@
 <div #mapaRecursos class="w-full h-full"></div>
+
+<div class="absolute right-3 top-3 flex gap-2">
+  <button
+    type="button"
+    class="btn-secondary !px-2.5 !py-1.5 shadow-sm"
+    title="Volver a colocar los nodos automáticamente"
+    aria-label="Reordenar"
+    (click)="reordenar()">
+    <fa-icon [icon]="faReordenar"></fa-icon>
+    <span class="hidden sm:inline">Reordenar</span>
+  </button>
+  <button
+    type="button"
+    class="btn-secondary !px-2.5 !py-1.5 shadow-sm"
+    title="Ajustar vista"
+    aria-label="Ajustar vista"
+    (click)="ajustarVista()">
+    <fa-icon [icon]="faExpand"></fa-icon>
+    <span class="hidden sm:inline">Ajustar vista</span>
+  </button>
+</div>
+
+<ul
+  class="pointer-events-none absolute left-3 bottom-3 flex flex-wrap gap-x-3 gap-y-1 rounded-lg border border-gray-200 bg-white/90 px-2.5 py-1.5 text-xs text-gray-600 shadow-sm">
+  @for (item of leyenda; track item.etiqueta) {
+    <li class="flex items-center gap-1.5">
+      <span
+        class="inline-block h-3 w-3 rounded-[3px] border-2"
+        [style.background-color]="item.colores.background"
+        [style.border-color]="item.colores.border"></span>
+      {{ item.etiqueta }}
+    </li>
+  }
+</ul>

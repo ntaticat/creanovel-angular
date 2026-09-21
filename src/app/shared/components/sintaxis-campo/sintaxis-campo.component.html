@@ -1,0 +1,50 @@
+<div>
+  <textarea
+    #campo
+    class="input font-mono text-sm w-full"
+    spellcheck="false"
+    autocomplete="off"
+    [rows]="filas"
+    [attr.aria-label]="etiqueta || (modo === 'condicion' ? 'Condición como texto' : 'Efectos como texto')"
+    [attr.aria-invalid]="errores.length ? 'true' : null"
+    [placeholder]="modo === 'condicion' ? 'Sin condición: siempre se cumple' : 'Sin efectos'"
+    [value]="texto"
+    (input)="cambiar($any($event.target).value)"></textarea>
+
+  <div class="flex flex-wrap items-center gap-2 mt-1 text-xs">
+    @if (errores.length) {
+      <span class="text-red-700">No se entiende</span>
+    } @else if (texto.trim()) {
+      <span class="text-emerald-700">✓ Se entiende</span>
+    }
+
+    @if (grupos.length) {
+      <select
+        class="input !w-auto !py-0.5 text-xs"
+        aria-label="Insertar en el texto"
+        (change)="insertar($any($event.target))">
+        <option value="">Insertar…</option>
+        @for (grupo of grupos; track grupo.titulo) {
+          <optgroup [label]="grupo.titulo">
+            @for (item of grupo.items; track item) {
+              <option [value]="item">{{ item }}</option>
+            }
+          </optgroup>
+        }
+      </select>
+    }
+  </div>
+
+  @if (errores.length) {
+    <ul class="mt-1 text-xs text-red-700 list-disc list-inside" role="alert">
+      @for (error of errores; track $index) {
+        <li>{{ error.mensaje }} <span class="text-red-500">({{ posicion(error) }})</span></li>
+      }
+    </ul>
+  }
+
+  <details class="mt-1 text-xs text-gray-500">
+    <summary class="cursor-pointer">Ayuda de la sintaxis</summary>
+    <p class="mt-1">{{ ayuda }}</p>
+  </details>
+</div>

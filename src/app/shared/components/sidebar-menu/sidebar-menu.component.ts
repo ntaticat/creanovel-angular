@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@services/auth.service';
 
@@ -6,6 +6,7 @@ import { AuthService } from '@services/auth.service';
   selector: 'app-sidebar-menu',
   templateUrl: './sidebar-menu.component.html',
   styleUrls: ['./sidebar-menu.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class SidebarMenuComponent {
   constructor(

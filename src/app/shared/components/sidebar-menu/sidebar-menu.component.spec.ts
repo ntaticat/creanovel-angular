@@ -8,7 +8,7 @@ describe('SidebarMenuComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SidebarMenuComponent],
+      imports: [SidebarMenuComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SidebarMenuComponent);

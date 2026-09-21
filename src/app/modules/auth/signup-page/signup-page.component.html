@@ -1,72 +1,27 @@
-<!-- Main -->
-<div class="p-0">
-  <!-- Novela -->
-  <div
-    class="w-full h-screen flex flex-col flex-wrap border-2 border-solid border-gray-700/75 mb-3">
-    <!-- Stage -->
+<div class="w-full max-w-4xl mx-auto p-2">
+  <app-novela-stage
+    [arte]="arte"
+    [mensaje]="mensaje"
+    [esDecision]="esDecision"
+    [opciones]="opciones"
+    [esEntrada]="esEntrada"
+    [placeholderEntrada]="placeholderEntrada"
+    [tipoEntrada]="campo?.tipo ?? 'text'"
+    [autocompletarEntrada]="campo?.autocompletar ?? 'off'"
+    [valorEntradaInicial]="valorEntrada"
+    [mostrarSiguiente]="mostrarSiguiente"
+    [etiquetaSiguiente]="esFinal ? 'Iniciar sesión' : 'Siguiente'"
+    [formatoLibre]="true"
+    (siguiente)="siguiente()"
+    (opcionSeleccionada)="elegirOpcion($event)"
+    (entradaEnviada)="enviarEntrada($event)"></app-novela-stage>
 
-    <div
-      class="relative w-full flex-grow bg-black/90 flex flex-wrap justify-center items-end overflow-hidden">
-      @if (currentRecurso) {
-        <!-- Alert -->
-        <app-recurso-alerta></app-recurso-alerta>
+  @if (errorMotor) {
+    <p class="p-2 text-center text-sm text-red-700 bg-red-50" role="alert">{{ errorMotor }}</p>
+  }
 
-        <!-- Form -->
-        @if (instanceOfIEntrada(currentRecurso)) {
-          <app-recurso-entrada
-            [recursoEntrada]="currentRecurso"
-            (recursoEntradaReady)="
-              handleEntradaEmit($event)
-            "></app-recurso-entrada>
-        }
-
-        <!-- Decisions -->
-        @if (instanceOfIDecision(currentRecurso)) {
-          <app-recurso-decision
-            [recursoDecision]="currentRecurso"></app-recurso-decision>
-        }
-
-        <!-- Character Dialogue -->
-        @if (instanceOfIConversacion(currentRecurso)) {
-          <app-recurso-conversacion
-            [recursoConversacion]="currentRecurso"></app-recurso-conversacion>
-        }
-
-        <!-- Background image -->
-        <div class="absolute top-0 left-0 w-full h-full z-10">
-          <img
-            class="w-full h-full object-cover object-center"
-            [src]="currentRecurso.backgroundUrl"
-            alt="horror mansion" />
-        </div>
-
-        <!-- Character image -->
-        <div class="absolute w-full h-full top-0 left-0 z-20 box-border">
-          <img
-            class="w-full h-full object-cover md:object-contain"
-            [src]="currentRecurso.personajeUrl"
-            alt="Kokichi Sprite" />
-        </div>
-      }
-    </div>
-
-    <!-- Acciones -->
-    <div class="flex-grow-0 w-full h-auto">
-      <div class="w-full flex flex-nowrap">
-        <button
-          (click)="onClickPreviousRecurso()"
-          class="w-full p-2 bg-black text-white">
-          <fa-icon [icon]="faArrowLeft"></fa-icon>
-        </button>
-        <button class="w-full p-2 bg-black text-white">
-          <fa-icon [icon]="faCog"></fa-icon>
-        </button>
-        <button
-          (click)="onClickNextRecurso()"
-          class="w-full p-2 bg-black text-white">
-          <fa-icon [icon]="faArrowRight"></fa-icon>
-        </button>
-      </div>
-    </div>
-  </div>
+  <p class="text-center text-sm text-gray-600 mt-3">
+    ¿Ya tienes una cuenta?
+    <a class="text-primary-600 hover:underline" routerLink="/auth/login">Inicia sesión</a>
+  </p>
 </div>

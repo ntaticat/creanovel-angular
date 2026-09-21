@@ -1,0 +1,63 @@
+<div>
+  <div
+    #escenario
+    class="relative w-full aspect-video bg-gray-700 bg-cover bg-center rounded-lg overflow-hidden touch-none select-none cursor-crosshair"
+    role="group"
+    aria-label="Escenario: arrastra para dibujar una zona"
+    [style.background-image]="fondoUrl ? 'url(' + fondoUrl + ')' : null"
+    (pointerdown)="iniciarCrear($event)"
+    (pointermove)="arrastrar($event)"
+    (pointerup)="soltar()"
+    (pointercancel)="soltar()">
+    @if (!fondoUrl) {
+      <p class="absolute inset-0 flex items-center justify-center text-white/60 text-sm pointer-events-none">
+        Elige un fondo para ver el escenario
+      </p>
+    }
+
+    <!-- Personajes del nodo, detrás de las zonas y sin capturar el ratón: dibujar y mover zonas funciona igual encima de ellos -->
+    @for (personaje of personajes; track $index) {
+      <div class="absolute inset-0 flex items-center justify-center pointer-events-none" [ngStyle]="estiloPersonaje(personaje)">
+        <img class="h-full w-auto max-w-full object-contain" [src]="personaje.url" alt="" aria-hidden="true" draggable="false" />
+      </div>
+    }
+
+    @for (zona of zonas; track $index) {
+      @if (zona.region; as region) {
+        <div
+          class="absolute border-2 rounded cursor-move"
+          [class]="seleccionada === $index ? 'border-yellow-300 bg-yellow-200/30 z-10' : 'border-white/80 bg-white/15'"
+          role="button"
+          tabindex="0"
+          [attr.aria-label]="'Zona ' + ($index + 1) + ': ' + (zona.etiqueta || 'sin nombre') + '. Flechas para mover, Mayús y flechas para cambiar el tamaño'"
+          [style.left.%]="region.x"
+          [style.top.%]="region.y"
+          [style.width.%]="region.ancho"
+          [style.height.%]="region.alto"
+          (pointerdown)="iniciarMover($event, $index)"
+          (focus)="seleccionar.emit($index)"
+          (keydown)="teclado($event, $index)">
+          <span class="absolute top-0 left-0 bg-black/70 text-white text-[10px] leading-tight px-1 rounded-br pointer-events-none">
+            {{ $index + 1 }}. {{ zona.etiqueta || 'sin nombre' }}
+          </span>
+          <span
+            class="absolute -right-1.5 -bottom-1.5 w-3 h-3 bg-yellow-300 border border-gray-800 rounded-sm cursor-nwse-resize"
+            aria-hidden="true"
+            (pointerdown)="iniciarRedimensionar($event, $index)"></span>
+        </div>
+      }
+    }
+
+    @if (borrador; as b) {
+      <div
+        class="absolute border-2 border-dashed border-yellow-300 bg-yellow-200/20 pointer-events-none"
+        [style.left.%]="b.x"
+        [style.top.%]="b.y"
+        [style.width.%]="b.ancho"
+        [style.height.%]="b.alto"></div>
+    }
+  </div>
+  <p class="text-xs text-gray-500 mt-1">
+    Arrastra sobre el escenario para dibujar una zona; arrástrala para moverla y usa su esquina para cambiar el tamaño.
+  </p>
+</div>

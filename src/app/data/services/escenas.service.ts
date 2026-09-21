@@ -19,10 +19,13 @@ export class EscenasService {
   }
 
   postEscena(escenaInfo: IEscenaPost): Observable<{}> {
-    const method = `${this.url}/escenas`;
+    const method = `${this.url}/novela-versiones/${escenaInfo.novelaVersionId}/escenas`;
 
     const request = {
-      ...escenaInfo,
+      identificador: escenaInfo.identificador,
+      primerEscena: escenaInfo.primerEscena,
+      ultimaEscena: escenaInfo.ultimaEscena,
+      etiquetas: escenaInfo.etiquetas ?? [],
     };
 
     return this.http.post(method, request);

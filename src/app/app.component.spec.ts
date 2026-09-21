@@ -1,12 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { Component } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { RouterTestingHarness } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+
+@Component({ template: 'pagina' })
+class PaginaFalsa {}
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [AppComponent],
+      imports: [AppComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
@@ -22,12 +27,25 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('creanovel');
   });
 
-  it('should render title', () => {
+  it('la instancia raíz dibuja el aviso de actualización', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain(
-      'creanovel app is running!'
-    );
+
+    expect(fixture.componentInstance.esRaiz).toBeTrue();
+    expect(fixture.nativeElement.querySelectorAll('app-aviso-actualizacion').length).toBe(1);
+  });
+
+  it('la instancia anidada como ruta de layout no lo repite', async () => {
+    TestBed.resetTestingModule();
+    await TestBed.configureTestingModule({
+      imports: [AppComponent],
+      providers: [provideRouter([{ path: '', component: AppComponent, children: [{ path: '', component: PaginaFalsa }] }])],
+    }).compileComponents();
+
+    const harness = await RouterTestingHarness.create('/');
+
+    const anidada = harness.routeDebugElement!.componentInstance as AppComponent;
+    expect(anidada.esRaiz).toBeFalse();
+    expect(harness.routeNativeElement!.querySelectorAll('app-aviso-actualizacion').length).toBe(0);
   });
 });

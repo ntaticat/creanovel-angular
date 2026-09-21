@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { provideRouter } from '@angular/router';
 import { NovelasModuleLayoutComponent } from './novelas-module-layout.component';
 
 describe('NovelasModuleLayoutComponent', () => {
@@ -8,7 +9,8 @@ describe('NovelasModuleLayoutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NovelasModuleLayoutComponent],
+      imports: [NovelasModuleLayoutComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NovelasModuleLayoutComponent);

@@ -1,1 +1,12 @@
-<p>testing-novela-page works!</p>
+<main class="bg-black w-full min-h-screen">
+  <div>
+    <p class="text-white text-center">Vista previa del borrador</p>
+  </div>
+  <div class="p-3">
+    <!-- El ancho se limita para que el escenario 16:9 (con su mochila y el botón de avanzar) quepa entero en la altura de la ventana. -->
+    <app-playing-novela
+      class="block mx-auto w-full max-w-[min(64rem,max(32rem,calc((100dvh-12rem)*16/9)))]"
+      [novelaId]="novelaId"
+      modo="preview"></app-playing-novela>
+  </div>
+</main>
