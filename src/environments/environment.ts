@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  url: 'https://creanovel-api.ntaticat.lat/api',
-  apiOrigin: 'https://creanovel-api.ntaticat.lat',
+  url: 'http://localhost:5000/api',
+  apiOrigin: 'http://localhost:5000',
 };
 
 /*

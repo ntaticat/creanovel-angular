@@ -24,7 +24,7 @@ RUN npx ng build
 # =====================
 # STAGE 1: Servidor estático (nginx) con fallback de SPA y cabeceras para el service worker
 # =====================
-FROM nginx:1-alpine AS final
+FROM nginx:1.25-alpine AS final
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist/creanovel/browser /usr/share/nginx/html
 EXPOSE 80
